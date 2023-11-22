@@ -1,0 +1,14 @@
+[[modify-pwd-member]]
+=== 회원 로그인 API
+
+==== HTTP Request
+
+include::{snippets}/modify-pwd-member/http-request.adoc[]
+include::{snippets}/modify-pwd-member/request-headers.adoc[]
+include::{snippets}/modify-pwd-member/request-fields.adoc[]
+
+
+==== HTTP Response
+
+include::{snippets}/modify-pwd-member/http-response.adoc[]
+include::{snippets}/modify-pwd-member/response-fields.adoc[]
