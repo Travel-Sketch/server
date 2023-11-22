@@ -2,13 +2,17 @@ package com.travelsketch.travel.api.controller.member;
 
 import com.travelsketch.travel.api.ApiResponse;
 import com.travelsketch.travel.api.controller.member.request.CreateMemberRequest;
+import com.travelsketch.travel.api.controller.member.request.LoginMemberRequest;
 import com.travelsketch.travel.api.controller.member.response.CreateMemberResponse;
+import com.travelsketch.travel.api.controller.member.response.TokenInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+
+import static com.travelsketch.travel.api.ApiResponse.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -28,6 +32,16 @@ public class AccountController {
             .joinedDate(LocalDateTime.of(2023, 11, 11, 18, 0))
             .build();
 
-        return ApiResponse.created(response);
+        return created(response);
+    }
+
+    @PostMapping("/login")
+    public ApiResponse<TokenInfo> login(@RequestBody LoginMemberRequest request) {
+        TokenInfo tokenInfo = TokenInfo.builder()
+            .grantType("Bearer")
+            .accessToken("access.token")
+            .refreshToken("refresh.token")
+            .build();
+        return ok(tokenInfo);
     }
 }
