@@ -1,8 +1,10 @@
 package com.travelsketch.travel.docs.member;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.travelsketch.travel.api.controller.member.MemberController;
 import com.travelsketch.travel.api.controller.member.request.ModifyNicknameRequest;
 import com.travelsketch.travel.api.controller.member.request.ModifyPwdRequest;
+import com.travelsketch.travel.api.controller.member.request.WithdrawalMemberRequest;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -110,6 +112,51 @@ public class MemberControllerDocsTest extends RestDocsSupport {
                         .description("수정된 닉네임"),
                     fieldWithPath("data.modifiedDate").type(JsonFieldType.ARRAY)
                         .description("수정된 일시")
+                )
+            ));
+    }
+
+    @DisplayName("회원 탈퇴 API")
+    @Test
+    void withdrawal() throws Exception {
+        WithdrawalMemberRequest request = WithdrawalMemberRequest.builder()
+            .pwd("temp1234!")
+            .build();
+
+        mockMvc.perform(
+                patch(BASE_URL + "/withdrawal")
+                    .header("Authorization", "Bearer Access Token")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("withdrawal-member",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestHeaders(
+                    headerWithName("Authorization")
+                        .description("Bearer Access Token")
+                ),
+                requestFields(
+                    fieldWithPath("pwd").type(JsonFieldType.STRING)
+                        .description("현재 비밀번호")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.email").type(JsonFieldType.STRING)
+                        .description("탈퇴한 이메일"),
+                    fieldWithPath("data.name").type(JsonFieldType.STRING)
+                        .description("탈퇴한 회원 이름"),
+                    fieldWithPath("data.removedDate").type(JsonFieldType.ARRAY)
+                        .description("탈퇴 일시")
                 )
             ));
     }
