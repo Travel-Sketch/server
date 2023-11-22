@@ -1,0 +1,13 @@
+[[request-authentication-number]]
+=== 이메일 인증 번호 요청 API
+
+==== HTTP Request
+
+include::{snippets}/request-authentication-number/http-request.adoc[]
+include::{snippets}/request-authentication-number/request-fields.adoc[]
+
+
+==== HTTP Response
+
+include::{snippets}/request-authentication-number/http-response.adoc[]
+include::{snippets}/request-authentication-number/response-fields.adoc[]

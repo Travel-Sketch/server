@@ -15,6 +15,7 @@ include::overview.adoc[]
 [[Member-API]]
 == Member API
 
+include::api/member/request-authentication-number.adoc[]
 include::api/member/create-member.adoc[]
 include::api/member/login-member.adoc[]
 include::api/member/search-member-info.adoc[]
