@@ -1,0 +1,13 @@
+[[check-authentication-number]]
+=== 이메일 인증 번호 확인 API
+
+==== HTTP Request
+
+include::{snippets}/check-authentication-number/http-request.adoc[]
+include::{snippets}/check-authentication-number/request-fields.adoc[]
+
+
+==== HTTP Response
+
+include::{snippets}/check-authentication-number/http-response.adoc[]
+include::{snippets}/check-authentication-number/response-fields.adoc[]
