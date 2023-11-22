@@ -2,6 +2,7 @@ package com.travelsketch.travel.docs.member;
 
 import com.travelsketch.travel.api.controller.member.AccountController;
 import com.travelsketch.travel.api.controller.member.request.CreateMemberRequest;
+import com.travelsketch.travel.api.controller.member.request.LoginMemberRequest;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -82,6 +83,49 @@ public class AccountControllerDocsTest extends RestDocsSupport {
                         .description("닉네임"),
                     fieldWithPath("data.joinedDate").type(JsonFieldType.ARRAY)
                         .description("가입 일시")
+                )
+            ));
+    }
+
+    @DisplayName("회원 로그인 API")
+    @Test
+    void login() throws Exception {
+        LoginMemberRequest request = LoginMemberRequest.builder()
+            .email("temp@naver.com")
+            .pwd("temp1234!")
+            .build();
+
+        mockMvc.perform(
+                post(BASE_URL + "/login")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("login-member",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestFields(
+                    fieldWithPath("email").type(JsonFieldType.STRING)
+                        .description("이메일"),
+                    fieldWithPath("pwd").type(JsonFieldType.STRING)
+                        .description("비밀번호")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.grantType").type(JsonFieldType.STRING)
+                        .description("권한 유형"),
+                    fieldWithPath("data.accessToken").type(JsonFieldType.STRING)
+                        .description("접근 토큰"),
+                    fieldWithPath("data.refreshToken").type(JsonFieldType.STRING)
+                        .description("갱신 토큰")
                 )
             ));
     }
