@@ -1,6 +1,8 @@
 package com.travelsketch.travel.docs.member;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.travelsketch.travel.api.controller.member.AccountController;
+import com.travelsketch.travel.api.controller.member.request.AuthenticationNumberRequest;
 import com.travelsketch.travel.api.controller.member.request.CreateMemberRequest;
 import com.travelsketch.travel.api.controller.member.request.LoginMemberRequest;
 import com.travelsketch.travel.docs.RestDocsSupport;
@@ -126,6 +128,40 @@ public class AccountControllerDocsTest extends RestDocsSupport {
                         .description("접근 토큰"),
                     fieldWithPath("data.refreshToken").type(JsonFieldType.STRING)
                         .description("갱신 토큰")
+                )
+            ));
+    }
+
+    @DisplayName("이메일 인증 번호 요청 API")
+    @Test
+    void requestAuthenticationNumber() throws Exception {
+        AuthenticationNumberRequest request = AuthenticationNumberRequest.builder()
+            .email("temp@naver.com")
+            .build();
+
+        mockMvc.perform(
+                post(BASE_URL + "/auth")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("request-authentication-number",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestFields(
+                    fieldWithPath("email").type(JsonFieldType.STRING)
+                        .description("이메일")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.NULL)
+                        .description("응답 데이터")
                 )
             ));
     }
