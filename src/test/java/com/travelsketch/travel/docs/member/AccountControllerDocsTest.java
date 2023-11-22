@@ -3,6 +3,7 @@ package com.travelsketch.travel.docs.member;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.travelsketch.travel.api.controller.member.AccountController;
 import com.travelsketch.travel.api.controller.member.request.AuthenticationNumberRequest;
+import com.travelsketch.travel.api.controller.member.request.CheckAuthenticationNumberRequest;
 import com.travelsketch.travel.api.controller.member.request.CreateMemberRequest;
 import com.travelsketch.travel.api.controller.member.request.LoginMemberRequest;
 import com.travelsketch.travel.docs.RestDocsSupport;
@@ -152,6 +153,43 @@ public class AccountControllerDocsTest extends RestDocsSupport {
                 requestFields(
                     fieldWithPath("email").type(JsonFieldType.STRING)
                         .description("이메일")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.NULL)
+                        .description("응답 데이터")
+                )
+            ));
+    }
+
+    @DisplayName("이메일 인증 번호 확인 API")
+    @Test
+    void checkAuthenticationNumber() throws Exception {
+        CheckAuthenticationNumberRequest request = CheckAuthenticationNumberRequest.builder()
+            .email("temp@naver.com")
+            .authenticationNumber("1V4g6d16")
+            .build();
+
+        mockMvc.perform(
+                post(BASE_URL + "/auth/check")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("check-authentication-number",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestFields(
+                    fieldWithPath("email").type(JsonFieldType.STRING)
+                        .description("이메일"),
+                    fieldWithPath("authenticationNumber").type(JsonFieldType.STRING)
+                        .description("인증 번호")
                 ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER)
