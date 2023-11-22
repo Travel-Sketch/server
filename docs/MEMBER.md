@@ -7,5 +7,5 @@
 * [ ] 회원은 로그아웃을 할 수 있다.
 * [ ] 회원은 본인의 회원 정보를 조회할 수 있다. - `MemberQueryController#searchMemberInfo`
 * [ ] 회원 비밀번호를 수정할 수 있다. - `MemberController#modifyPwd`
-* [ ] 회원 닉네임을 수정할 수 있다.
-* [ ] 회원 삭제(탈퇴)를 할 수 있다.
+* [ ] 회원 닉네임을 수정할 수 있다. - `MemberController#modifyNickname`
+* [ ] 회원 삭제(탈퇴)를 할 수 있다. - `MemberController#withdrawal`
