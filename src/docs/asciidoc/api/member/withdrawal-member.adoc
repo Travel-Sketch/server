@@ -1,0 +1,14 @@
+[[withdrawal-member]]
+=== 회원 정보 조회 API
+
+==== HTTP Request
+
+include::{snippets}/withdrawal-member/http-request.adoc[]
+include::{snippets}/withdrawal-member/request-headers.adoc[]
+include::{snippets}/withdrawal-member/request-fields.adoc[]
+
+
+==== HTTP Response
+
+include::{snippets}/withdrawal-member/http-response.adoc[]
+include::{snippets}/withdrawal-member/response-fields.adoc[]
