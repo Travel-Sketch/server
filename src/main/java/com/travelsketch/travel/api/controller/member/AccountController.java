@@ -2,6 +2,7 @@ package com.travelsketch.travel.api.controller.member;
 
 import com.travelsketch.travel.api.ApiResponse;
 import com.travelsketch.travel.api.controller.member.request.AuthenticationNumberRequest;
+import com.travelsketch.travel.api.controller.member.request.CheckAuthenticationNumberRequest;
 import com.travelsketch.travel.api.controller.member.request.CreateMemberRequest;
 import com.travelsketch.travel.api.controller.member.request.LoginMemberRequest;
 import com.travelsketch.travel.api.controller.member.response.CreateMemberResponse;
@@ -48,6 +49,11 @@ public class AccountController {
 
     @PostMapping("/auth")
     public ApiResponse<String> requestAuthenticationNumber(@RequestBody AuthenticationNumberRequest request) {
+        return ok(null);
+    }
+
+    @PostMapping("/auth/check")
+    public ApiResponse<String> checkAuthenticationNumber(@RequestBody CheckAuthenticationNumberRequest request) {
         return ok(null);
     }
 }
