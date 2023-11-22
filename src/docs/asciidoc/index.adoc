@@ -15,4 +15,4 @@ include::overview.adoc[]
 [[Member-API]]
 == Member API
 
-
+include::api/member/create-member.adoc[]
