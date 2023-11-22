@@ -1,6 +1,7 @@
 package com.travelsketch.travel.docs.member;
 
 import com.travelsketch.travel.api.controller.member.MemberController;
+import com.travelsketch.travel.api.controller.member.request.ModifyNicknameRequest;
 import com.travelsketch.travel.api.controller.member.request.ModifyPwdRequest;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
@@ -66,6 +67,49 @@ public class MemberControllerDocsTest extends RestDocsSupport {
                         .description("메시지"),
                     fieldWithPath("data").type(JsonFieldType.NULL)
                         .description("응답 데이터")
+                )
+            ));
+    }
+
+    @DisplayName("닉네임 변경 API")
+    @Test
+    void modifyNickname() throws Exception {
+        ModifyNicknameRequest request  = ModifyNicknameRequest.builder()
+            .nickname("에스파 카리나")
+            .build();
+
+        mockMvc.perform(
+                patch(BASE_URL + "/nickname")
+                    .header("Authorization", "Bearer Access Token")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("modify-nickname-member",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestHeaders(
+                    headerWithName("Authorization")
+                        .description("Bearer Access Token")
+                ),
+                requestFields(
+                    fieldWithPath("nickname").type(JsonFieldType.STRING)
+                        .description("새로운 닉네임")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.modifiedNickname").type(JsonFieldType.STRING)
+                        .description("수정된 닉네임"),
+                    fieldWithPath("data.modifiedDate").type(JsonFieldType.ARRAY)
+                        .description("수정된 일시")
                 )
             ));
     }
