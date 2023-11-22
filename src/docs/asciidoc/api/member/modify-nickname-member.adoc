@@ -1,0 +1,14 @@
+[[modify-nickname-member]]
+=== 닉네임 변경 API
+
+==== HTTP Request
+
+include::{snippets}/modify-nickname-member/http-request.adoc[]
+include::{snippets}/modify-nickname-member/request-headers.adoc[]
+include::{snippets}/modify-nickname-member/request-fields.adoc[]
+
+
+==== HTTP Response
+
+include::{snippets}/modify-nickname-member/http-response.adoc[]
+include::{snippets}/modify-nickname-member/response-fields.adoc[]

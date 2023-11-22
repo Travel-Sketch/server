@@ -1,0 +1,25 @@
+ifndef::snippets[]
+:snippets: ../../build/generated-snippets
+endif::[]
+= Travel Sketch REST API 문서
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+include::overview.adoc[]
+
+
+[[Member-API]]
+== Member API
+
+include::api/member/request-authentication-number.adoc[]
+include::api/member/check-authentication-number.adoc[]
+include::api/member/create-member.adoc[]
+include::api/member/login-member.adoc[]
+include::api/member/search-member-info.adoc[]
+include::api/member/modify-pwd-member.adoc[]
+include::api/member/modify-nickname-member.adoc[]
+include::api/member/withdrawal-member.adoc[]
