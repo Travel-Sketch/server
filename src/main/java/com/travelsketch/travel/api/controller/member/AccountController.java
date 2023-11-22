@@ -1,6 +1,7 @@
 package com.travelsketch.travel.api.controller.member;
 
 import com.travelsketch.travel.api.ApiResponse;
+import com.travelsketch.travel.api.controller.member.request.AuthenticationNumberRequest;
 import com.travelsketch.travel.api.controller.member.request.CreateMemberRequest;
 import com.travelsketch.travel.api.controller.member.request.LoginMemberRequest;
 import com.travelsketch.travel.api.controller.member.response.CreateMemberResponse;
@@ -43,5 +44,10 @@ public class AccountController {
             .refreshToken("refresh.token")
             .build();
         return ok(tokenInfo);
+    }
+
+    @PostMapping("/auth")
+    public ApiResponse<String> requestAuthenticationNumber(@RequestBody AuthenticationNumberRequest request) {
+        return ok(null);
     }
 }
