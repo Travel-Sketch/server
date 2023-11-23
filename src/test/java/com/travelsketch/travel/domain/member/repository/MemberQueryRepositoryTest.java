@@ -21,7 +21,7 @@ class MemberQueryRepositoryTest extends IntegrationTestSupport {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    @DisplayName("이미 등록된 이메일이 존재하면 false를 반환한다.")
+    @DisplayName("이미 등록된 이메일이 존재하지 않으면 false를 반환한다.")
     @Test
     void existEmailIsFalse() {
         //given
@@ -44,6 +44,31 @@ class MemberQueryRepositoryTest extends IntegrationTestSupport {
 
         //then
         assertThat(isExistedEmail).isTrue();
+    }
+
+    @DisplayName("이미 등록된 닉네임이 존재하지 않으면 false를 반환한다.")
+    @Test
+    void existNicknameIsFalse() {
+        //given
+
+        //when
+        boolean isExistedNickname = memberQueryRepository.existNickname("카리나");
+
+        //then
+        assertThat(isExistedNickname).isFalse();
+    }
+
+    @DisplayName("이미 등록된 닉네임이 존재하면 true를 반환한다.")
+    @Test
+    void existNicknameIsTrue() {
+        //given
+        Member member = savedMember();
+
+        //when
+        boolean isExistedNickname = memberQueryRepository.existNickname("카리나");
+
+        //then
+        assertThat(isExistedNickname).isTrue();
     }
 
     private Member savedMember() {
