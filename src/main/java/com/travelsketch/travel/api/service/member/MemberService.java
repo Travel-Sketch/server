@@ -21,19 +21,35 @@ public class MemberService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public CreateMemberResponse createMember(CreateMemberDto dto) {
-        boolean isExistedEmail = memberQueryRepository.existEmail(dto.email());
+
+        checkDuplicationForEmail(dto.email());
+        checkDuplicationForNickname(dto.nickname());
+
+        Member member = toEntity(dto);
+
+        Member savedMember = memberRepository.save(member);
+
+        return CreateMemberResponse.of(savedMember);
+    }
+
+    private void checkDuplicationForEmail(String email) {
+        boolean isExistedEmail = memberQueryRepository.existEmail(email);
         if (isExistedEmail) {
             throw new IllegalArgumentException("이미 사용 중인 이메일 입니다.");
         }
+    }
 
-        boolean isExistedNickname = memberQueryRepository.existNickname(dto.nickname());
+    private void checkDuplicationForNickname(String nickname) {
+        boolean isExistedNickname = memberQueryRepository.existNickname(nickname);
         if (isExistedNickname) {
             throw new IllegalArgumentException("이미 사용 중인 닉네임 입니다.");
         }
+    }
 
+    private Member toEntity(CreateMemberDto dto) {
         String encodedPwd = passwordEncoder.encode(dto.pwd());
 
-        Member member = Member.builder()
+        return Member.builder()
             .email(dto.email())
             .pwd(encodedPwd)
             .name(dto.name())
@@ -42,9 +58,5 @@ public class MemberService {
             .nickname(dto.nickname())
             .role(Role.USER)
             .build();
-
-        Member savedMember = memberRepository.save(member);
-
-        return CreateMemberResponse.of(savedMember);
     }
 }
