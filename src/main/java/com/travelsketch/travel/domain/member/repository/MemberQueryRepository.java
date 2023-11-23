@@ -24,4 +24,8 @@ public class MemberQueryRepository {
 
         return content != null;
     }
+
+    public boolean existNickname(String nickname) {
+        return false;
+    }
 }
