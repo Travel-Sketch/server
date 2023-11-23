@@ -26,6 +26,12 @@ public class MemberQueryRepository {
     }
 
     public boolean existNickname(String nickname) {
-        return false;
+        Long content = queryFactory
+            .select(member.id)
+            .from(member)
+            .where(member.nickname.eq(nickname))
+            .fetchFirst();
+
+        return content != null;
     }
 }
