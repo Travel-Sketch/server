@@ -1,19 +1,27 @@
 package com.travelsketch.travel.docs.member;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.travelsketch.travel.api.controller.member.AccountController;
 import com.travelsketch.travel.api.controller.member.request.AuthenticationNumberRequest;
 import com.travelsketch.travel.api.controller.member.request.CheckAuthenticationNumberRequest;
 import com.travelsketch.travel.api.controller.member.request.CreateMemberRequest;
 import com.travelsketch.travel.api.controller.member.request.LoginMemberRequest;
+import com.travelsketch.travel.api.controller.member.response.CreateMemberResponse;
+import com.travelsketch.travel.api.service.member.MemberService;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentRequest;
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.*;
+import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -22,24 +30,37 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class AccountControllerDocsTest extends RestDocsSupport {
 
+    private final MemberService memberService = mock(MemberService.class);
     private static final String BASE_URL = "/api/v1";
 
     @Override
     protected Object initController() {
-        return new AccountController();
+        return new AccountController(memberService);
     }
 
     @DisplayName("회원 가입 API")
     @Test
     void join() throws Exception {
         CreateMemberRequest request = CreateMemberRequest.builder()
-            .email("temp@naver.com")
-            .pwd("temp1234!")
+            .email("karina@naver.com")
+            .pwd("karina1234!")
             .name("유지민")
-            .birth("2000-04-11")
+            .birth(LocalDate.of(2000, 4, 11))
             .gender("F")
             .nickname("카리나")
             .build();
+
+        CreateMemberResponse response = CreateMemberResponse.builder()
+            .email("karina@naver.com")
+            .name("유지민")
+            .birth(LocalDate.of(2000, 4, 11).toString())
+            .gender("F")
+            .nickname("카리나")
+            .joinedDate(LocalDateTime.of(2023, 11, 24, 14, 59))
+            .build();
+
+        given(memberService.createMember(any()))
+            .willReturn(response);
 
         mockMvc.perform(
                 post(BASE_URL + "/join")
@@ -58,7 +79,7 @@ public class AccountControllerDocsTest extends RestDocsSupport {
                         .description("비밀번호"),
                     fieldWithPath("name").type(JsonFieldType.STRING)
                         .description("이름"),
-                    fieldWithPath("birth").type(JsonFieldType.STRING)
+                    fieldWithPath("birth").type(JsonFieldType.ARRAY)
                         .description("생년월일"),
                     fieldWithPath("gender").type(JsonFieldType.STRING)
                         .description("성별"),
