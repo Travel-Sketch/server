@@ -1,5 +1,6 @@
 package com.travelsketch.travel.api.controller.member.response;
 
+import com.travelsketch.travel.domain.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -23,5 +24,16 @@ public class CreateMemberResponse {
         this.gender = gender;
         this.nickname = nickname;
         this.joinedDate = joinedDate;
+    }
+
+    public static CreateMemberResponse of(Member member) {
+        return CreateMemberResponse.builder()
+            .email(member.getEmail())
+            .name(member.getName())
+            .birth(member.getBirth())
+            .gender(member.getGender())
+            .nickname(member.getNickname())
+            .joinedDate(member.getCreatedDate())
+            .build();
     }
 }

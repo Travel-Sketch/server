@@ -7,14 +7,15 @@ import com.travelsketch.travel.api.controller.member.request.CreateMemberRequest
 import com.travelsketch.travel.api.controller.member.request.LoginMemberRequest;
 import com.travelsketch.travel.api.controller.member.response.CreateMemberResponse;
 import com.travelsketch.travel.api.controller.member.response.TokenInfo;
+import com.travelsketch.travel.api.service.member.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
 import static com.travelsketch.travel.api.ApiResponse.*;
+import static com.travelsketch.travel.api.controller.member.MemberCustomValid.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,17 +23,19 @@ import static com.travelsketch.travel.api.ApiResponse.*;
 @RequestMapping("/api/v1")
 public class AccountController {
 
+    private final MemberService memberService;
+
     @PostMapping("/join")
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<CreateMemberResponse> join(@RequestBody CreateMemberRequest request) {
-        CreateMemberResponse response = CreateMemberResponse.builder()
-            .email("temp@naver.com")
-            .name("유지민")
-            .birth("2000-04-11")
-            .gender("F")
-            .nickname("카리나")
-            .joinedDate(LocalDateTime.of(2023, 11, 11, 18, 0))
-            .build();
+    public ApiResponse<CreateMemberResponse> join(@Valid @RequestBody CreateMemberRequest request) {
+
+        validEmail(request.getEmail());
+        validPwd(request.getPwd());
+        validName(request.getName());
+        validGender(request.getGender());
+        validNickname(request.getNickname());
+
+        CreateMemberResponse response = memberService.createMember(request.toDto());
 
         return created(response);
     }
