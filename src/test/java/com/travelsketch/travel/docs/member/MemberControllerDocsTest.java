@@ -4,6 +4,7 @@ import com.travelsketch.travel.api.controller.member.MemberController;
 import com.travelsketch.travel.api.controller.member.request.ModifyNicknameRequest;
 import com.travelsketch.travel.api.controller.member.request.ModifyPwdRequest;
 import com.travelsketch.travel.api.controller.member.request.WithdrawalMemberRequest;
+import com.travelsketch.travel.api.controller.member.response.ModifyNicknameResponse;
 import com.travelsketch.travel.api.service.member.MemberService;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import com.travelsketch.travel.security.SecurityUtils;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+
+import java.time.LocalDateTime;
 
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentRequest;
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
@@ -87,9 +90,20 @@ public class MemberControllerDocsTest extends RestDocsSupport {
     @DisplayName("닉네임 변경 API")
     @Test
     void modifyNickname() throws Exception {
+        given(securityUtils.getCurrentEmail())
+            .willReturn("karina@naver.com");
+
         ModifyNicknameRequest request  = ModifyNicknameRequest.builder()
-            .nickname("에스파 카리나")
+            .nickname("asepa카리나")
             .build();
+
+        ModifyNicknameResponse response = ModifyNicknameResponse.builder()
+            .modifiedNickname("asepa카리나")
+            .modifiedDate(LocalDateTime.of(2023, 11, 11, 10, 0))
+            .build();
+
+        given(memberService.modifyNickname(anyString(), anyString()))
+            .willReturn(response);
 
         mockMvc.perform(
                 patch(BASE_URL + "/nickname")

@@ -1,6 +1,7 @@
 package com.travelsketch.travel.api.controller.member;
 
 import com.travelsketch.travel.ControllerTestSupport;
+import com.travelsketch.travel.api.controller.member.request.ModifyNicknameRequest;
 import com.travelsketch.travel.api.controller.member.request.ModifyPwdRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -83,5 +84,49 @@ class MemberControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.code").value("400"))
             .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("비밀번호는 최소 8자, 최대 20자 입니다."));
+    }
+
+    @DisplayName("닉네임 변경시 닉네임은 필수값이다.")
+    @Test
+    void modifyNicknameWithoutNickname() throws Exception {
+        //given
+        ModifyNicknameRequest request = ModifyNicknameRequest.builder()
+            .nickname(" ")
+            .build();
+
+        //when //then
+        mockMvc.perform(
+                patch(BASE_URL + "/nickname")
+                    .with(csrf())
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("400"))
+            .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("닉네임은 필수입니다."));
+    }
+
+    @DisplayName("닉네임 변경시 닉네임은 최대 10자이다.")
+    @Test
+    void modifyNicknameOutOfSizeNickname() throws Exception {
+        //given
+        ModifyNicknameRequest request = ModifyNicknameRequest.builder()
+            .nickname("aspea카리나유지민")
+            .build();
+
+        //when //then
+        mockMvc.perform(
+                patch(BASE_URL + "/nickname")
+                    .with(csrf())
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("400"))
+            .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("닉네임은 최대 10자 입니다."));
     }
 }
