@@ -40,4 +40,6 @@
   * [x] [예외] 입력 받은 새로운 닉네임의 길이가 10자를 초과하면 예외가 발생한다.
   * [x] [예외] 입력 받은 새로운 닉네임에 한글, 영어, 숫자 이외의 문자가 존재하면 예외가 발생한다.
   * [x] [예외] 입력 받은 새로운 닉네임이 이미 사용 중이라면 예외가 발생한다. - `MemberService#checkDuplicationForNickname`
-* [ ] 회원 삭제(탈퇴)를 할 수 있다. - `MemberController#withdrawal`
+* [x] 회원 삭제(탈퇴)를 할 수 있다. - `MemberController#withdrawal`
+  * [x] 비밀번호를 입력 받아 회원 삭제(탈퇴)를 한다. - `MemberService#removeMember`
+  * [x] [예외] 입력 받은 비밀번호가 일치하지 않으면 예외가 발생한다. - `MemberService#checkCurrentPwd`
