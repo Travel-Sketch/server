@@ -39,6 +39,20 @@ public class NoticeService {
     }
 
     public ModifyNoticeResponse modifyNotice(String email, Long noticeId, String title, String content) {
-        return null;
+        Optional<Notice> findNotice = noticeRepository.findById(noticeId);
+        if (findNotice.isEmpty()) {
+            throw new NoSuchElementException("등록되지 않은 공지사항입니다.");
+        }
+        Notice notice = findNotice.get();
+
+        Optional<Member> findMember = memberRepository.findByEmail(email);
+        if (findMember.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        Member member = findMember.get();
+
+        Notice modifiedNotice = notice.modify(title, content, member);
+
+        return ModifyNoticeResponse.of(modifiedNotice);
     }
 }
