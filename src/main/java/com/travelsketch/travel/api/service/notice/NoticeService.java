@@ -1,6 +1,7 @@
 package com.travelsketch.travel.api.service.notice;
 
 import com.travelsketch.travel.api.controller.notice.response.CreateNoticeResponse;
+import com.travelsketch.travel.api.controller.notice.response.ModifyNoticeResponse;
 import com.travelsketch.travel.domain.member.Member;
 import com.travelsketch.travel.domain.member.repository.MemberRepository;
 import com.travelsketch.travel.domain.notice.Notice;
@@ -35,5 +36,9 @@ public class NoticeService {
         Notice savedNotice = noticeRepository.save(notice);
 
         return CreateNoticeResponse.of(savedNotice);
+    }
+
+    public ModifyNoticeResponse modifyNotice(String email, Long noticeId, String title, String content) {
+        return null;
     }
 }
