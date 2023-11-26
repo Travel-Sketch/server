@@ -1,6 +1,7 @@
 package com.travelsketch.travel.domain.notice.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.travelsketch.travel.api.controller.notice.response.NoticeDetailResponse;
 import com.travelsketch.travel.api.controller.notice.response.NoticeResponse;
@@ -71,6 +72,21 @@ public class NoticeQueryRepository {
     }
 
     public Optional<NoticeDetailResponse> findById(Long noticeId) {
-        return Optional.empty();
+        NoticeDetailResponse content = queryFactory
+            .select(
+                Projections.constructor(
+                    NoticeDetailResponse.class,
+                    Expressions.asNumber(noticeId),
+                    notice.title,
+                    notice.content,
+                    notice.createdDate
+                )
+            )
+            .from(notice)
+            .where(
+                notice.id.eq(noticeId)
+            )
+            .fetchFirst();
+        return Optional.ofNullable(content);
     }
 }
