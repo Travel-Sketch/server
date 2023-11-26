@@ -56,7 +56,15 @@ public class MemberService {
     }
 
     public ModifyNicknameResponse modifyNickname(String email, String nickname) {
-        return null;
+        Optional<Member> findMember = memberRepository.findByEmail(email);
+        if (findMember.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        Member member = findMember.get();
+
+        Member modifiedMember = member.modifyNickname(nickname);
+
+        return ModifyNicknameResponse.of(modifiedMember);
     }
 
     private void checkDuplicationForEmail(String email) {

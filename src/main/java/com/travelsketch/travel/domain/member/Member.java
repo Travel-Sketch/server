@@ -58,4 +58,9 @@ public class Member extends TimeBaseEntity {
         this.pwd = pwd;
         return this;
     }
+
+    public Member modifyNickname(String nickname) {
+        this.nickname = nickname;
+        return this;
+    }
 }
