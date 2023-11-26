@@ -5,6 +5,7 @@ import com.travelsketch.travel.api.controller.notice.request.CreateNoticeRequest
 import com.travelsketch.travel.api.controller.notice.request.ModifyNoticeRequest;
 import com.travelsketch.travel.api.controller.notice.response.CreateNoticeResponse;
 import com.travelsketch.travel.api.controller.notice.response.ModifyNoticeResponse;
+import com.travelsketch.travel.api.controller.notice.response.RemoveNoticeResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -40,6 +41,16 @@ public class NoticeController {
             .modifiedDate(LocalDateTime.of(2023, 11, 26, 16, 56))
             .build();
 
+        return ok(response);
+    }
+
+    @DeleteMapping("/{noticeId}")
+    public ApiResponse<RemoveNoticeResponse> removeNotice(@PathVariable Long noticeId) {
+        RemoveNoticeResponse response = RemoveNoticeResponse.builder()
+            .noticeId(1L)
+            .title("삭제된 공지사항 제목입니다.")
+            .removedDate(LocalDateTime.of(2023, 11, 26, 17, 2))
+            .build();
         return ok(response);
     }
 }

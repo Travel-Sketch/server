@@ -14,8 +14,7 @@ import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -127,6 +126,44 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
                         .description("공지사항 제목"),
                     fieldWithPath("data.modifiedDate").type(JsonFieldType.ARRAY)
                         .description("공지사항 수정 일시")
+                )
+            ));
+    }
+
+    @DisplayName("공지사항 삭제 API")
+    @Test
+    void removeNotice() throws Exception {
+        mockMvc.perform(
+                delete(BASE_URL + "/{noticeId}", 1L)
+                    .header("Authorization", "Bearer Access Token")
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("modify-notice",
+                getDocumentResponse(),
+                requestHeaders(
+                    headerWithName("Authorization")
+                        .description("Bearer Access Token")
+                ),
+                pathParameters(
+                    parameterWithName("noticeId")
+                        .description("공지사항 아이디")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.noticeId").type(JsonFieldType.NUMBER)
+                        .description("공지사항 아이디"),
+                    fieldWithPath("data.title").type(JsonFieldType.STRING)
+                        .description("공지사항 제목"),
+                    fieldWithPath("data.removedDate").type(JsonFieldType.ARRAY)
+                        .description("공지사항 삭제 일시")
                 )
             ));
     }
