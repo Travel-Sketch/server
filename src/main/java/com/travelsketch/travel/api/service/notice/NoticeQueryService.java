@@ -1,6 +1,7 @@
 package com.travelsketch.travel.api.service.notice;
 
 import com.travelsketch.travel.api.PageResponse;
+import com.travelsketch.travel.api.controller.notice.response.NoticeDetailResponse;
 import com.travelsketch.travel.api.controller.notice.response.NoticeResponse;
 import com.travelsketch.travel.domain.notice.repository.NoticeQueryRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +27,9 @@ public class NoticeQueryService {
         PageImpl<NoticeResponse> content = new PageImpl<>(responses, pageable, count);
 
         return new PageResponse<>(content);
+    }
+
+    public NoticeDetailResponse searchById(Long noticeId) {
+        return null;
     }
 }
