@@ -79,6 +79,7 @@ public class NoticeQueryRepository {
                     Expressions.asNumber(noticeId),
                     notice.title,
                     notice.content,
+                    notice.isDeleted,
                     notice.createdDate
                 )
             )
