@@ -1,6 +1,7 @@
 package com.travelsketch.travel.api.service.member;
 
 import com.travelsketch.travel.api.controller.member.response.CreateMemberResponse;
+import com.travelsketch.travel.api.controller.member.response.ModifyNicknameResponse;
 import com.travelsketch.travel.api.service.member.dto.CreateMemberDto;
 import com.travelsketch.travel.domain.member.Member;
 import com.travelsketch.travel.domain.member.Role;
@@ -52,6 +53,10 @@ public class MemberService {
         Member modifiedMember = member.modifyPwd(encodedPwd);
 
         return true;
+    }
+
+    public ModifyNicknameResponse modifyNickname(String email, String nickname) {
+        return null;
     }
 
     private void checkDuplicationForEmail(String email) {

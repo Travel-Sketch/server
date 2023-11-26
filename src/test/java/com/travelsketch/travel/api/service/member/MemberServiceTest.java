@@ -2,6 +2,7 @@ package com.travelsketch.travel.api.service.member;
 
 import com.travelsketch.travel.IntegrationTestSupport;
 import com.travelsketch.travel.api.controller.member.response.CreateMemberResponse;
+import com.travelsketch.travel.api.controller.member.response.ModifyNicknameResponse;
 import com.travelsketch.travel.api.service.member.dto.CreateMemberDto;
 import com.travelsketch.travel.domain.member.Member;
 import com.travelsketch.travel.domain.member.Role;
@@ -115,6 +116,22 @@ class MemberServiceTest extends IntegrationTestSupport {
 
         boolean matches = passwordEncoder.matches("karina5678@", findMember.get().getPwd());
         assertThat(matches).isTrue();
+    }
+
+    @DisplayName("이메일, 닉네임을 입력 받아 닉네임을 수정한다.")
+    @Test
+    void modifyNickname() {
+        //given
+        Member member = savedMember();
+
+        //when
+        ModifyNicknameResponse response = memberService.modifyNickname("karina@naver.com", "에스파 카리나");
+
+        //then
+        Optional<Member> findMember = memberRepository.findById(member.getId());
+        assertThat(findMember).isPresent();
+
+        assertThat(findMember.get().getNickname()).isEqualTo("에스파 카리나");
     }
 
     private Member savedMember() {
