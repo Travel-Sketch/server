@@ -1,12 +1,24 @@
 package com.travelsketch.travel.docs.notice;
 
+import com.travelsketch.travel.api.PageResponse;
 import com.travelsketch.travel.api.controller.notice.NoticeQueryController;
+import com.travelsketch.travel.api.controller.notice.response.NoticeResponse;
+import com.travelsketch.travel.api.service.notice.NoticeQueryService;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -17,16 +29,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class NoticeQueryControllerDocsTest extends RestDocsSupport {
 
+    private final NoticeQueryService noticeQueryService = mock(NoticeQueryService.class);
     private static final String BASE_URL = "/api/v1/notices";
 
     @Override
     protected Object initController() {
-        return new NoticeQueryController();
+        return new NoticeQueryController(noticeQueryService);
     }
 
     @DisplayName("공지사항 목록 조회 API")
     @Test
     void searchNotices() throws Exception {
+        NoticeResponse response = NoticeResponse.builder()
+            .noticeId(1L)
+            .title("공지사항 제목입니다.")
+            .createdDate(LocalDateTime.of(2023, 11, 26, 17, 11))
+            .build();
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        given(noticeQueryService.searchByCond(anyString(), any()))
+            .willReturn(new PageResponse<>(new PageImpl<>(List.of(response), pageRequest, 3)));
+
         mockMvc.perform(
                 get(BASE_URL)
                     .param("page", "1")
