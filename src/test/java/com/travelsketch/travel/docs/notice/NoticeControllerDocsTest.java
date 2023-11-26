@@ -139,7 +139,7 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("modify-notice",
+            .andDo(document("remove-notice",
                 getDocumentResponse(),
                 requestHeaders(
                     headerWithName("Authorization")
