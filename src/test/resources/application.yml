@@ -15,3 +15,6 @@ spring:
 logging:
   level:
     com.travelsketch.travel: debug
+
+jwt:
+  secret: temptemptemptemptemptemptemptemptemptemptemp

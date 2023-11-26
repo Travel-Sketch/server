@@ -6,11 +6,11 @@ import com.travelsketch.travel.api.controller.member.request.CheckAuthentication
 import com.travelsketch.travel.api.controller.member.request.CreateMemberRequest;
 import com.travelsketch.travel.api.controller.member.request.LoginMemberRequest;
 import com.travelsketch.travel.api.controller.member.response.CreateMemberResponse;
+import com.travelsketch.travel.api.service.member.AccountService;
 import com.travelsketch.travel.api.service.member.MemberService;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentRequest;
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -31,11 +31,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AccountControllerDocsTest extends RestDocsSupport {
 
     private final MemberService memberService = mock(MemberService.class);
+    private final AccountService accountService = mock(AccountService.class);
     private static final String BASE_URL = "/api/v1";
 
     @Override
     protected Object initController() {
-        return new AccountController(memberService);
+        return new AccountController(memberService, accountService);
     }
 
     @DisplayName("회원 가입 API")
