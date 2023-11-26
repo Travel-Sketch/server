@@ -11,6 +11,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 @Transactional
@@ -33,7 +36,22 @@ public class MemberService {
     }
 
     public boolean modifyPwd(String email, String currentPwd, String newPwd) {
-        return false;
+        Optional<Member> findMember = memberRepository.findByEmail(email);
+        if (findMember.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        Member member = findMember.get();
+
+        boolean isMatched = passwordEncoder.matches(currentPwd, member.getPwd());
+        if (!isMatched) {
+            throw new IllegalArgumentException("현재 비밀번호가 일치하지 않습니다.");
+        }
+
+        String encodedPwd = passwordEncoder.encode(newPwd);
+
+        Member modifiedMember = member.modifyPwd(encodedPwd);
+
+        return true;
     }
 
     private void checkDuplicationForEmail(String email) {

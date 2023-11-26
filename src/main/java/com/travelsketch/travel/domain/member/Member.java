@@ -52,4 +52,10 @@ public class Member extends TimeBaseEntity {
         this.nickname = nickname;
         this.role = role;
     }
+
+    //== 비즈니스 로직 ==//
+    public Member modifyPwd(String pwd) {
+        this.pwd = pwd;
+        return this;
+    }
 }
