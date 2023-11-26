@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
 import static com.travelsketch.travel.api.ApiResponse.*;
+import static com.travelsketch.travel.api.controller.member.MemberCustomValid.validNickname;
 import static com.travelsketch.travel.api.controller.member.MemberCustomValid.validPwd;
 
 @RequiredArgsConstructor
@@ -39,11 +40,13 @@ public class MemberController {
     }
 
     @PatchMapping("/nickname")
-    public ApiResponse<ModifyNicknameResponse> modifyNickname(@RequestBody ModifyNicknameRequest request) {
-        ModifyNicknameResponse response = ModifyNicknameResponse.builder()
-            .modifiedNickname("에스파 카리나")
-            .modifiedDate(LocalDateTime.of(2023, 11, 11, 10, 0))
-            .build();
+    public ApiResponse<ModifyNicknameResponse> modifyNickname(@Valid @RequestBody ModifyNicknameRequest request) {
+        validNickname(request.getNickname());
+
+        String email = securityUtils.getCurrentEmail();
+
+        ModifyNicknameResponse response = memberService.modifyNickname(email, request.getNickname());
+
         return ok(response);
     }
 
