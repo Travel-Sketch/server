@@ -54,6 +54,25 @@ class NoticeQueryRepositoryTest extends IntegrationTestSupport {
             );
     }
 
+    @DisplayName("검색 조건에 맞는 공지사항 갯수를 조회한다.")
+    @Test
+    void findCountByCond() {
+        //given
+        Member member = saveMember();
+        Notice notice1 = saveNotice(member, "카리나 최고입니다.");
+        Notice notice2 = saveNotice(member, "에스파 카리나 최고입니다.");
+        Notice notice3 = saveNotice(member, "에스파 카리나");
+        Notice notice4 = saveNotice(member, "에스파 윈터도 최고입니다.");
+        Notice notice5 = saveNotice(member, "에스파 카리나 1위");
+        notice5.remove();
+
+        //when
+        int count = noticeQueryRepository.findCountByCond("카리나");
+
+        //then
+        assertThat(count).isEqualTo(3);
+    }
+
     private Member saveMember() {
         Member member = Member.builder()
             .email("karina@naver.com")

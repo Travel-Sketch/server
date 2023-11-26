@@ -56,4 +56,8 @@ public class NoticeQueryRepository {
             .fetch();
     }
 
+    public int findCountByCond(String query) {
+        return 0;
+    }
+
 }
