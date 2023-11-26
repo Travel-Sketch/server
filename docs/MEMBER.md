@@ -24,9 +24,20 @@
   * [x] [예외] 입력 받은 닉네임이 이미 사용 중이라면 예외가 발생한다. - `MemberService#checkDuplicationForNickname`
 * [ ] 회원 이메일 중복 확인을 위해 인증 번호 요청을 보낼 수 있다. - `AccountController#requestAuthenticationNumber`
 * [ ] 회원 이메일 중복 확인을 위해 발급 받은 인증 번호가 일치하는지 확인할 수 있다. - `AccountController#checkAuthenticationNumber`
-* [ ] 회원은 로그인을 할 수 있다. - `AccountController#login`
+* [x] 회원은 로그인을 할 수 있다. - `AccountController#login`
 * [ ] 회원은 로그아웃을 할 수 있다.
-* [ ] 회원은 본인의 회원 정보를 조회할 수 있다. - `MemberQueryController#searchMemberInfo`
-* [ ] 회원 비밀번호를 수정할 수 있다. - `MemberController#modifyPwd`
-* [ ] 회원 닉네임을 수정할 수 있다. - `MemberController#modifyNickname`
+* [x] 회원은 본인의 회원 정보를 조회할 수 있다. - `MemberQueryController#searchMemberInfo`
+  * [x] 토큰 정보로 회원 정보를 조회한다.
+  * [x] [예외] 토큰 정보와 일치하는 회원 정보가 존재하지 않으면 예외가 발생한다.
+* [x] 회원 비밀번호를 수정할 수 있다. - `MemberController#modifyPwd`
+  * [x] 현재 비밀번호, 새로운 비밀번호를 입력 받아 비밀번호 수정을 한다. - `MemberService#modifyPwd`
+  * [x] [예외] 입력 받은 현재 비밀번호가 일치하지 않으면 예외가 발생한다. - `MemberService#checkCurrentPwd`
+  * [x] [예외] 입력 받은 새로운 비밀번호가 최소 8자, 최대 20자를 벗어나면 예외가 발생한다.
+  * [x] [예외] 입력 받은 비밀번호에 영어, 숫자, 특수문자가 단 하나라도 존재하지 않으면 예외가 발생한다.
+* [x] 회원 닉네임을 수정할 수 있다. - `MemberController#modifyNickname`
+  * [x] 새로운 닉네임을 입력 받아 닉네임 수정을 한다. - `MemberService#modifyNickname`
+  * [x] [예외] 입력 받은 새로운 닉네임이 빈 문자열이면 예외가 발생한다.
+  * [x] [예외] 입력 받은 새로운 닉네임의 길이가 10자를 초과하면 예외가 발생한다.
+  * [x] [예외] 입력 받은 새로운 닉네임에 한글, 영어, 숫자 이외의 문자가 존재하면 예외가 발생한다.
+  * [x] [예외] 입력 받은 새로운 닉네임이 이미 사용 중이라면 예외가 발생한다. - `MemberService#checkDuplicationForNickname`
 * [ ] 회원 삭제(탈퇴)를 할 수 있다. - `MemberController#withdrawal`

@@ -4,8 +4,7 @@ import com.travelsketch.travel.api.controller.member.MemberQueryController;
 import com.travelsketch.travel.api.controller.member.response.MemberInfo;
 import com.travelsketch.travel.api.service.member.MemberQueryService;
 import com.travelsketch.travel.docs.RestDocsSupport;
-import com.travelsketch.travel.security.SecurityUtil;
-import org.junit.jupiter.api.BeforeEach;
+import com.travelsketch.travel.security.SecurityUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -16,7 +15,6 @@ import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockStatic;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -29,23 +27,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MemberQueryControllerDocsTest extends RestDocsSupport {
 
     private final MemberQueryService memberQueryService = mock(MemberQueryService.class);
+    private final SecurityUtils securityUtils = mock(SecurityUtils.class);
     private static final String BASE_URL = "/api/v1/members";
 
     @Override
     protected Object initController() {
-        return new MemberQueryController(memberQueryService);
-    }
-
-    @BeforeEach
-    void setUp() {
-        mockStatic(SecurityUtil.class);
+        return new MemberQueryController(memberQueryService, securityUtils);
     }
 
     @DisplayName("회원 정보 조회 API")
     @Test
     @WithMockUser(username = "karina@naver.com")
     void searchMemberInfo() throws Exception {
-        given(SecurityUtil.getCurrentEmail())
+        given(securityUtils.getCurrentEmail())
             .willReturn("karina@naver.com");
 
         MemberInfo memberInfo = MemberInfo.builder()
@@ -61,7 +55,7 @@ public class MemberQueryControllerDocsTest extends RestDocsSupport {
 
         mockMvc.perform(
                 get(BASE_URL)
-                    .header("Authorization", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJrYXJpbmFAbmF2ZXIuY29tIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTcwMTA1MjY5NX0.udPyKjH_AU_6LnaAgttJ1ycWz_SoeiaDF4tCZvGpDa0")
+                    .header("Authorization", "Bearer Access Token")
             )
             .andDo(print())
             .andExpect(status().isOk())

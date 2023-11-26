@@ -1,43 +1,57 @@
 package com.travelsketch.travel.docs.member;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.travelsketch.travel.api.controller.member.MemberController;
 import com.travelsketch.travel.api.controller.member.request.ModifyNicknameRequest;
 import com.travelsketch.travel.api.controller.member.request.ModifyPwdRequest;
 import com.travelsketch.travel.api.controller.member.request.WithdrawalMemberRequest;
+import com.travelsketch.travel.api.controller.member.response.ModifyNicknameResponse;
+import com.travelsketch.travel.api.service.member.MemberService;
 import com.travelsketch.travel.docs.RestDocsSupport;
+import com.travelsketch.travel.security.SecurityUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.time.LocalDateTime;
+
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentRequest;
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class MemberControllerDocsTest extends RestDocsSupport {
 
+    private final MemberService memberService = mock(MemberService.class);
+    private final SecurityUtils securityUtils = mock(SecurityUtils.class);
     private static final String BASE_URL = "/api/v1/members";
 
     @Override
     protected Object initController() {
-        return new MemberController();
+        return new MemberController(memberService, securityUtils);
     }
 
     @DisplayName("비밀번호 변경 API")
     @Test
     void modifyPwd() throws Exception {
+        given(securityUtils.getCurrentEmail())
+            .willReturn("karina@naver.com");
+
         ModifyPwdRequest request = ModifyPwdRequest.builder()
-            .currentPwd("temp1234!")
-            .newPwd("temp5678@")
+            .currentPwd("karina1234!")
+            .newPwd("karina5678@")
             .build();
+
+        given(memberService.modifyPwd(anyString(), anyString(), anyString()))
+            .willReturn(true);
 
         mockMvc.perform(
                 patch(BASE_URL + "/pwd")
@@ -67,7 +81,7 @@ public class MemberControllerDocsTest extends RestDocsSupport {
                         .description("상태"),
                     fieldWithPath("message").type(JsonFieldType.STRING)
                         .description("메시지"),
-                    fieldWithPath("data").type(JsonFieldType.NULL)
+                    fieldWithPath("data").type(JsonFieldType.BOOLEAN)
                         .description("응답 데이터")
                 )
             ));
@@ -76,9 +90,20 @@ public class MemberControllerDocsTest extends RestDocsSupport {
     @DisplayName("닉네임 변경 API")
     @Test
     void modifyNickname() throws Exception {
+        given(securityUtils.getCurrentEmail())
+            .willReturn("karina@naver.com");
+
         ModifyNicknameRequest request  = ModifyNicknameRequest.builder()
-            .nickname("에스파 카리나")
+            .nickname("asepa카리나")
             .build();
+
+        ModifyNicknameResponse response = ModifyNicknameResponse.builder()
+            .modifiedNickname("asepa카리나")
+            .modifiedDate(LocalDateTime.of(2023, 11, 11, 10, 0))
+            .build();
+
+        given(memberService.modifyNickname(anyString(), anyString()))
+            .willReturn(response);
 
         mockMvc.perform(
                 patch(BASE_URL + "/nickname")
@@ -120,7 +145,7 @@ public class MemberControllerDocsTest extends RestDocsSupport {
     @Test
     void withdrawal() throws Exception {
         WithdrawalMemberRequest request = WithdrawalMemberRequest.builder()
-            .pwd("temp1234!")
+            .pwd("karina1234!")
             .build();
 
         mockMvc.perform(
