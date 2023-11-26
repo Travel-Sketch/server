@@ -23,7 +23,8 @@ public class BaseEntity extends TimeBaseEntity {
     @JoinColumn(name = "last_modified_by", nullable = false)
     private Member lastModifiedBy;
 
-    protected BaseEntity(Member createdBy) {
-        this.createdBy = createdBy;
+    protected BaseEntity(Member member) {
+        this.createdBy = member;
+        this.lastModifiedBy = member;
     }
 }
