@@ -2,10 +2,12 @@ package com.travelsketch.travel.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
-public class SecurityUtil {
+@Component
+public class SecurityUtils {
 
-    public static String getCurrentEmail() {
+    public String getCurrentEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getName() == null) {
             throw new RuntimeException("No authentication information");
