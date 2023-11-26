@@ -6,6 +6,9 @@ import com.travelsketch.travel.api.controller.notice.request.ModifyNoticeRequest
 import com.travelsketch.travel.api.controller.notice.response.CreateNoticeResponse;
 import com.travelsketch.travel.api.controller.notice.response.ModifyNoticeResponse;
 import com.travelsketch.travel.api.controller.notice.response.RemoveNoticeResponse;
+import com.travelsketch.travel.api.service.notice.NoticeService;
+import com.travelsketch.travel.security.SecurityUtils;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,14 +24,15 @@ import static com.travelsketch.travel.api.ApiResponse.*;
 @RequestMapping("/api/v1/notices")
 public class NoticeController {
 
+    private final NoticeService noticeService;
+    private final SecurityUtils securityUtils;
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<CreateNoticeResponse> createNotice(@RequestBody CreateNoticeRequest request) {
-        CreateNoticeResponse response = CreateNoticeResponse.builder()
-            .noticeId(1L)
-            .title("공지사항 제목입니다.")
-            .createdDate(LocalDateTime.of(2023, 11, 26, 16, 46))
-            .build();
+    public ApiResponse<CreateNoticeResponse> createNotice(@Valid @RequestBody CreateNoticeRequest request) {
+        String email = securityUtils.getCurrentEmail();
+
+        CreateNoticeResponse response = noticeService.createNotice(email, request.getTitle(), request.getContent());
 
         return created(response);
     }
