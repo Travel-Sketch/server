@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.travelsketch.travel.api.controller.member.AccountController;
 import com.travelsketch.travel.api.controller.member.MemberController;
 import com.travelsketch.travel.api.controller.member.MemberQueryController;
+import com.travelsketch.travel.api.controller.notice.NoticeController;
 import com.travelsketch.travel.api.service.member.AccountService;
 import com.travelsketch.travel.api.service.member.MemberQueryService;
 import com.travelsketch.travel.api.service.member.MemberService;
+import com.travelsketch.travel.api.service.notice.NoticeService;
 import com.travelsketch.travel.interceptor.query.ApiQueryCounter;
 import com.travelsketch.travel.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WithMockUser
-@WebMvcTest(controllers = {AccountController.class, MemberController.class, MemberQueryController.class})
+@WebMvcTest(controllers = {AccountController.class, MemberController.class, MemberQueryController.class,
+    NoticeController.class})
 public abstract class ControllerTestSupport {
 
     @Autowired
@@ -39,4 +42,7 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected AccountService accountService;
+
+    @MockBean
+    protected NoticeService noticeService;
 }
