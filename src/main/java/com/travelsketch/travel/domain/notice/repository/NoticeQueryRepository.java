@@ -57,7 +57,15 @@ public class NoticeQueryRepository {
     }
 
     public int findCountByCond(String query) {
-        return 0;
+        return queryFactory
+            .select(notice.id)
+            .from(notice)
+            .where(
+                notice.isDeleted.isFalse(),
+                notice.title.like("%" + query + "%")
+            )
+            .fetch()
+            .size();
     }
 
 }
