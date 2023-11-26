@@ -2,6 +2,7 @@ package com.travelsketch.travel.domain.notice.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.travelsketch.travel.api.controller.notice.response.NoticeDetailResponse;
 import com.travelsketch.travel.api.controller.notice.response.NoticeResponse;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.travelsketch.travel.domain.notice.QNotice.notice;
 
@@ -68,4 +70,7 @@ public class NoticeQueryRepository {
             .size();
     }
 
+    public Optional<NoticeDetailResponse> findById(Long noticeId) {
+        return Optional.empty();
+    }
 }

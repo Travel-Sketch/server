@@ -1,6 +1,7 @@
 package com.travelsketch.travel.domain.notice.repository;
 
 import com.travelsketch.travel.IntegrationTestSupport;
+import com.travelsketch.travel.api.controller.notice.response.NoticeDetailResponse;
 import com.travelsketch.travel.api.controller.notice.response.NoticeResponse;
 import com.travelsketch.travel.domain.member.Member;
 import com.travelsketch.travel.domain.member.Role;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
@@ -71,6 +73,20 @@ class NoticeQueryRepositoryTest extends IntegrationTestSupport {
 
         //then
         assertThat(count).isEqualTo(3);
+    }
+
+    @DisplayName("공지사항 아이디로 상세 조회한다.")
+    @Test
+    void findById() {
+        //given
+        Member member = saveMember();
+        Notice notice = saveNotice(member, "공지사항 제목입니다.");
+
+        //when
+        Optional<NoticeDetailResponse> findResponse = noticeQueryRepository.findById(notice.getId());
+
+        //then
+        assertThat(findResponse).isPresent();
     }
 
     private Member saveMember() {
