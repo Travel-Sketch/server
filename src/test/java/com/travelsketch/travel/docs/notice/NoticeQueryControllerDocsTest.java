@@ -1,12 +1,24 @@
 package com.travelsketch.travel.docs.notice;
 
+import com.travelsketch.travel.api.PageResponse;
 import com.travelsketch.travel.api.controller.notice.NoticeQueryController;
+import com.travelsketch.travel.api.controller.notice.response.NoticeDetailResponse;
+import com.travelsketch.travel.api.controller.notice.response.NoticeResponse;
+import com.travelsketch.travel.api.service.notice.NoticeQueryService;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -17,16 +29,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class NoticeQueryControllerDocsTest extends RestDocsSupport {
 
+    private final NoticeQueryService noticeQueryService = mock(NoticeQueryService.class);
     private static final String BASE_URL = "/api/v1/notices";
 
     @Override
     protected Object initController() {
-        return new NoticeQueryController();
+        return new NoticeQueryController(noticeQueryService);
     }
 
     @DisplayName("공지사항 목록 조회 API")
     @Test
     void searchNotices() throws Exception {
+        NoticeResponse response = NoticeResponse.builder()
+            .noticeId(1L)
+            .title("공지사항 제목입니다.")
+            .createdDate(LocalDateTime.of(2023, 11, 26, 17, 11))
+            .build();
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        given(noticeQueryService.searchByCond(anyString(), any()))
+            .willReturn(new PageResponse<>(new PageImpl<>(List.of(response), pageRequest, 3)));
+
         mockMvc.perform(
                 get(BASE_URL)
                     .param("page", "1")
@@ -75,6 +98,17 @@ public class NoticeQueryControllerDocsTest extends RestDocsSupport {
     @DisplayName("공지사항 상세 조회 API")
     @Test
     void searchNotice() throws Exception {
+        NoticeDetailResponse response = NoticeDetailResponse.builder()
+            .noticeId(1L)
+            .title("공지사항 제목입니다.")
+            .content("공지사항 내용입니다.")
+            .isDeleted(false)
+            .createdDate(LocalDateTime.of(2023, 11, 26, 17, 30))
+            .build();
+
+        given(noticeQueryService.searchById(anyLong()))
+            .willReturn(response);
+
         mockMvc.perform(
                 get(BASE_URL + "/{noticeId}", 1L)
             )
@@ -101,6 +135,8 @@ public class NoticeQueryControllerDocsTest extends RestDocsSupport {
                         .description("공지사항 제목"),
                     fieldWithPath("data.content").type(JsonFieldType.STRING)
                         .description("공지사항 내용"),
+                    fieldWithPath("data.isDeleted").type(JsonFieldType.BOOLEAN)
+                        .description("공지사항 삭제여부"),
                     fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY)
                         .description("공지사항 등록 일시")
                 )

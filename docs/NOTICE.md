@@ -5,7 +5,14 @@
   * [x] [예외] 입력 받은 제목이 빈 문자열이면 예외가 발생한다.
   * [x] [예외] 입력 받은 제목의 길이가 50자를 초과하면 예외가 발생한다.
   * [x] [예외] 입력 받은 내용이 빈 문자열이면 예외가 발생한다.
-* [ ] 모든 사용자는 공지사항을 조회할 수 있다. - `NoticeController#searchNotices`
-* [ ] 모든 사용자는 공지사항을 상세 조회할 수 있다. - `NoticeController#searchNotice`
+* [x] 모든 사용자는 공지사항을 조회할 수 있다. - `NoticeController#searchNotices`
+  * [x] 페이지 번호, 검색 쿼리를 입력 받아 공지사항을 조회한다. - `NoticeQueryService#searchByCond`
+  * [x] 페이지 번호의 기본값은 1이다.
+  * [x] 검색 쿼리의 기본값은 빈 문자열이다.
+  * [x] [예외] 입력 받은 페이지 번호가 0이하라면 예외가 발생한다.
+* [x] 모든 사용자는 공지사항을 상세 조회할 수 있다. - `NoticeController#searchNotice`
+  * [x] 아이디를 입력 받아 공지사항을 상세 조회한다. - `NoticeQueryService#notice`
+  * [x] [예외] 입력 받은 아이디와 일치하는 공지사항이 존재하지 않으면 예외가 발생한다.
+  * [x] [예외] 입력 받은 아이디로 조회된 결과가 삭제된 공지사항이라면 예외가 발생한다.
 * [ ] 관리자는 공지사항을 수정할 수 있다. - `NoticeController#modifyNotice`
 * [ ] 관리자는 공지사항을 삭제할 수 있다. - `NoticeController#removeNotice`
