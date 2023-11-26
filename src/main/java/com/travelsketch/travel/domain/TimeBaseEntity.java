@@ -35,7 +35,7 @@ public class TimeBaseEntity {
     @Column(nullable = false, columnDefinition = "datetime default now()")
     private LocalDateTime lastModifiedDate;
 
-    protected void remove() {
+    public void remove() {
         this.isDeleted = true;
     }
 }

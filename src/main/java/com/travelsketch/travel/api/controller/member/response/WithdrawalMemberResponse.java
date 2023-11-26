@@ -1,5 +1,6 @@
 package com.travelsketch.travel.api.controller.member.response;
 
+import com.travelsketch.travel.domain.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,5 +18,13 @@ public class WithdrawalMemberResponse {
         this.email = email;
         this.name = name;
         this.removedDate = removedDate;
+    }
+
+    public static WithdrawalMemberResponse of(Member member) {
+        return WithdrawalMemberResponse.builder()
+            .email(member.getEmail())
+            .name(member.getName())
+            .removedDate(member.getLastModifiedDate())
+            .build();
     }
 }

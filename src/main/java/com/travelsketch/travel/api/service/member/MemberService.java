@@ -68,7 +68,17 @@ public class MemberService {
     }
 
     public WithdrawalMemberResponse removeMember(String email, String pwd) {
-        return null;
+        Optional<Member> findMember = memberRepository.findByEmail(email);
+        if (findMember.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        Member member = findMember.get();
+
+        checkCurrentPwd(pwd, member.getPwd());
+
+        member.remove();
+
+        return WithdrawalMemberResponse.of(member);
     }
 
     private void checkDuplicationForEmail(String email) {
