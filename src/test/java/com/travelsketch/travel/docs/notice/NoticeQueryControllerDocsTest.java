@@ -71,4 +71,39 @@ public class NoticeQueryControllerDocsTest extends RestDocsSupport {
                 )
             ));
     }
+
+    @DisplayName("공지사항 상세 조회 API")
+    @Test
+    void searchNotice() throws Exception {
+        mockMvc.perform(
+                get(BASE_URL + "/{noticeId}", 1L)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("search-notice",
+                getDocumentResponse(),
+                pathParameters(
+                    parameterWithName("noticeId")
+                        .description("공지사항 아이디")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.noticeId").type(JsonFieldType.NUMBER)
+                        .description("공지사항 아이디"),
+                    fieldWithPath("data.title").type(JsonFieldType.STRING)
+                        .description("공지사항 제목"),
+                    fieldWithPath("data.content").type(JsonFieldType.STRING)
+                        .description("공지사항 내용"),
+                    fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY)
+                        .description("공지사항 등록 일시")
+                )
+            ));
+    }
 }
