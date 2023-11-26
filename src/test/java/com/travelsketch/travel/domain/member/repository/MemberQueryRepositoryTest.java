@@ -1,12 +1,15 @@
 package com.travelsketch.travel.domain.member.repository;
 
 import com.travelsketch.travel.IntegrationTestSupport;
+import com.travelsketch.travel.api.controller.member.response.MemberInfo;
 import com.travelsketch.travel.domain.member.Member;
 import com.travelsketch.travel.domain.member.Role;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -27,7 +30,7 @@ class MemberQueryRepositoryTest extends IntegrationTestSupport {
         //given
 
         //when
-        boolean isExistedEmail = memberQueryRepository.existEmail("temp@naver.com");
+        boolean isExistedEmail = memberQueryRepository.existEmail("karina@naver.com");
 
         //then
         assertThat(isExistedEmail).isFalse();
@@ -40,7 +43,7 @@ class MemberQueryRepositoryTest extends IntegrationTestSupport {
         Member member = savedMember();
 
         //when
-        boolean isExistedEmail = memberQueryRepository.existEmail("temp@naver.com");
+        boolean isExistedEmail = memberQueryRepository.existEmail("karina@naver.com");
 
         //then
         assertThat(isExistedEmail).isTrue();
@@ -71,10 +74,23 @@ class MemberQueryRepositoryTest extends IntegrationTestSupport {
         assertThat(isExistedNickname).isTrue();
     }
 
+    @DisplayName("이메일로 회원 정보를 조회한다.")
+    @Test
+    void findMemberInfoByEmail() {
+        //given
+        Member member = savedMember();
+
+        //when
+        Optional<MemberInfo> findMemberInfo = memberQueryRepository.findMemberInfoByEmail("karina@naver.com");
+
+        //then
+        assertThat(findMemberInfo).isPresent();
+    }
+
     private Member savedMember() {
         Member member = Member.builder()
-            .email("temp@naver.com")
-            .pwd(passwordEncoder.encode("temp1234!"))
+            .email("karina@naver.com")
+            .pwd(passwordEncoder.encode("karina1234!"))
             .name("유지민")
             .birth("2000-04-11")
             .gender("F")

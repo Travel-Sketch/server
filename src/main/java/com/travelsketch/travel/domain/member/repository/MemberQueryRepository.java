@@ -1,10 +1,13 @@
 package com.travelsketch.travel.domain.member.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.travelsketch.travel.api.controller.member.response.MemberInfo;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 
-import static com.travelsketch.travel.domain.member.QMember.*;
+import java.util.Optional;
+
+import static com.travelsketch.travel.domain.member.QMember.member;
 
 @Repository
 public class MemberQueryRepository {
@@ -33,5 +36,9 @@ public class MemberQueryRepository {
             .fetchFirst();
 
         return content != null;
+    }
+
+    public Optional<MemberInfo> findMemberInfoByEmail(String email) {
+        return Optional.ofNullable(null);
     }
 }
