@@ -11,11 +11,12 @@ import com.travelsketch.travel.security.SecurityUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-
-import static com.travelsketch.travel.api.ApiResponse.*;
+import static com.travelsketch.travel.api.ApiResponse.ok;
 import static com.travelsketch.travel.api.controller.member.MemberCustomValid.validNickname;
 import static com.travelsketch.travel.api.controller.member.MemberCustomValid.validPwd;
 
@@ -51,12 +52,11 @@ public class MemberController {
     }
 
     @PatchMapping("/withdrawal")
-    public ApiResponse<WithdrawalMemberResponse> withdrawal(@RequestBody WithdrawalMemberRequest request) {
-        WithdrawalMemberResponse response = WithdrawalMemberResponse.builder()
-            .email("temp@naver.com")
-            .name("유지민")
-            .removedDate(LocalDateTime.of(2023, 11, 22, 20, 0))
-            .build();
+    public ApiResponse<WithdrawalMemberResponse> withdrawal(@Valid @RequestBody WithdrawalMemberRequest request) {
+        String email = securityUtils.getCurrentEmail();
+
+        WithdrawalMemberResponse response = memberService.removeMember(email, request.getPwd());
+
         return ok(response);
     }
 }
