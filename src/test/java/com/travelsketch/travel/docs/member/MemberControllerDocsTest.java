@@ -5,6 +5,7 @@ import com.travelsketch.travel.api.controller.member.request.ModifyNicknameReque
 import com.travelsketch.travel.api.controller.member.request.ModifyPwdRequest;
 import com.travelsketch.travel.api.controller.member.request.WithdrawalMemberRequest;
 import com.travelsketch.travel.api.controller.member.response.ModifyNicknameResponse;
+import com.travelsketch.travel.api.controller.member.response.WithdrawalMemberResponse;
 import com.travelsketch.travel.api.service.member.MemberService;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import com.travelsketch.travel.security.SecurityUtils;
@@ -144,9 +145,21 @@ public class MemberControllerDocsTest extends RestDocsSupport {
     @DisplayName("회원 탈퇴 API")
     @Test
     void withdrawal() throws Exception {
+        given(securityUtils.getCurrentEmail())
+            .willReturn("karian@naver.com");
+
         WithdrawalMemberRequest request = WithdrawalMemberRequest.builder()
             .pwd("karina1234!")
             .build();
+
+        WithdrawalMemberResponse response = WithdrawalMemberResponse.builder()
+            .email("karian@naver.com")
+            .name("유지민")
+            .removedDate(LocalDateTime.of(2023, 11, 22, 20, 0))
+            .build();
+
+        given(memberService.removeMember(anyString(), anyString()))
+            .willReturn(response);
 
         mockMvc.perform(
                 patch(BASE_URL + "/withdrawal")
