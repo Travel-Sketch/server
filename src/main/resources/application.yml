@@ -16,3 +16,6 @@ logging:
   level:
     org.hibernate.SQL: debug
     com.travelsketch.travel: debug
+
+jwt:
+  secret: ${jwt.secret}

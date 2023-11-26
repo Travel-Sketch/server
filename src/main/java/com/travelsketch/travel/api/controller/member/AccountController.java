@@ -7,6 +7,7 @@ import com.travelsketch.travel.api.controller.member.request.CreateMemberRequest
 import com.travelsketch.travel.api.controller.member.request.LoginMemberRequest;
 import com.travelsketch.travel.api.controller.member.response.CreateMemberResponse;
 import com.travelsketch.travel.api.controller.member.response.TokenInfo;
+import com.travelsketch.travel.api.service.member.AccountService;
 import com.travelsketch.travel.api.service.member.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import static com.travelsketch.travel.api.ApiResponse.*;
+import static com.travelsketch.travel.api.ApiResponse.created;
+import static com.travelsketch.travel.api.ApiResponse.ok;
 import static com.travelsketch.travel.api.controller.member.MemberCustomValid.*;
 
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ import static com.travelsketch.travel.api.controller.member.MemberCustomValid.*;
 public class AccountController {
 
     private final MemberService memberService;
+    private final AccountService accountService;
 
     @PostMapping("/join")
     @ResponseStatus(HttpStatus.CREATED)
@@ -41,12 +44,10 @@ public class AccountController {
     }
 
     @PostMapping("/login")
-    public ApiResponse<TokenInfo> login(@RequestBody LoginMemberRequest request) {
-        TokenInfo tokenInfo = TokenInfo.builder()
-            .grantType("Bearer")
-            .accessToken("access.token")
-            .refreshToken("refresh.token")
-            .build();
+    public ApiResponse<TokenInfo> login(@Valid @RequestBody LoginMemberRequest request) {
+
+        TokenInfo tokenInfo = accountService.login(request.getEmail(), request.getPwd());
+
         return ok(tokenInfo);
     }
 
