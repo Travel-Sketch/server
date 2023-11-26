@@ -2,6 +2,7 @@ package com.travelsketch.travel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.travelsketch.travel.api.controller.member.AccountController;
+import com.travelsketch.travel.api.service.member.AccountService;
 import com.travelsketch.travel.api.service.member.MemberService;
 import com.travelsketch.travel.interceptor.query.ApiQueryCounter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,4 +26,7 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected MemberService memberService;
+
+    @MockBean
+    protected AccountService accountService;
 }

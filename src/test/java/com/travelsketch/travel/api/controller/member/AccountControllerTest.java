@@ -2,6 +2,7 @@ package com.travelsketch.travel.api.controller.member;
 
 import com.travelsketch.travel.ControllerTestSupport;
 import com.travelsketch.travel.api.controller.member.request.CreateMemberRequest;
+import com.travelsketch.travel.api.controller.member.request.LoginMemberRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -311,6 +312,50 @@ class AccountControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.code").value("400"))
             .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("닉네임은 최대 10자 입니다."));
+    }
+
+    @DisplayName("로그인시 이메일은 필수값이다.")
+    @Test
+    void loginWithoutEmail() throws Exception {
+        //given
+        LoginMemberRequest request = LoginMemberRequest.builder()
+            .pwd("karina1234!")
+            .build();
+
+        //when //then
+        mockMvc.perform(
+                post(BASE_URL + "/login")
+                    .with(csrf())
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("400"))
+            .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("이메일은 필수입니다."));
+    }
+
+    @DisplayName("로그인시 비밀번호는 필수값이다.")
+    @Test
+    void loginWithoutPwd() throws Exception {
+        //given
+        LoginMemberRequest request = LoginMemberRequest.builder()
+            .email("karina@naver.com")
+            .build();
+
+        //when //then
+        mockMvc.perform(
+                post(BASE_URL + "/login")
+                    .with(csrf())
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("400"))
+            .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("비밀번호는 필수입니다."));
     }
 
     private String getText(int size) {

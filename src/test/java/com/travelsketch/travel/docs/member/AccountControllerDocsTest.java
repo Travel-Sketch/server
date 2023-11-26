@@ -6,6 +6,7 @@ import com.travelsketch.travel.api.controller.member.request.CheckAuthentication
 import com.travelsketch.travel.api.controller.member.request.CreateMemberRequest;
 import com.travelsketch.travel.api.controller.member.request.LoginMemberRequest;
 import com.travelsketch.travel.api.controller.member.response.CreateMemberResponse;
+import com.travelsketch.travel.api.controller.member.response.TokenInfo;
 import com.travelsketch.travel.api.service.member.AccountService;
 import com.travelsketch.travel.api.service.member.MemberService;
 import com.travelsketch.travel.docs.RestDocsSupport;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentRequest;
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -119,6 +121,15 @@ public class AccountControllerDocsTest extends RestDocsSupport {
             .email("temp@naver.com")
             .pwd("temp1234!")
             .build();
+
+        TokenInfo tokenInfo = TokenInfo.builder()
+            .grantType("Bearer")
+            .accessToken("access.token")
+            .refreshToken("refresh.token")
+            .build();
+
+        given(accountService.login(anyString(), anyString()))
+            .willReturn(tokenInfo);
 
         mockMvc.perform(
                 post(BASE_URL + "/login")
