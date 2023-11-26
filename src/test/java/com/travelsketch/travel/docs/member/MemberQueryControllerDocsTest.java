@@ -1,37 +1,67 @@
 package com.travelsketch.travel.docs.member;
 
 import com.travelsketch.travel.api.controller.member.MemberQueryController;
+import com.travelsketch.travel.api.controller.member.response.MemberInfo;
+import com.travelsketch.travel.api.service.member.MemberQueryService;
 import com.travelsketch.travel.docs.RestDocsSupport;
+import com.travelsketch.travel.security.SecurityUtil;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentRequest;
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class MemberQueryControllerDocsTest extends RestDocsSupport {
 
+    private final MemberQueryService memberQueryService = mock(MemberQueryService.class);
     private static final String BASE_URL = "/api/v1/members";
 
     @Override
     protected Object initController() {
-        return new MemberQueryController();
+        return new MemberQueryController(memberQueryService);
+    }
+
+    @BeforeEach
+    void setUp() {
+        mockStatic(SecurityUtil.class);
     }
 
     @DisplayName("회원 정보 조회 API")
     @Test
+    @WithMockUser(username = "karina@naver.com")
     void searchMemberInfo() throws Exception {
+        given(SecurityUtil.getCurrentEmail())
+            .willReturn("karina@naver.com");
+
+        MemberInfo memberInfo = MemberInfo.builder()
+            .email("karina@naver.com")
+            .name("유지민")
+            .birth("2000-04-11")
+            .gender("F")
+            .nickname("카리나")
+            .build();
+
+        given(memberQueryService.searchMemberInfo(anyString()))
+            .willReturn(memberInfo);
+
         mockMvc.perform(
                 get(BASE_URL)
-                    .header("Authorization", "Bearer Access Token")
+                    .header("Authorization", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJrYXJpbmFAbmF2ZXIuY29tIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTcwMTA1MjY5NX0.udPyKjH_AU_6LnaAgttJ1ycWz_SoeiaDF4tCZvGpDa0")
             )
             .andDo(print())
             .andExpect(status().isOk())

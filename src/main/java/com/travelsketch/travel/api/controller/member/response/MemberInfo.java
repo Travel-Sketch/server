@@ -13,7 +13,7 @@ public class MemberInfo {
     private final String nickname;
 
     @Builder
-    private MemberInfo(String email, String name, String birth, String gender, String nickname) {
+    public MemberInfo(String email, String name, String birth, String gender, String nickname) {
         this.email = email;
         this.name = name;
         this.birth = birth;
