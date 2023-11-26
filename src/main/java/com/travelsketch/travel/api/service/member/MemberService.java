@@ -32,6 +32,10 @@ public class MemberService {
         return CreateMemberResponse.of(savedMember);
     }
 
+    public boolean modifyPwd(String email, String currentPwd, String newPwd) {
+        return false;
+    }
+
     private void checkDuplicationForEmail(String email) {
         boolean isExistedEmail = memberQueryRepository.existEmail(email);
         if (isExistedEmail) {
