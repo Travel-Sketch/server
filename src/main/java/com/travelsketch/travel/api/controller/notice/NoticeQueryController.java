@@ -10,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
 import static com.travelsketch.travel.api.ApiResponse.ok;
 
 @RequiredArgsConstructor
@@ -41,12 +39,7 @@ public class NoticeQueryController {
     @GetMapping("/{noticeId}")
     public ApiResponse<NoticeDetailResponse> searchNotice(@PathVariable Long noticeId) {
 
-        NoticeDetailResponse response = NoticeDetailResponse.builder()
-            .noticeId(1L)
-            .title("공지사항 제목입니다.")
-            .content("공지사항 내용입니다.")
-            .createdDate(LocalDateTime.of(2023, 11, 26, 17, 30))
-            .build();
+        NoticeDetailResponse response = noticeQueryService.searchById(noticeId);
 
         return ok(response);
 

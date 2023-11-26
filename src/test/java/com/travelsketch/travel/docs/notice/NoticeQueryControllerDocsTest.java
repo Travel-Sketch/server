@@ -2,6 +2,7 @@ package com.travelsketch.travel.docs.notice;
 
 import com.travelsketch.travel.api.PageResponse;
 import com.travelsketch.travel.api.controller.notice.NoticeQueryController;
+import com.travelsketch.travel.api.controller.notice.response.NoticeDetailResponse;
 import com.travelsketch.travel.api.controller.notice.response.NoticeResponse;
 import com.travelsketch.travel.api.service.notice.NoticeQueryService;
 import com.travelsketch.travel.docs.RestDocsSupport;
@@ -15,8 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -98,6 +98,17 @@ public class NoticeQueryControllerDocsTest extends RestDocsSupport {
     @DisplayName("공지사항 상세 조회 API")
     @Test
     void searchNotice() throws Exception {
+        NoticeDetailResponse response = NoticeDetailResponse.builder()
+            .noticeId(1L)
+            .title("공지사항 제목입니다.")
+            .content("공지사항 내용입니다.")
+            .isDeleted(false)
+            .createdDate(LocalDateTime.of(2023, 11, 26, 17, 30))
+            .build();
+
+        given(noticeQueryService.searchById(anyLong()))
+            .willReturn(response);
+
         mockMvc.perform(
                 get(BASE_URL + "/{noticeId}", 1L)
             )
@@ -124,6 +135,8 @@ public class NoticeQueryControllerDocsTest extends RestDocsSupport {
                         .description("공지사항 제목"),
                     fieldWithPath("data.content").type(JsonFieldType.STRING)
                         .description("공지사항 내용"),
+                    fieldWithPath("data.isDeleted").type(JsonFieldType.BOOLEAN)
+                        .description("공지사항 삭제여부"),
                     fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY)
                         .description("공지사항 등록 일시")
                 )
