@@ -43,10 +43,7 @@ public class MemberService {
         }
         Member member = findMember.get();
 
-        boolean isMatched = passwordEncoder.matches(currentPwd, member.getPwd());
-        if (!isMatched) {
-            throw new IllegalArgumentException("현재 비밀번호가 일치하지 않습니다.");
-        }
+        checkCurrentPwd(currentPwd, member.getPwd());
 
         String encodedPwd = passwordEncoder.encode(newPwd);
 
@@ -56,6 +53,8 @@ public class MemberService {
     }
 
     public ModifyNicknameResponse modifyNickname(String email, String nickname) {
+        checkDuplicationForNickname(nickname);
+
         Optional<Member> findMember = memberRepository.findByEmail(email);
         if (findMember.isEmpty()) {
             throw new NoSuchElementException();
@@ -93,5 +92,12 @@ public class MemberService {
             .nickname(dto.nickname())
             .role(Role.USER)
             .build();
+    }
+
+    private void checkCurrentPwd(String currentPwd, String encodedPwd) {
+        boolean isMatched = passwordEncoder.matches(currentPwd, encodedPwd);
+        if (!isMatched) {
+            throw new IllegalArgumentException("현재 비밀번호가 일치하지 않습니다.");
+        }
     }
 }
