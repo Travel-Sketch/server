@@ -2,6 +2,7 @@ package com.travelsketch.travel.api.service.member;
 
 import com.travelsketch.travel.api.controller.member.response.CreateMemberResponse;
 import com.travelsketch.travel.api.controller.member.response.ModifyNicknameResponse;
+import com.travelsketch.travel.api.controller.member.response.WithdrawalMemberResponse;
 import com.travelsketch.travel.api.service.member.dto.CreateMemberDto;
 import com.travelsketch.travel.domain.member.Member;
 import com.travelsketch.travel.domain.member.Role;
@@ -64,6 +65,10 @@ public class MemberService {
         Member modifiedMember = member.modifyNickname(nickname);
 
         return ModifyNicknameResponse.of(modifiedMember);
+    }
+
+    public WithdrawalMemberResponse removeMember(String email, String pwd) {
+        return null;
     }
 
     private void checkDuplicationForEmail(String email) {

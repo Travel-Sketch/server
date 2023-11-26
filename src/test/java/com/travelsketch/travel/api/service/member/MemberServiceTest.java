@@ -3,6 +3,7 @@ package com.travelsketch.travel.api.service.member;
 import com.travelsketch.travel.IntegrationTestSupport;
 import com.travelsketch.travel.api.controller.member.response.CreateMemberResponse;
 import com.travelsketch.travel.api.controller.member.response.ModifyNicknameResponse;
+import com.travelsketch.travel.api.controller.member.response.WithdrawalMemberResponse;
 import com.travelsketch.travel.api.service.member.dto.CreateMemberDto;
 import com.travelsketch.travel.domain.member.Member;
 import com.travelsketch.travel.domain.member.Role;
@@ -132,6 +133,33 @@ class MemberServiceTest extends IntegrationTestSupport {
         assertThat(findMember).isPresent();
 
         assertThat(findMember.get().getNickname()).isEqualTo("에스파 카리나");
+    }
+
+    @DisplayName("입력 받은 비밀번호가 일치하지 않으면 예외가 발생한다.")
+    @Test
+    void removeMemberNotMatchCurrentPwd() {
+        //given
+        Member member = savedMember();
+
+        //when //then
+        assertThatThrownBy(() -> memberService.removeMember("karina@naver.com", "winter1234!"))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("현재 비밀번호가 일치하지 않습니다.");
+    }
+
+    @DisplayName("이메일, 비밀번호를 입력 받아 회원 삭제(탈퇴)를 할 수 있다.")
+    @Test
+    void removeMember() {
+        //given
+        Member member = savedMember();
+
+        //when
+        WithdrawalMemberResponse response = memberService.removeMember("karina@naver.com", "karina1234!");
+
+        //then
+        Optional<Member> findMember = memberRepository.findById(member.getId());
+        assertThat(findMember).isPresent();
+        assertThat(findMember.get().getIsDeleted()).isTrue();
     }
 
     private Member savedMember() {
