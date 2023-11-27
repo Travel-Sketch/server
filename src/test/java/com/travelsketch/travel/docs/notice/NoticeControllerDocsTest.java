@@ -4,6 +4,7 @@ import com.travelsketch.travel.api.controller.notice.NoticeController;
 import com.travelsketch.travel.api.controller.notice.request.CreateNoticeRequest;
 import com.travelsketch.travel.api.controller.notice.request.ModifyNoticeRequest;
 import com.travelsketch.travel.api.controller.notice.response.CreateNoticeResponse;
+import com.travelsketch.travel.api.controller.notice.response.ModifyNoticeResponse;
 import com.travelsketch.travel.api.service.notice.NoticeService;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import com.travelsketch.travel.security.SecurityUtils;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentRequest;
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -103,10 +105,22 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
     @DisplayName("공지사항 수정 API")
     @Test
     void modifyNotice() throws Exception {
+        given(securityUtils.getCurrentEmail())
+            .willReturn("karina@naver.com");
+
         ModifyNoticeRequest request = ModifyNoticeRequest.builder()
             .title("수정된 공지사항 제목입니다.")
             .content("수정된 공지사항 내용입니다.")
             .build();
+
+        ModifyNoticeResponse response = ModifyNoticeResponse.builder()
+            .noticeId(1L)
+            .title("수정된 공지사항 제목입니다.")
+            .modifiedDate(LocalDateTime.of(2023, 11, 26, 16, 56))
+            .build();
+
+        given(noticeService.modifyNotice(anyString(), anyLong(), anyString(), anyString()))
+            .willReturn(response);
 
         mockMvc.perform(
                 patch(BASE_URL + "/{noticeId}", 1L)

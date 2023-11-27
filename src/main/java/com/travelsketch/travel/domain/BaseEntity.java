@@ -27,4 +27,8 @@ public class BaseEntity extends TimeBaseEntity {
         this.createdBy = member;
         this.lastModifiedBy = member;
     }
+
+    protected void updateLastModifiedBy(Member member) {
+        this.lastModifiedBy = member;
+    }
 }

@@ -31,4 +31,12 @@ public class Notice extends BaseEntity {
         this.title = title;
         this.content = content;
     }
+
+    //== 비즈니스 로직 ==//
+    public Notice modify(String title, String content, Member member) {
+        this.title = title;
+        this.content = content;
+        super.updateLastModifiedBy(member);
+        return this;
+    }
 }
