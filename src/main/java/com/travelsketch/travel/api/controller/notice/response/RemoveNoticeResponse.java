@@ -1,5 +1,6 @@
 package com.travelsketch.travel.api.controller.notice.response;
 
+import com.travelsketch.travel.domain.notice.Notice;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,5 +18,13 @@ public class RemoveNoticeResponse {
         this.noticeId = noticeId;
         this.title = title;
         this.removedDate = removedDate;
+    }
+
+    public static RemoveNoticeResponse of(Notice notice) {
+        return RemoveNoticeResponse.builder()
+            .noticeId(notice.getId())
+            .title(notice.getTitle())
+            .removedDate(notice.getLastModifiedDate())
+            .build();
     }
 }

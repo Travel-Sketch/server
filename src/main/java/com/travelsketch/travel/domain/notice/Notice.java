@@ -39,4 +39,9 @@ public class Notice extends BaseEntity {
         super.updateLastModifiedBy(member);
         return this;
     }
+
+    public void remove(Member member) {
+        super.remove();
+        super.updateLastModifiedBy(member);
+    }
 }
