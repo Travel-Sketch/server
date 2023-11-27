@@ -2,6 +2,7 @@ package com.travelsketch.travel.api.service.notice;
 
 import com.travelsketch.travel.api.controller.notice.response.CreateNoticeResponse;
 import com.travelsketch.travel.api.controller.notice.response.ModifyNoticeResponse;
+import com.travelsketch.travel.api.controller.notice.response.RemoveNoticeResponse;
 import com.travelsketch.travel.domain.member.Member;
 import com.travelsketch.travel.domain.member.repository.MemberRepository;
 import com.travelsketch.travel.domain.notice.Notice;
@@ -54,5 +55,9 @@ public class NoticeService {
         Notice modifiedNotice = notice.modify(title, content, member);
 
         return ModifyNoticeResponse.of(modifiedNotice);
+    }
+
+    public RemoveNoticeResponse removeNotice(String email, Long noticeId) {
+        return null;
     }
 }

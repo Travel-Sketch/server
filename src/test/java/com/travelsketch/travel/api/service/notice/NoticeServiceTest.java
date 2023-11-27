@@ -3,6 +3,7 @@ package com.travelsketch.travel.api.service.notice;
 import com.travelsketch.travel.IntegrationTestSupport;
 import com.travelsketch.travel.api.controller.notice.response.CreateNoticeResponse;
 import com.travelsketch.travel.api.controller.notice.response.ModifyNoticeResponse;
+import com.travelsketch.travel.api.controller.notice.response.RemoveNoticeResponse;
 import com.travelsketch.travel.domain.member.Member;
 import com.travelsketch.travel.domain.member.Role;
 import com.travelsketch.travel.domain.member.repository.MemberRepository;
@@ -15,8 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 class NoticeServiceTest extends IntegrationTestSupport {
 
@@ -69,6 +69,22 @@ class NoticeServiceTest extends IntegrationTestSupport {
         Optional<Notice> findNotice = noticeRepository.findById(notice.getId());
         assertThat(findNotice).isPresent();
         assertThat(findNotice.get().getTitle()).isEqualTo("수정된 공지사항 제목입니다.");
+    }
+
+    @DisplayName("이메일, 아이디를 입력 받아 공지사항을 삭제할 수 있다.")
+    @Test
+    void removeNotice() {
+        //given
+        Member member = savedMember();
+        Notice notice = saveNotice(member);
+
+        //when
+        RemoveNoticeResponse response = noticeService.removeNotice("karina@naver.com", notice.getId());
+
+        //then
+        Optional<Notice> findNotice = noticeRepository.findById(notice.getId());
+        assertThat(findNotice).isPresent();
+        assertThat(findNotice.get().getIsDeleted()).isTrue();
     }
 
     private Member savedMember() {
