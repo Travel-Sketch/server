@@ -1,7 +1,9 @@
 package com.travelsketch.travel.api.controller.qna;
 
 import com.travelsketch.travel.api.ApiResponse;
+import com.travelsketch.travel.api.controller.qna.request.CreateAnswerRequest;
 import com.travelsketch.travel.api.controller.qna.request.CreateQuestionRequest;
+import com.travelsketch.travel.api.controller.qna.response.CreateAnswerResponse;
 import com.travelsketch.travel.api.controller.qna.response.CreateQuestionResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,5 +31,17 @@ public class QnaController {
             .build();
 
         return created(response);
+    }
+
+    @PostMapping("/{qnaId}")
+    public ApiResponse<CreateAnswerResponse> createAnswer(@PathVariable Long qnaId, @RequestBody CreateAnswerRequest request) {
+        CreateAnswerResponse response = CreateAnswerResponse.builder()
+            .qnaId(qnaId)
+            .type("계정")
+            .title("질문 제목입니다.")
+            .answer("질문 답변입니다.")
+            .modifiedDate(LocalDateTime.of(2023, 11, 27, 17, 32))
+            .build();
+        return ok(response);
     }
 }

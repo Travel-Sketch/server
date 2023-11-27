@@ -1,6 +1,7 @@
 package com.travelsketch.travel.docs.qna;
 
 import com.travelsketch.travel.api.controller.qna.QnaController;
+import com.travelsketch.travel.api.controller.qna.request.CreateAnswerRequest;
 import com.travelsketch.travel.api.controller.qna.request.CreateQuestionRequest;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
@@ -79,6 +80,55 @@ public class QnaControllerDocsTest extends RestDocsSupport {
                         .description("질문 제목"),
                     fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY)
                         .description("질문 등록 일시")
+                )
+            ));
+    }
+
+    @DisplayName("답변 등록 API")
+    @Test
+    void createAnswer() throws Exception {
+        CreateAnswerRequest request = CreateAnswerRequest.builder()
+            .answer("질문 답변입니다.")
+            .build();
+
+        mockMvc.perform(
+                post(BASE_URL + "/{qnaId}", 1L)
+                    .header("Authorization", "Bearer Access Token")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("create-answer",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestHeaders(
+                    headerWithName("Authorization")
+                        .description("Bearer Access Token")
+                ),
+                requestFields(
+                    fieldWithPath("answer").type(JsonFieldType.STRING)
+                        .description("질문 답변")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.qnaId").type(JsonFieldType.NUMBER)
+                        .description("QnA 아이디"),
+                    fieldWithPath("data.type").type(JsonFieldType.STRING)
+                        .description("질문 유형"),
+                    fieldWithPath("data.title").type(JsonFieldType.STRING)
+                        .description("질문 제목"),
+                    fieldWithPath("data.answer").type(JsonFieldType.STRING)
+                        .description("질문 답변"),
+                    fieldWithPath("data.modifiedDate").type(JsonFieldType.ARRAY)
+                        .description("답변 등록 일시")
                 )
             ));
     }
