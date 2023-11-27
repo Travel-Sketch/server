@@ -14,7 +14,7 @@ public class CreateNoticeRequest {
     @Size(max = 50, message = "제목은 최대 50자입니다.")
     private String title;
 
-    @NotBlank(message = "내용을 필수입니다.")
+    @NotBlank(message = "내용은 필수입니다.")
     private String content;
 
     @Builder
