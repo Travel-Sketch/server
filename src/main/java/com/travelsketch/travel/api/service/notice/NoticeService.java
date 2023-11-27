@@ -23,34 +23,19 @@ public class NoticeService {
     private final MemberRepository memberRepository;
 
     public CreateNoticeResponse createNotice(String email, String title, String content) {
-        Optional<Member> findMember = memberRepository.findByEmail(email);
-        if (findMember.isEmpty()) {
-            throw new NoSuchElementException();
-        }
-        Member member = findMember.get();
+        Member member = getMember(email);
 
-        Notice notice = Notice.builder()
-            .title(title)
-            .content(content)
-            .member(member)
-            .build();
+        Notice notice = toEntity(title, content, member);
+
         Notice savedNotice = noticeRepository.save(notice);
 
         return CreateNoticeResponse.of(savedNotice);
     }
 
     public ModifyNoticeResponse modifyNotice(String email, Long noticeId, String title, String content) {
-        Optional<Notice> findNotice = noticeRepository.findById(noticeId);
-        if (findNotice.isEmpty()) {
-            throw new NoSuchElementException("등록되지 않은 공지사항입니다.");
-        }
-        Notice notice = findNotice.get();
+        Notice notice = getNotice(noticeId);
 
-        Optional<Member> findMember = memberRepository.findByEmail(email);
-        if (findMember.isEmpty()) {
-            throw new NoSuchElementException();
-        }
-        Member member = findMember.get();
+        Member member = getMember(email);
 
         Notice modifiedNotice = notice.modify(title, content, member);
 
@@ -58,20 +43,36 @@ public class NoticeService {
     }
 
     public RemoveNoticeResponse removeNotice(String email, Long noticeId) {
-        Optional<Notice> findNotice = noticeRepository.findById(noticeId);
-        if (findNotice.isEmpty()) {
-            throw new NoSuchElementException("등록되지 않은 공지사항입니다.");
-        }
-        Notice notice = findNotice.get();
+        Notice notice = getNotice(noticeId);
 
-        Optional<Member> findMember = memberRepository.findByEmail(email);
-        if (findMember.isEmpty()) {
-            throw new NoSuchElementException();
-        }
-        Member member = findMember.get();
+        Member member = getMember(email);
 
         notice.remove(member);
 
         return RemoveNoticeResponse.of(notice);
+    }
+
+    private Notice toEntity(String title, String content, Member member) {
+        return Notice.builder()
+            .title(title)
+            .content(content)
+            .member(member)
+            .build();
+    }
+
+    private Member getMember(String email) {
+        Optional<Member> findMember = memberRepository.findByEmail(email);
+        if (findMember.isEmpty()) {
+            throw new NoSuchElementException("등록되지 않은 회원입니다.");
+        }
+        return findMember.get();
+    }
+
+    private Notice getNotice(Long noticeId) {
+        Optional<Notice> findNotice = noticeRepository.findById(noticeId);
+        if (findNotice.isEmpty()) {
+            throw new NoSuchElementException("등록되지 않은 공지사항입니다.");
+        }
+        return findNotice.get();
     }
 }
