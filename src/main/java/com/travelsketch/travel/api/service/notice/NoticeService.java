@@ -14,6 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+/**
+ * 공지사항 서비스
+ *
+ * @author 임우택
+ */
 @RequiredArgsConstructor
 @Service
 @Transactional
@@ -22,6 +27,14 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
     private final MemberRepository memberRepository;
 
+    /**
+     * 새로운 공지사항을 저장하고 저장 결과를 반환한다.
+     *
+     * @param email   작성자 이메일
+     * @param title   등록할 공지사항 제목
+     * @param content 등록할 공지사항 내용
+     * @return 저장된 공지사항 내용
+     */
     public CreateNoticeResponse createNotice(String email, String title, String content) {
         Member member = getMember(email);
 
@@ -32,6 +45,15 @@ public class NoticeService {
         return CreateNoticeResponse.of(savedNotice);
     }
 
+    /**
+     * 공지사항을 수정하고 수정 결과를 반환한다.
+     *
+     * @param email    수정자 이메일
+     * @param noticeId 수정할 공지사항 아이디
+     * @param title    수정할 공지사항 제목
+     * @param content  수정할 공지사항 내용
+     * @return 수정된 공지사항 내용
+     */
     public ModifyNoticeResponse modifyNotice(String email, Long noticeId, String title, String content) {
         Notice notice = getNotice(noticeId);
 
@@ -42,6 +64,13 @@ public class NoticeService {
         return ModifyNoticeResponse.of(modifiedNotice);
     }
 
+    /**
+     * 공지사항을 삭제하고 삭제 결과를 반환한다.
+     *
+     * @param email    삭제한 관리자 이메일
+     * @param noticeId 삭제할 공지사항 아이디
+     * @return 삭제된 공지사항 내용
+     */
     public RemoveNoticeResponse removeNotice(String email, Long noticeId) {
         Notice notice = getNotice(noticeId);
 
@@ -52,6 +81,14 @@ public class NoticeService {
         return RemoveNoticeResponse.of(notice);
     }
 
+    /**
+     * 공지사항 엔티티를 생성하여 반환한다.
+     *
+     * @param title   공지사항 제목
+     * @param content 공지사항 내용
+     * @param member  공지사항 작성자
+     * @return 생성된 공지사항 엔티티
+     */
     private Notice toEntity(String title, String content, Member member) {
         return Notice.builder()
             .title(title)
@@ -60,6 +97,13 @@ public class NoticeService {
             .build();
     }
 
+    /**
+     * 이메일로 회원 엔티티를 조회하여 반환한다.
+     *
+     * @param email 조회할 이메일
+     * @return 조회된 회원 엔티티
+     * @throws NoSuchElementException 이메일이 일치하는 회원이 존재하지 않을 경우 발생
+     */
     private Member getMember(String email) {
         Optional<Member> findMember = memberRepository.findByEmail(email);
         if (findMember.isEmpty()) {
@@ -68,6 +112,13 @@ public class NoticeService {
         return findMember.get();
     }
 
+    /**
+     * 아이디로 공지사항 엔티티를 조회하여 반환한다.
+     *
+     * @param noticeId 조회할 아이디
+     * @return 조회된 공지사항 엔티티
+     * @throws NoSuchElementException 아이디가 일치하는 공지사항이 존재하지 않을 경우 발생
+     */
     private Notice getNotice(Long noticeId) {
         Optional<Notice> findNotice = noticeRepository.findById(noticeId);
         if (findNotice.isEmpty()) {
