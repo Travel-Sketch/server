@@ -14,9 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
-import static com.travelsketch.travel.api.ApiResponse.*;
+import static com.travelsketch.travel.api.ApiResponse.created;
+import static com.travelsketch.travel.api.ApiResponse.ok;
 
 @RequiredArgsConstructor
 @RestController
@@ -48,11 +47,10 @@ public class NoticeController {
 
     @DeleteMapping("/{noticeId}")
     public ApiResponse<RemoveNoticeResponse> removeNotice(@PathVariable Long noticeId) {
-        RemoveNoticeResponse response = RemoveNoticeResponse.builder()
-            .noticeId(1L)
-            .title("삭제된 공지사항 제목입니다.")
-            .removedDate(LocalDateTime.of(2023, 11, 26, 17, 2))
-            .build();
+        String email = securityUtils.getCurrentEmail();
+
+        RemoveNoticeResponse response = noticeService.removeNotice(email, noticeId);
+
         return ok(response);
     }
 }

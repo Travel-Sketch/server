@@ -5,6 +5,7 @@ import com.travelsketch.travel.api.controller.notice.request.CreateNoticeRequest
 import com.travelsketch.travel.api.controller.notice.request.ModifyNoticeRequest;
 import com.travelsketch.travel.api.controller.notice.response.CreateNoticeResponse;
 import com.travelsketch.travel.api.controller.notice.response.ModifyNoticeResponse;
+import com.travelsketch.travel.api.controller.notice.response.RemoveNoticeResponse;
 import com.travelsketch.travel.api.service.notice.NoticeService;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import com.travelsketch.travel.security.SecurityUtils;
@@ -169,6 +170,18 @@ public class NoticeControllerDocsTest extends RestDocsSupport {
     @DisplayName("공지사항 삭제 API")
     @Test
     void removeNotice() throws Exception {
+        given(securityUtils.getCurrentEmail())
+            .willReturn("karina@naver.com");
+
+        RemoveNoticeResponse response = RemoveNoticeResponse.builder()
+            .noticeId(1L)
+            .title("삭제된 공지사항 제목입니다.")
+            .removedDate(LocalDateTime.of(2023, 11, 26, 17, 2))
+            .build();
+
+        given(noticeService.removeNotice(anyString(), anyLong()))
+            .willReturn(response);
+
         mockMvc.perform(
                 delete(BASE_URL + "/{noticeId}", 1L)
                     .header("Authorization", "Bearer Access Token")
