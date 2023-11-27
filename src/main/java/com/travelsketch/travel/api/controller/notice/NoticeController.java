@@ -38,12 +38,10 @@ public class NoticeController {
     }
 
     @PatchMapping("/{noticeId}")
-    public ApiResponse<ModifyNoticeResponse> modifyNotice(@PathVariable Long noticeId, @RequestBody ModifyNoticeRequest request) {
-        ModifyNoticeResponse response = ModifyNoticeResponse.builder()
-            .noticeId(1L)
-            .title("수정된 공지사항 제목입니다.")
-            .modifiedDate(LocalDateTime.of(2023, 11, 26, 16, 56))
-            .build();
+    public ApiResponse<ModifyNoticeResponse> modifyNotice(@PathVariable Long noticeId, @Valid @RequestBody ModifyNoticeRequest request) {
+        String email = securityUtils.getCurrentEmail();
+
+        ModifyNoticeResponse response = noticeService.modifyNotice(email, noticeId, request.getTitle(), request.getContent());
 
         return ok(response);
     }
