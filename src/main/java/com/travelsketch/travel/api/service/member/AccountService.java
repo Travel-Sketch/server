@@ -16,6 +16,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * 계정 서비스
+ *
+ * @author 임우택
+ */
 @RequiredArgsConstructor
 @Service
 public class AccountService implements UserDetailsService {
@@ -24,6 +29,13 @@ public class AccountService implements UserDetailsService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
 
+    /**
+     * 이메일, 비밀번호를 입력 받아 계정에 로그인을 하여 토큰 정보를 반환한다.
+     *
+     * @param email 로그인 할 이메일
+     * @param pwd   비밀번호
+     * @return 발급된 토큰 정보
+     */
     public TokenInfo login(String email, String pwd) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, pwd);
 

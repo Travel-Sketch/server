@@ -16,6 +16,11 @@ import java.util.Optional;
 
 import static com.travelsketch.travel.domain.notice.QNotice.notice;
 
+/**
+ * 공지사항 조회용 저장소
+ *
+ * @author 임우택
+ */
 @Repository
 public class NoticeQueryRepository {
 
@@ -25,6 +30,13 @@ public class NoticeQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    /**
+     * 검색 조건에 따라 공지사항 목록을 조회하여 반환한다.
+     *
+     * @param query    검색 조건
+     * @param pageable 페이징 정보
+     * @return 조회된 공지사항 정보
+     */
     public List<NoticeResponse> findByCond(String query, Pageable pageable) {
         List<Long> ids = queryFactory
             .select(notice.id)
@@ -59,6 +71,12 @@ public class NoticeQueryRepository {
             .fetch();
     }
 
+    /**
+     * 검색 조건에 일치하는 공지사항의 갯수를 카운팅하여 반환한다.
+     *
+     * @param query 검색 조건
+     * @return 조회된 공지사항 갯수
+     */
     public int findCountByCond(String query) {
         return queryFactory
             .select(notice.id)
@@ -71,6 +89,12 @@ public class NoticeQueryRepository {
             .size();
     }
 
+    /**
+     * 아이디로 공지사항 단건을 조회하여 반환한다.
+     *
+     * @param noticeId 조회할 아이디
+     * @return 조회된 공지사항
+     */
     public Optional<NoticeDetailResponse> findById(Long noticeId) {
         NoticeDetailResponse content = queryFactory
             .select(

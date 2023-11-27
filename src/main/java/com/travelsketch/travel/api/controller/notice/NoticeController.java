@@ -14,10 +14,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import static com.travelsketch.travel.api.ApiResponse.created;
+import static com.travelsketch.travel.api.ApiResponse.ok;
 
-import static com.travelsketch.travel.api.ApiResponse.*;
-
+/**
+ * 공지사항 API 컨트롤러
+ *
+ * @author 임우택
+ */
 @RequiredArgsConstructor
 @RestController
 @Slf4j
@@ -27,6 +31,12 @@ public class NoticeController {
     private final NoticeService noticeService;
     private final SecurityUtils securityUtils;
 
+    /**
+     * 공지사항 등록 API
+     *
+     * @param request 등록할 공지사항 정보
+     * @return 저장된 공지사항 정보
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<CreateNoticeResponse> createNotice(@Valid @RequestBody CreateNoticeRequest request) {
@@ -37,6 +47,13 @@ public class NoticeController {
         return created(response);
     }
 
+    /**
+     * 공지사항 수정 API
+     *
+     * @param noticeId 수정할 공지사항 아이디
+     * @param request  수정할 공지사항 정보
+     * @return 수정된 공지사항 정보
+     */
     @PatchMapping("/{noticeId}")
     public ApiResponse<ModifyNoticeResponse> modifyNotice(@PathVariable Long noticeId, @Valid @RequestBody ModifyNoticeRequest request) {
         String email = securityUtils.getCurrentEmail();
@@ -46,13 +63,18 @@ public class NoticeController {
         return ok(response);
     }
 
+    /**
+     * 공자사항 삭제 API
+     *
+     * @param noticeId 삭제할 공지사항 아이디
+     * @return 삭제된 공지사항 정보
+     */
     @DeleteMapping("/{noticeId}")
     public ApiResponse<RemoveNoticeResponse> removeNotice(@PathVariable Long noticeId) {
-        RemoveNoticeResponse response = RemoveNoticeResponse.builder()
-            .noticeId(1L)
-            .title("삭제된 공지사항 제목입니다.")
-            .removedDate(LocalDateTime.of(2023, 11, 26, 17, 2))
-            .build();
+        String email = securityUtils.getCurrentEmail();
+
+        RemoveNoticeResponse response = noticeService.removeNotice(email, noticeId);
+
         return ok(response);
     }
 }

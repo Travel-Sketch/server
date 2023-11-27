@@ -19,6 +19,11 @@ import static com.travelsketch.travel.api.ApiResponse.created;
 import static com.travelsketch.travel.api.ApiResponse.ok;
 import static com.travelsketch.travel.api.controller.member.MemberCustomValid.*;
 
+/**
+ * 토큰 없이 사용 가능한 회원 API
+ *
+ * @author 임우택
+ */
 @RequiredArgsConstructor
 @RestController
 @Slf4j
@@ -28,6 +33,12 @@ public class AccountController {
     private final MemberService memberService;
     private final AccountService accountService;
 
+    /**
+     * 회원 가입 API
+     *
+     * @param request 이메일, 비밀번호, 이름, 생년월일, 성별, 닉네임 정보
+     * @return 가입된 회원의 정보
+     */
     @PostMapping("/join")
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<CreateMemberResponse> join(@Valid @RequestBody CreateMemberRequest request) {
@@ -43,6 +54,12 @@ public class AccountController {
         return created(response);
     }
 
+    /**
+     * 로그인 API
+     *
+     * @param request 이메일, 비밀번호 정보
+     * @return 로그인된 회원에게 발급된 토큰 정보
+     */
     @PostMapping("/login")
     public ApiResponse<TokenInfo> login(@Valid @RequestBody LoginMemberRequest request) {
 
