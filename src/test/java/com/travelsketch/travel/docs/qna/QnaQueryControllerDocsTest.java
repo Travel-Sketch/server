@@ -83,4 +83,45 @@ public class QnaQueryControllerDocsTest extends RestDocsSupport {
                 )
             ));
     }
+
+    @DisplayName("QnA 상세 조회 API")
+    @Test
+    void searchQna() throws Exception {
+        mockMvc.perform(
+                get(BASE_URL + "/{qnaId}", 1L)
+                    .header("Authorization", "Bearer Access Token")
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("search-qna",
+                getDocumentResponse(),
+                requestHeaders(
+                    headerWithName("Authorization")
+                        .description("Bearer Access Token")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.qnaId").type(JsonFieldType.NUMBER)
+                        .description("QnA 아이디"),
+                    fieldWithPath("data.type").type(JsonFieldType.STRING)
+                        .description("질문 유형"),
+                    fieldWithPath("data.title").type(JsonFieldType.STRING)
+                        .description("QnA 제목"),
+                    fieldWithPath("data.content").type(JsonFieldType.STRING)
+                        .description("QnA 내용"),
+                    fieldWithPath("data.answer").type(JsonFieldType.STRING)
+                        .optional()
+                        .description("QnA 답변"),
+                    fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY)
+                        .description("QnA 등록 일시")
+                )
+            ));
+    }
 }
