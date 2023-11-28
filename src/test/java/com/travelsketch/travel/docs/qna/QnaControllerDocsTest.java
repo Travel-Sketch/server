@@ -4,6 +4,7 @@ import com.travelsketch.travel.api.controller.qna.QnaController;
 import com.travelsketch.travel.api.controller.qna.request.CreateAnswerRequest;
 import com.travelsketch.travel.api.controller.qna.request.CreateQuestionRequest;
 import com.travelsketch.travel.docs.RestDocsSupport;
+import com.travelsketch.travel.domain.qna.QnaType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -35,7 +36,7 @@ public class QnaControllerDocsTest extends RestDocsSupport {
     @Test
     void createQuestion() throws Exception {
         CreateQuestionRequest request = CreateQuestionRequest.builder()
-            .type("계정")
+            .type(QnaType.ACCOUNT)
             .title("질문 제목입니다.")
             .content("질문 내용입니다.")
             .pwd("1234")
