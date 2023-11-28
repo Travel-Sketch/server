@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
 import static com.travelsketch.travel.api.ApiResponse.*;
+import static com.travelsketch.travel.api.controller.qna.QnaCustomValid.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,6 +31,8 @@ public class QnaController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<CreateQuestionResponse> createQuestion(@Valid @RequestBody CreateQuestionRequest request) {
+        validPwd(request.getPwd());
+
         String email = securityUtils.getCurrentEmail();
 
         CreateQuestionResponse response = qnaService.createQuestion(email, request.toDto());
