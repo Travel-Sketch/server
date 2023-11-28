@@ -1,0 +1,14 @@
+[[create-question]]
+=== 질문 등록 API
+
+==== HTTP Request
+
+include::{snippets}/create-question/http-request.adoc[]
+include::{snippets}/create-question/request-headers.adoc[]
+include::{snippets}/create-question/request-fields.adoc[]
+
+
+==== HTTP Response
+
+include::{snippets}/create-question/http-response.adoc[]
+include::{snippets}/create-question/response-fields.adoc[]
