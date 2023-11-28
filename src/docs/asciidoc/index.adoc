@@ -32,3 +32,12 @@ include::api/notice/search-notices.adoc[]
 include::api/notice/search-notice.adoc[]
 include::api/notice/modify-notice.adoc[]
 include::api/notice/remove-notice.adoc[]
+
+[[QnA-API]]
+== QnA API
+
+include::api/qna/create-question.adoc[]
+include::api/qna/create-answer.adoc[]
+include::api/qna/search-qnas.adoc[]
+include::api/qna/search-qna.adoc[]
+include::api/qna/remove-qna.adoc[]

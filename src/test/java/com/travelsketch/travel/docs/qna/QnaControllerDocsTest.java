@@ -17,6 +17,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -107,6 +109,10 @@ public class QnaControllerDocsTest extends RestDocsSupport {
                     headerWithName("Authorization")
                         .description("Bearer Access Token")
                 ),
+                pathParameters(
+                    parameterWithName("qnaId")
+                        .description("QnA 아이디")
+                ),
                 requestFields(
                     fieldWithPath("answer").type(JsonFieldType.STRING)
                         .description("질문 답변")
@@ -148,6 +154,10 @@ public class QnaControllerDocsTest extends RestDocsSupport {
                 requestHeaders(
                     headerWithName("Authorization")
                         .description("Bearer Access Token")
+                ),
+                pathParameters(
+                    parameterWithName("qnaId")
+                        .description("QnA 아이디")
                 ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER)

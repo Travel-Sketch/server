@@ -13,8 +13,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -98,6 +97,10 @@ public class QnaQueryControllerDocsTest extends RestDocsSupport {
                 requestHeaders(
                     headerWithName("Authorization")
                         .description("Bearer Access Token")
+                ),
+                pathParameters(
+                    parameterWithName("qnaId")
+                        .description("QnA 아이디")
                 ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER)

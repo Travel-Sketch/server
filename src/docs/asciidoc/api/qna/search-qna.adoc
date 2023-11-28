@@ -1,0 +1,14 @@
+[[search-qna]]
+=== 질문 등록 API
+
+==== HTTP Request
+
+include::{snippets}/search-qna/http-request.adoc[]
+include::{snippets}/search-qna/request-headers.adoc[]
+include::{snippets}/search-qna/path-parameters.adoc[]
+
+
+==== HTTP Response
+
+include::{snippets}/search-qna/http-response.adoc[]
+include::{snippets}/search-qna/response-fields.adoc[]

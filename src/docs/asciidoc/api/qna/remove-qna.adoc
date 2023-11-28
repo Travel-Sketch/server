@@ -1,0 +1,14 @@
+[[remove-qna]]
+=== 질문 등록 API
+
+==== HTTP Request
+
+include::{snippets}/remove-qna/http-request.adoc[]
+include::{snippets}/remove-qna/request-headers.adoc[]
+include::{snippets}/remove-qna/path-parameters.adoc[]
+
+
+==== HTTP Response
+
+include::{snippets}/remove-qna/http-response.adoc[]
+include::{snippets}/remove-qna/response-fields.adoc[]
