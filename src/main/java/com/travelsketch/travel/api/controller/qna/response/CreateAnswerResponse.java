@@ -1,5 +1,6 @@
 package com.travelsketch.travel.api.controller.qna.response;
 
+import com.travelsketch.travel.domain.qna.Qna;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -21,5 +22,15 @@ public class CreateAnswerResponse {
         this.title = title;
         this.answer = answer;
         this.modifiedDate = modifiedDate;
+    }
+
+    public static CreateAnswerResponse of(Qna qna) {
+        return CreateAnswerResponse.builder()
+            .qnaId(qna.getId())
+            .type(qna.getType().getText())
+            .title(qna.getTitle())
+            .answer(qna.getAnswer())
+            .modifiedDate(qna.getLastModifiedDate())
+            .build();
     }
 }

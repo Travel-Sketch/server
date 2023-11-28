@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static org.springframework.util.StringUtils.hasText;
+
 @RequiredArgsConstructor
 @Service
 @Transactional
@@ -40,7 +42,21 @@ public class QnaService {
     }
 
     public CreateAnswerResponse createAnswer(String email, Long qnaId, String answer) {
-        return null;
+        Optional<Qna> findQna = qnaRepository.findById(qnaId);
+        if (findQna.isEmpty()) {
+            throw new NoSuchElementException("등록되지 않은 QnA입니다.");
+        }
+        Qna qna = findQna.get();
+
+        if (hasText(qna.getAnswer())) {
+            throw new IllegalArgumentException("이미 답변이 등록된 QnA입니다.");
+        }
+
+        Member member = getMember(email);
+
+        Qna modifiedQna = qna.createAnswer(member, answer);
+
+        return CreateAnswerResponse.of(modifiedQna);
     }
 
     private Member getMember(String email) {

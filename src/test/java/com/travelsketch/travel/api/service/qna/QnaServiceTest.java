@@ -14,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,7 +59,7 @@ class QnaServiceTest extends IntegrationTestSupport {
 
         //when //then
         assertThatThrownBy(() -> qnaService.createAnswer("karina@naver.com", 1L, "QnA 답변입니다."))
-            .isInstanceOf(IllegalArgumentException.class)
+            .isInstanceOf(NoSuchElementException.class)
             .hasMessage("등록되지 않은 QnA입니다.");
     }
 
