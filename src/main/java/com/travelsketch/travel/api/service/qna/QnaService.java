@@ -1,5 +1,6 @@
 package com.travelsketch.travel.api.service.qna;
 
+import com.travelsketch.travel.api.controller.qna.response.CreateAnswerResponse;
 import com.travelsketch.travel.api.controller.qna.response.CreateQuestionResponse;
 import com.travelsketch.travel.api.service.qna.dto.CreateQuestionDto;
 import com.travelsketch.travel.domain.member.Member;
@@ -36,6 +37,10 @@ public class QnaService {
         Qna savedQna = qnaRepository.save(qna);
 
         return CreateQuestionResponse.of(savedQna);
+    }
+
+    public CreateAnswerResponse createAnswer(String email, Long qnaId, String answer) {
+        return null;
     }
 
     private Member getMember(String email) {
