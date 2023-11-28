@@ -3,14 +3,24 @@ package com.travelsketch.travel.docs.qna;
 import com.travelsketch.travel.api.controller.qna.QnaController;
 import com.travelsketch.travel.api.controller.qna.request.CreateAnswerRequest;
 import com.travelsketch.travel.api.controller.qna.request.CreateQuestionRequest;
+import com.travelsketch.travel.api.controller.qna.response.CreateQuestionResponse;
+import com.travelsketch.travel.api.service.qna.QnaService;
 import com.travelsketch.travel.docs.RestDocsSupport;
+import com.travelsketch.travel.domain.qna.QnaType;
+import com.travelsketch.travel.security.SecurityUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.time.LocalDateTime;
+
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentRequest;
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -24,22 +34,37 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class QnaControllerDocsTest extends RestDocsSupport {
 
+    private final QnaService qnaService = mock(QnaService.class);
+    private final SecurityUtils securityUtils = mock(SecurityUtils.class);
     private static final String BASE_URL = "/api/v1/qna";
 
     @Override
     protected Object initController() {
-        return new QnaController();
+        return new QnaController(qnaService, securityUtils);
     }
 
     @DisplayName("질문 등록 API")
     @Test
     void createQuestion() throws Exception {
+        given(securityUtils.getCurrentEmail())
+            .willReturn("karina@naver.com");
+
         CreateQuestionRequest request = CreateQuestionRequest.builder()
-            .type("계정")
+            .type(QnaType.ACCOUNT)
             .title("질문 제목입니다.")
             .content("질문 내용입니다.")
             .pwd("1234")
             .build();
+
+        CreateQuestionResponse response = CreateQuestionResponse.builder()
+            .qnaId(1L)
+            .type("계정")
+            .title("질문 제목입니다.")
+            .createdDate(LocalDateTime.of(2023, 11, 27, 16, 39))
+            .build();
+
+        given(qnaService.createQuestion(anyString(), any()))
+            .willReturn(response);
 
         mockMvc.perform(
                 post(BASE_URL)

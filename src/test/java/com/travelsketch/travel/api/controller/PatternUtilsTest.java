@@ -85,9 +85,30 @@ class PatternUtilsTest {
     @DisplayName("문자열이 닉네임 형식이 아니라면 False를 반환한다.")
     @ParameterizedTest
     @CsvSource({"에스파 카리나", "에스파karina!"})
-    void isNotKNicknamePattern(String text) {
+    void isNotNicknamePattern(String text) {
         //given //when
         boolean result = PatternUtils.isNicknamePattern(text);
+
+        //then
+        assertThat(result).isFalse();
+    }
+
+    @DisplayName("문자열이 숫자로만 구성되어 있으면 True를 반환한다.")
+    @Test
+    void isDigit() {
+        //given //when
+        boolean result = PatternUtils.isDigit("1231");
+
+        //then
+        assertThat(result).isTrue();
+    }
+
+    @DisplayName("문자열에 숫자 외의 문자가 포함되어 있으면 False를 반환한다.")
+    @ParameterizedTest
+    @CsvSource({"123!", "w213"})
+    void isNotDigit(String text) {
+        //given //when
+        boolean result = PatternUtils.isDigit(text);
 
         //then
         assertThat(result).isFalse();

@@ -6,11 +6,13 @@ import com.travelsketch.travel.api.controller.member.MemberController;
 import com.travelsketch.travel.api.controller.member.MemberQueryController;
 import com.travelsketch.travel.api.controller.notice.NoticeController;
 import com.travelsketch.travel.api.controller.notice.NoticeQueryController;
+import com.travelsketch.travel.api.controller.qna.QnaController;
 import com.travelsketch.travel.api.service.member.AccountService;
 import com.travelsketch.travel.api.service.member.MemberQueryService;
 import com.travelsketch.travel.api.service.member.MemberService;
 import com.travelsketch.travel.api.service.notice.NoticeQueryService;
 import com.travelsketch.travel.api.service.notice.NoticeService;
+import com.travelsketch.travel.api.service.qna.QnaService;
 import com.travelsketch.travel.interceptor.query.ApiQueryCounter;
 import com.travelsketch.travel.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WithMockUser
 @WebMvcTest(controllers = {AccountController.class, MemberController.class, MemberQueryController.class,
-    NoticeController.class, NoticeQueryController.class})
+    NoticeController.class, NoticeQueryController.class,
+    QnaController.class
+})
 public abstract class ControllerTestSupport {
 
     @Autowired
@@ -50,4 +54,7 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected NoticeQueryService noticeQueryService;
+
+    @MockBean
+    protected QnaService qnaService;
 }

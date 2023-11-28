@@ -6,6 +6,9 @@ import com.travelsketch.travel.api.controller.qna.request.CreateQuestionRequest;
 import com.travelsketch.travel.api.controller.qna.response.CreateAnswerResponse;
 import com.travelsketch.travel.api.controller.qna.response.CreateQuestionResponse;
 import com.travelsketch.travel.api.controller.qna.response.RemoveQnaResponse;
+import com.travelsketch.travel.api.service.qna.QnaService;
+import com.travelsketch.travel.security.SecurityUtils;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
 import static com.travelsketch.travel.api.ApiResponse.*;
+import static com.travelsketch.travel.api.controller.qna.QnaCustomValid.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -21,15 +25,17 @@ import static com.travelsketch.travel.api.ApiResponse.*;
 @RequestMapping("/api/v1/qna")
 public class QnaController {
 
+    private final QnaService qnaService;
+    private final SecurityUtils securityUtils;
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<CreateQuestionResponse> createQuestion(@RequestBody CreateQuestionRequest request) {
-        CreateQuestionResponse response = CreateQuestionResponse.builder()
-            .qnaId(1L)
-            .type("계정")
-            .title("질문 제목입니다.")
-            .createdDate(LocalDateTime.of(2023, 11, 27, 16, 39))
-            .build();
+    public ApiResponse<CreateQuestionResponse> createQuestion(@Valid @RequestBody CreateQuestionRequest request) {
+        validPwd(request.getPwd());
+
+        String email = securityUtils.getCurrentEmail();
+
+        CreateQuestionResponse response = qnaService.createQuestion(email, request.toDto());
 
         return created(response);
     }

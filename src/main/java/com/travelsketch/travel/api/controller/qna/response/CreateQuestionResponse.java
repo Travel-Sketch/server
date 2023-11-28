@@ -1,5 +1,6 @@
 package com.travelsketch.travel.api.controller.qna.response;
 
+import com.travelsketch.travel.domain.qna.Qna;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,5 +20,14 @@ public class CreateQuestionResponse {
         this.type = type;
         this.title = title;
         this.createdDate = createdDate;
+    }
+
+    public static CreateQuestionResponse of(Qna qna) {
+        return CreateQuestionResponse.builder()
+            .qnaId(qna.getId())
+            .type(qna.getType().getText())
+            .title(qna.getTitle())
+            .createdDate(qna.getCreatedDate())
+            .build();
     }
 }
