@@ -1,7 +1,7 @@
 # 게시물 기능 목록 명세서
 
 * [ ] 회원은 게시물을 등록할 수 있다. - `PostController#createPost`
-  * [ ] 제목, 내용, 장소를 입력 받아서 게시물을 등록한다.
+  * [ ] 제목, 내용을 입력 받아서 게시물을 등록한다.
   * [ ] 필요한 경우에 첨부 파일을 추가적으로 등록할 수 있다.
 * [ ] 회원은 게시물에 댓글을 등록할 수 있다. - `CommentController#createComment`
 * [ ] 회원은 게시물을 스크랩할 수 있다. - `ScrapController#toggleScrap`
