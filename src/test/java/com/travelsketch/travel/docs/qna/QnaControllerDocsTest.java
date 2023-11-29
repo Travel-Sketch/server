@@ -3,6 +3,7 @@ package com.travelsketch.travel.docs.qna;
 import com.travelsketch.travel.api.controller.qna.QnaController;
 import com.travelsketch.travel.api.controller.qna.request.CreateAnswerRequest;
 import com.travelsketch.travel.api.controller.qna.request.CreateQuestionRequest;
+import com.travelsketch.travel.api.controller.qna.response.CreateAnswerResponse;
 import com.travelsketch.travel.api.controller.qna.response.CreateQuestionResponse;
 import com.travelsketch.travel.api.service.qna.QnaService;
 import com.travelsketch.travel.docs.RestDocsSupport;
@@ -17,8 +18,7 @@ import java.time.LocalDateTime;
 
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentRequest;
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -115,9 +115,23 @@ public class QnaControllerDocsTest extends RestDocsSupport {
     @DisplayName("답변 등록 API")
     @Test
     void createAnswer() throws Exception {
+        given(securityUtils.getCurrentEmail())
+            .willReturn("karina@naver.com");
+
         CreateAnswerRequest request = CreateAnswerRequest.builder()
             .answer("질문 답변입니다.")
             .build();
+
+        CreateAnswerResponse response = CreateAnswerResponse.builder()
+            .qnaId(1L)
+            .type("계정")
+            .title("질문 제목입니다.")
+            .answer("질문 답변입니다.")
+            .modifiedDate(LocalDateTime.of(2023, 11, 27, 17, 32))
+            .build();
+
+        given(qnaService.createAnswer(anyString(), anyLong(), anyString()))
+            .willReturn(response);
 
         mockMvc.perform(
                 post(BASE_URL + "/{qnaId}", 1L)
