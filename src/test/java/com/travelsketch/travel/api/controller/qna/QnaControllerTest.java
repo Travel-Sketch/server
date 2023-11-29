@@ -1,6 +1,7 @@
 package com.travelsketch.travel.api.controller.qna;
 
 import com.travelsketch.travel.ControllerTestSupport;
+import com.travelsketch.travel.api.controller.qna.request.CreateAnswerRequest;
 import com.travelsketch.travel.api.controller.qna.request.CreateQuestionRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -110,6 +111,28 @@ class QnaControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.code").value("400"))
             .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("내용은 필수입니다."));
+    }
+
+    @DisplayName("답변 등록시 답변은 필수값이다.")
+    @Test
+    void createAnswerWithoutAnswer() throws Exception {
+        //given
+        CreateAnswerRequest request = CreateAnswerRequest.builder()
+            .answer(" ")
+            .build();
+
+        //when //then
+        mockMvc.perform(
+                post(BASE_URL + "/{qnaId}", 1L)
+                    .with(csrf())
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("400"))
+            .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("답변은 필수입니다."));
     }
 
     private String getText(int size) {
