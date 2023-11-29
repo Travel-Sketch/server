@@ -1,5 +1,6 @@
 package com.travelsketch.travel.api.service.qna;
 
+import com.travelsketch.travel.api.controller.qna.response.CreateAnswerResponse;
 import com.travelsketch.travel.api.controller.qna.response.CreateQuestionResponse;
 import com.travelsketch.travel.api.service.qna.dto.CreateQuestionDto;
 import com.travelsketch.travel.domain.member.Member;
@@ -12,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
+import static org.springframework.util.StringUtils.hasText;
 
 @RequiredArgsConstructor
 @Service
@@ -36,6 +39,24 @@ public class QnaService {
         Qna savedQna = qnaRepository.save(qna);
 
         return CreateQuestionResponse.of(savedQna);
+    }
+
+    public CreateAnswerResponse createAnswer(String email, Long qnaId, String answer) {
+        Optional<Qna> findQna = qnaRepository.findById(qnaId);
+        if (findQna.isEmpty()) {
+            throw new NoSuchElementException("등록되지 않은 QnA입니다.");
+        }
+        Qna qna = findQna.get();
+
+        if (hasText(qna.getAnswer())) {
+            throw new IllegalArgumentException("이미 답변이 등록된 QnA입니다.");
+        }
+
+        Member member = getMember(email);
+
+        Qna modifiedQna = qna.createAnswer(member, answer);
+
+        return CreateAnswerResponse.of(modifiedQna);
     }
 
     private Member getMember(String email) {

@@ -45,4 +45,11 @@ public class Qna extends BaseEntity {
         this.pwd = pwd;
         this.answer = answer;
     }
+
+    //== 비즈니스 로직 ==//
+    public Qna createAnswer(Member member, String answer) {
+        super.updateLastModifiedBy(member);
+        this.answer = answer;
+        return this;
+    }
 }

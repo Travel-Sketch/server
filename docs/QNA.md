@@ -8,7 +8,11 @@
   * [x] [예외] 입력 받은 내용이 빈 문자열이면 예외가 발생한다.
   * [x] [예외] 입력 받은 비밀번호의 길이가 4자가 아니라면 예외가 발생한다. - `QnaCustomValid#validPwd`
   * [x] [예외] 입력 받은 비밀번호가 숫자 이외의 문자가 존재하면 예외가 발생한다. - `QnaCustomValid#validPwd`
-* [ ] 관리자는 답글을 등록할 수 있다. - `QnaController#createAnswer`
+* [x] 관리자는 답글을 등록할 수 있다. - `QnaController#createAnswer`
+  * [x] 이메일, 답글을 입력 받아 답변을 등록한다. - `QnaService#createAnswer`
+  * [x] [예외] 입력 받은 답글이 빈 문자열이면 예외가 발생한다.
+  * [x] [예외] 입력 받은 아이디와 일치하는 QnA가 존재하지 않으면 예외가 발생한다.
+  * [x] [예외] 이미 답변이 등록된 QnA라면 예외가 발생한다.
 * [ ] 회원은 QnA 목록을 조회할 수 있다. - `QnaQueryController#searchQnas`
 * [ ] 회원은 QnA 상세 조회할 수 있다. - `QnaQueryController#searchQna`
 * [ ] 회원은 QnA 삭제할 수 있다. - `QnaController#removeQna`
