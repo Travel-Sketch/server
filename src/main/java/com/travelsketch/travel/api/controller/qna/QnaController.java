@@ -41,14 +41,11 @@ public class QnaController {
     }
 
     @PostMapping("/{qnaId}")
-    public ApiResponse<CreateAnswerResponse> createAnswer(@PathVariable Long qnaId, @RequestBody CreateAnswerRequest request) {
-        CreateAnswerResponse response = CreateAnswerResponse.builder()
-            .qnaId(1L)
-            .type("계정")
-            .title("질문 제목입니다.")
-            .answer("질문 답변입니다.")
-            .modifiedDate(LocalDateTime.of(2023, 11, 27, 17, 32))
-            .build();
+    public ApiResponse<CreateAnswerResponse> createAnswer(@PathVariable Long qnaId, @Valid @RequestBody CreateAnswerRequest request) {
+        String email = securityUtils.getCurrentEmail();
+
+        CreateAnswerResponse response = qnaService.createAnswer(email, qnaId, request.getAnswer());
+
         return ok(response);
     }
 
