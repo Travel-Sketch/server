@@ -8,17 +8,17 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class CreatePostResponse {
+public class DeletePostResponse {
 
     private Long postId;
     private String title;
-    private LocalDateTime createdDate;
+    private Boolean isDeleted;
 
     @Builder
-    private CreatePostResponse(Long postId, String title, LocalDateTime createdDate) {
+    private DeletePostResponse(Long postId, String title, Boolean isDeleted) {
         this.postId = postId;
         this.title = title;
-        this.createdDate = createdDate;
+        this.isDeleted = isDeleted;
     }
 
 }

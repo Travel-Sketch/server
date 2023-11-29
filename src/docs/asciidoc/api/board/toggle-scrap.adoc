@@ -1,0 +1,13 @@
+[[toggle-scrap]]
+=== 스크랩 토글 API
+
+==== HTTP Request
+
+include::{snippets}/toggle-scrap/http-request.adoc[]
+include::{snippets}/toggle-scrap/path-parameters.adoc[]
+include::{snippets}/toggle-scrap/request-headers.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/toggle-scrap/http-response.adoc[]
+include::{snippets}/toggle-scrap/response-fields.adoc[]

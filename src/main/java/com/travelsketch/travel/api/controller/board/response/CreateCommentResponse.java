@@ -8,16 +8,16 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class CreatePostResponse {
+public class CreateCommentResponse {
 
-    private Long postId;
-    private String title;
+    private Long commentId;
+    private String content;
     private LocalDateTime createdDate;
 
     @Builder
-    private CreatePostResponse(Long postId, String title, LocalDateTime createdDate) {
-        this.postId = postId;
-        this.title = title;
+    private CreateCommentResponse(Long commentId, String content, LocalDateTime createdDate) {
+        this.commentId = commentId;
+        this.content = content;
         this.createdDate = createdDate;
     }
 

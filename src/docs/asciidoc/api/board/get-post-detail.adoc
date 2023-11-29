@@ -1,0 +1,12 @@
+[[get-post-detail]]
+=== 게시물 상세 조회 API
+
+==== HTTP Request
+
+include::{snippets}/get-post-detail/http-request.adoc[]
+include::{snippets}/get-post-detail/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/get-post-detail/http-response.adoc[]
+include::{snippets}/get-post-detail/response-fields.adoc[]

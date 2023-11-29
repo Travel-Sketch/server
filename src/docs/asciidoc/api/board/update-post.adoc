@@ -1,0 +1,14 @@
+[[update-post]]
+=== 스크랩 토글 API
+
+==== HTTP Request
+
+include::{snippets}/update-post/http-request.adoc[]
+include::{snippets}/update-post/request-fields.adoc[]
+include::{snippets}/update-post/path-parameters.adoc[]
+include::{snippets}/update-post/request-headers.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/update-post/http-response.adoc[]
+include::{snippets}/update-post/response-fields.adoc[]

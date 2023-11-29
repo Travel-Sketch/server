@@ -1,0 +1,11 @@
+[[get-post-list]]
+=== 게시물 목록 조회 API
+
+==== HTTP Request
+
+include::{snippets}/get-post-list/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/get-post-list/http-response.adoc[]
+include::{snippets}/get-post-list/response-fields.adoc[]

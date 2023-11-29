@@ -1,0 +1,13 @@
+[[delete-post]]
+=== 게시물 삭제 API
+
+==== HTTP Request
+
+include::{snippets}/delete-post/http-request.adoc[]
+include::{snippets}/delete-post/path-parameters.adoc[]
+include::{snippets}/delete-comment/request-headers.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/delete-post/http-response.adoc[]
+include::{snippets}/delete-post/response-fields.adoc[]

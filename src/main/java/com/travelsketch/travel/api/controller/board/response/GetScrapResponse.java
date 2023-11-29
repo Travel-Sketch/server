@@ -4,21 +4,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
 @NoArgsConstructor
-public class CreatePostResponse {
+public class GetScrapResponse {
 
     private Long postId;
     private String title;
-    private LocalDateTime createdDate;
 
     @Builder
-    private CreatePostResponse(Long postId, String title, LocalDateTime createdDate) {
+    private GetScrapResponse(Long postId, String title) {
         this.postId = postId;
         this.title = title;
-        this.createdDate = createdDate;
     }
 
 }
