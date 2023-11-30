@@ -56,4 +56,8 @@ public class QnaQueryRepository {
             .orderBy(qna.createdDate.desc())
             .fetch();
     }
+
+    public int findCountByCond(String query) {
+        return 0;
+    }
 }

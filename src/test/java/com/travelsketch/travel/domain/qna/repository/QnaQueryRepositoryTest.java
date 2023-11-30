@@ -55,6 +55,25 @@ class QnaQueryRepositoryTest extends IntegrationTestSupport {
             );
     }
 
+    @DisplayName("검색 조건에 맞는 QnA의 갯수를 조회한다.")
+    @Test
+    void findCountByCond() {
+        //given
+        Member member = saveMember();
+        Qna qna1 = saveQna(member, "카리나 최고인가요?", "1234", null);
+        Qna qna2 = saveQna(member, "에스파 카리나 최고인가요?", "1234", "맞습니다");
+        Qna qna3 = saveQna(member, "에스파 카리나", null, null);
+        Qna qna4 = saveQna(member, "에스파 윈터입니다.", "1234", null);
+        Qna qna5 = saveQna(member, "에스파 카리나 최고인가?", null, null);
+        qna5.remove();
+
+        //when
+        int count = qnaQueryRepository.findCountByCond("카리나");
+
+        //then
+        assertThat(count).isEqualTo(3);
+    }
+
     private Member saveMember() {
         Member member = Member.builder()
             .email("karina@naver.com")
