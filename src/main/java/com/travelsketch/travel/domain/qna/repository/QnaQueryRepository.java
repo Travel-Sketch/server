@@ -58,6 +58,14 @@ public class QnaQueryRepository {
     }
 
     public int findCountByCond(String query) {
-        return 0;
+        return queryFactory
+            .select(qna.id)
+            .from(qna)
+            .where(
+                qna.isDeleted.isFalse(),
+                qna.title.like("%" + query + "%")
+            )
+            .fetch()
+            .size();
     }
 }
