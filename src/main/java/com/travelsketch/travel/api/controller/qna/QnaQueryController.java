@@ -4,17 +4,15 @@ import com.travelsketch.travel.api.ApiResponse;
 import com.travelsketch.travel.api.PageResponse;
 import com.travelsketch.travel.api.controller.qna.response.QnaDetailResponse;
 import com.travelsketch.travel.api.controller.qna.response.QnaResponse;
+import com.travelsketch.travel.api.service.qna.QnaQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static com.travelsketch.travel.api.ApiResponse.ok;
-import static com.travelsketch.travel.domain.qna.QnaType.ACCOUNT;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,21 +20,19 @@ import static com.travelsketch.travel.domain.qna.QnaType.ACCOUNT;
 @RequestMapping("/api/v1/qna")
 public class QnaQueryController {
 
+    private final QnaQueryService qnaQueryService;
+
     @GetMapping
     public ApiResponse<PageResponse<QnaResponse>> searchQnas(
         @RequestParam(defaultValue = "1") Integer page,
         @RequestParam(defaultValue = "") String query
     ) {
-        QnaResponse response = QnaResponse.builder()
-            .qnaId(1L)
-            .type(ACCOUNT)
-            .title("QnA 제목입니다.")
-            .pwd("1234")
-            .createdDate(LocalDateTime.of(2023, 11, 27, 19, 7))
-            .build();
-        PageRequest pageRequest = PageRequest.of(0, 10);
 
-        return ok(new PageResponse<>(new PageImpl<>(List.of(response), pageRequest, 1)));
+        PageRequest pageRequest = PageRequest.of(page - 1, 10);
+
+        PageResponse<QnaResponse> response = qnaQueryService.searchQnas(query, pageRequest);
+
+        return ok(response);
     }
 
     @GetMapping("/{qnaId}")

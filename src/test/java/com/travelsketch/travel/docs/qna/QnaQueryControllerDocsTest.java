@@ -1,12 +1,25 @@
 package com.travelsketch.travel.docs.qna;
 
+import com.travelsketch.travel.api.PageResponse;
 import com.travelsketch.travel.api.controller.qna.QnaQueryController;
+import com.travelsketch.travel.api.controller.qna.response.QnaResponse;
+import com.travelsketch.travel.api.service.qna.QnaQueryService;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
+import static com.travelsketch.travel.domain.qna.QnaType.ACCOUNT;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -19,16 +32,30 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class QnaQueryControllerDocsTest extends RestDocsSupport {
 
+    private final QnaQueryService qnaQueryService = mock(QnaQueryService.class);
     private static final String BASE_URL = "/api/v1/qna";
 
     @Override
     protected Object initController() {
-        return new QnaQueryController();
+        return new QnaQueryController(qnaQueryService);
     }
 
     @DisplayName("QnA 목록 조회 API")
     @Test
     void searchQnas() throws Exception {
+        QnaResponse response = QnaResponse.builder()
+            .qnaId(1L)
+            .type(ACCOUNT)
+            .title("QnA 제목입니다.")
+            .pwd("1234")
+            .createdDate(LocalDateTime.of(2023, 11, 27, 19, 7))
+            .build();
+
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        given(qnaQueryService.searchQnas(anyString(), any()))
+            .willReturn(new PageResponse<>(new PageImpl<>(List.of(response), pageRequest, 1)));
+
         mockMvc.perform(
                 get(BASE_URL)
                     .header("Authorization", "Bearer Access Token")
@@ -69,6 +96,8 @@ public class QnaQueryControllerDocsTest extends RestDocsSupport {
                         .description("질문 제목"),
                     fieldWithPath("data.content[].isLocked").type(JsonFieldType.BOOLEAN)
                         .description("질문 잠금 여부"),
+                    fieldWithPath("data.content[].isAnswer").type(JsonFieldType.BOOLEAN)
+                        .description("답변 존재 여부"),
                     fieldWithPath("data.content[].createdDate").type(JsonFieldType.ARRAY)
                         .description("QnA 등록 일시"),
                     fieldWithPath("data.currentPage").type(JsonFieldType.NUMBER)
