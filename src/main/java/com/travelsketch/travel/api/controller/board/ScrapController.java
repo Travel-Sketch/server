@@ -14,6 +14,11 @@ import java.util.List;
 @RequestMapping("api/v1/scraps")
 public class ScrapController {
 
+    /**
+     * 게시물 스크랩 설정 API
+     * @param postId 게시물 id
+     * @return 스크랩 여부
+     */
     @PostMapping("/{postId}")
     public ApiResponse<ToggleScrapResponse> toggleScrap(@PathVariable Long postId) {
         ToggleScrapResponse response = ToggleScrapResponse.builder()
@@ -23,6 +28,10 @@ public class ScrapController {
         return ApiResponse.created(response);
     }
 
+    /**
+     * 스크랩 게시물 목록 조회
+     * @return 스크랩 게시물 목록
+     */
     @GetMapping
     public ApiResponse<List<GetScrapResponse>> getScrap() {
         GetScrapResponse response = GetScrapResponse.builder()

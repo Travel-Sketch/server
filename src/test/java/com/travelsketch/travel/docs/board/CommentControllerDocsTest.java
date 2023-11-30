@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class CommentControllerDocsTest extends RestDocsSupport {
 
-    private static final String BASE_URL = "/api/v1/comments";
+    private static final String BASE_URL = "/api/v1/posts/{postId}/comments";
 
     @Override
     protected Object initController() {
@@ -43,7 +43,7 @@ public class CommentControllerDocsTest extends RestDocsSupport {
                 .build();
 
         mockMvc.perform(
-                        post(BASE_URL)
+                        post(BASE_URL, 1)
                                 .header("Authorization", "Bearer Access Token")
 //                                .contentType("text/plain")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -56,6 +56,9 @@ public class CommentControllerDocsTest extends RestDocsSupport {
                 .andDo(document("create-comment",
                         getDocumentRequest(),
                         getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("postId").description("게시글id")
+                        ),
                         requestHeaders(
                                 headerWithName("Authorization")
                                         .description("Bearer Access Token")
@@ -88,7 +91,7 @@ public class CommentControllerDocsTest extends RestDocsSupport {
     @Test
     void deleteComment() throws Exception {
 
-        mockMvc.perform(delete(BASE_URL + "/{commentId}", 1)
+        mockMvc.perform(delete(BASE_URL + "/{commentId}", 1, 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer Access Token")
                 )
@@ -97,12 +100,13 @@ public class CommentControllerDocsTest extends RestDocsSupport {
                 .andDo(document("delete-comment",
                         getDocumentRequest(),
                         getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("postId").description("게시글id"),
+                                parameterWithName("commentId").description("댓글id")
+                        ),
                         requestHeaders(
                                 headerWithName("Authorization")
                                         .description("Bearer Access Token")
-                        ),
-                        pathParameters(
-                                parameterWithName("commentId").description("댓글id")
                         ),
                         responseFields(
                                 fieldWithPath("code").type(JsonFieldType.NUMBER)

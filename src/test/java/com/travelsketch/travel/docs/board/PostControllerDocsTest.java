@@ -17,9 +17,7 @@ import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -175,7 +173,7 @@ public class PostControllerDocsTest extends RestDocsSupport {
                 .content("게시물 내용 수정")
                 .build();
 
-        mockMvc.perform(post(BASE_URL + "/{postId}", 1)
+        mockMvc.perform(patch(BASE_URL + "/{postId}", 1)
                         .header("Authorization", "Bearer Access Token")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))

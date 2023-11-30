@@ -1,5 +1,5 @@
 [[delete-comment]]
-=== 게시물 삭제 API
+=== 댓글 삭제 API
 
 ==== HTTP Request
 

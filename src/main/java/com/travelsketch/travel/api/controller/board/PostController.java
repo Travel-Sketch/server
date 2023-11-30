@@ -16,6 +16,11 @@ import java.util.List;
 @RequestMapping("api/v1/posts")
 public class PostController {
 
+    /**
+     * 게시물 등록 API
+     * @param request 등록할 게시물 정보
+     * @return 등록된 게시물 정보
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<CreatePostResponse> createPost(@RequestBody CreatePostRequest request) {
@@ -27,7 +32,10 @@ public class PostController {
         return ApiResponse.created(response);
     }
 
-
+    /**
+     * 게시물 목록 조회 API
+     * @return 게시물 목록
+     */
     @GetMapping
     public ApiResponse<List<GetPostListResponse>> getPostList() {
         GetPostListResponse response1 = GetPostListResponse.builder()
@@ -43,8 +51,12 @@ public class PostController {
         return ApiResponse.ok(List.of(response1, response2));
     }
 
+    /**
+     * 게시물 상세 정보 조회 API
+     * @return 게시물 상세 정보
+     */
     @GetMapping("/{postId}")
-    public  ApiResponse<GetPostDetailResponse> getPostDetail() {
+    public ApiResponse<GetPostDetailResponse> getPostDetail() {
         GetPostDetailResponse response = GetPostDetailResponse.builder()
                 .postId(1L)
                 .category("게시물 카테고리 1")
@@ -59,8 +71,12 @@ public class PostController {
         return ApiResponse.ok(response);
     }
 
-
-    @PostMapping("/{postId}")
+    /**
+     * 게시물 수정 API
+     * @param request 게시물 수정 내용
+     * @return 게시물 수정 내용
+     */
+    @PatchMapping ("/{postId}")
     public ApiResponse<UpdatePostResponse> updatePost(@RequestBody UpdatePostRequest request) {
         UpdatePostResponse response = UpdatePostResponse.builder()
                 .postId(1L)
@@ -72,7 +88,10 @@ public class PostController {
         return ApiResponse.ok(response);
     }
 
-
+    /**
+     * 게시물 삭제 API
+     * @return 삭제된 게시물
+     */
     @DeleteMapping("/{postId}")
     public ApiResponse<DeletePostResponse> deletePost() {
         DeletePostResponse response = DeletePostResponse.builder()

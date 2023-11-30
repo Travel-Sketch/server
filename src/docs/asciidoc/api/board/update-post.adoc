@@ -1,5 +1,5 @@
 [[update-post]]
-=== 스크랩 토글 API
+=== 게시물 수정 API
 
 ==== HTTP Request
 
