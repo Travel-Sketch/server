@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -30,6 +32,16 @@ public class QnaQueryService {
     }
 
     public QnaDetailResponse searchQna(Long qnaId) {
-        return null;
+        Optional<QnaDetailResponse> findResponse = qnaQueryRepository.findById(qnaId);
+        if (findResponse.isEmpty()) {
+            throw new NoSuchElementException("등록되지 않은 QnA입니다.");
+        }
+        QnaDetailResponse response = findResponse.get();
+
+        if (response.getIsDeleted()) {
+            throw new IllegalArgumentException("삭제된 QnA입니다.");
+        }
+
+        return response;
     }
 }
