@@ -2,6 +2,7 @@ package com.travelsketch.travel.api.service.qna;
 
 import com.travelsketch.travel.IntegrationTestSupport;
 import com.travelsketch.travel.api.PageResponse;
+import com.travelsketch.travel.api.controller.qna.response.QnaDetailResponse;
 import com.travelsketch.travel.api.controller.qna.response.QnaResponse;
 import com.travelsketch.travel.domain.member.Member;
 import com.travelsketch.travel.domain.member.Role;
@@ -14,7 +15,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.NoSuchElementException;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.groups.Tuple.tuple;
 
 class QnaQueryServiceTest extends IntegrationTestSupport {
@@ -53,6 +57,45 @@ class QnaQueryServiceTest extends IntegrationTestSupport {
                 tuple("에스파 카리나 최고인가요?", true, true),
                 tuple("에스파 카리나", false, false)
             );
+    }
+
+    @DisplayName("QnA 아이디로 조회시 등록이 되지 않은 QnA라면 예외가 발생한다.")
+    @Test
+    void searchQnaNoSuchQna() {
+        //given
+
+        //when //then
+        assertThatThrownBy(() -> qnaQueryService.searchQna(1L))
+            .isInstanceOf(NoSuchElementException.class)
+            .hasMessage("등록되지 않은 QnA입니다.");
+    }
+
+    @DisplayName("조회된 QnA가 삭제된 경우 예외가 발생한다.")
+    @Test
+    void searchQnaIsDeleted() {
+        //given
+        Member member = saveMember();
+        Qna qna = saveQna(member, "QnA 제목입니다.", "1234", "QnA 답변입니다.");
+        qna.remove();
+
+        //when //then
+        assertThatThrownBy(() -> qnaQueryService.searchQna(qna.getId()))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("삭제된 QnA입니다.");
+    }
+
+    @DisplayName("QnA 아이디를 입력 받아 정보를 조회할 수 있다.")
+    @Test
+    void searchQna() {
+        //given
+        Member member = saveMember();
+        Qna qna = saveQna(member, "QnA 제목입니다.", "1234", "QnA 답변입니다.");
+
+        //when
+        QnaDetailResponse response = qnaQueryService.searchQna(qna.getId());
+
+        //then
+        assertThat(response.getTitle()).isEqualTo("QnA 제목입니다.");
     }
 
     private Member saveMember() {

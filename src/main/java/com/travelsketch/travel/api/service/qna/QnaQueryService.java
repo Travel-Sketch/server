@@ -1,6 +1,7 @@
 package com.travelsketch.travel.api.service.qna;
 
 import com.travelsketch.travel.api.PageResponse;
+import com.travelsketch.travel.api.controller.qna.response.QnaDetailResponse;
 import com.travelsketch.travel.api.controller.qna.response.QnaResponse;
 import com.travelsketch.travel.domain.qna.repository.QnaQueryRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +27,9 @@ public class QnaQueryService {
         PageImpl<QnaResponse> content = new PageImpl<>(responses, pageable, count);
 
         return new PageResponse<>(content);
+    }
+
+    public QnaDetailResponse searchQna(Long qnaId) {
+        return null;
     }
 }
