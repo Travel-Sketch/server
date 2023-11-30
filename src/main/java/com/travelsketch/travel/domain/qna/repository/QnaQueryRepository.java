@@ -72,6 +72,23 @@ public class QnaQueryRepository {
     }
 
     public Optional<QnaDetailResponse> findById(Long qnaId) {
-        return Optional.empty();
+        QnaDetailResponse response = queryFactory
+            .select(
+                Projections.constructor(
+                    QnaDetailResponse.class,
+                    qna.id,
+                    qna.type,
+                    qna.title,
+                    qna.content,
+                    qna.answer,
+                    qna.isDeleted,
+                    qna.createdDate
+                )
+            )
+            .from(qna)
+            .where(qna.id.eq(qnaId))
+            .fetchOne();
+
+        return Optional.ofNullable(response);
     }
 }
