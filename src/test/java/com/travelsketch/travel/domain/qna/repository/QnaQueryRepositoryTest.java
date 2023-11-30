@@ -43,7 +43,7 @@ class QnaQueryRepositoryTest extends IntegrationTestSupport {
         PageRequest pageRequest = PageRequest.of(0, 10);
 
         //when
-        List<QnaResponse> responses = qnaQueryRepository.findByCond("릴리즈", pageRequest);
+        List<QnaResponse> responses = qnaQueryRepository.findByCond("카리나", pageRequest);
 
         //then
         assertThat(responses).hasSize(3)

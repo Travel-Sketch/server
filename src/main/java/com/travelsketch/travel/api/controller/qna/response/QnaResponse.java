@@ -1,9 +1,12 @@
 package com.travelsketch.travel.api.controller.qna.response;
 
+import com.travelsketch.travel.domain.qna.QnaType;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+
+import static org.springframework.util.StringUtils.hasText;
 
 @Getter
 public class QnaResponse {
@@ -16,12 +19,12 @@ public class QnaResponse {
     private final LocalDateTime createdDate;
 
     @Builder
-    public QnaResponse(Long qnaId, String type, String title, Boolean isLocked, Boolean isAnswer, LocalDateTime createdDate) {
+    public QnaResponse(Long qnaId, QnaType type, String title, String pwd, String answer, LocalDateTime createdDate) {
         this.qnaId = qnaId;
-        this.type = type;
+        this.type = type.getText();
         this.title = title;
-        this.isLocked = isLocked;
-        this.isAnswer = isAnswer;
+        this.isLocked = hasText(pwd);
+        this.isAnswer = hasText(answer);
         this.createdDate = createdDate;
     }
 }

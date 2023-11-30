@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.travelsketch.travel.api.ApiResponse.*;
+import static com.travelsketch.travel.api.ApiResponse.ok;
+import static com.travelsketch.travel.domain.qna.QnaType.ACCOUNT;
 
 @RequiredArgsConstructor
 @RestController
@@ -28,9 +29,9 @@ public class QnaQueryController {
     ) {
         QnaResponse response = QnaResponse.builder()
             .qnaId(1L)
-            .type("계정")
+            .type(ACCOUNT)
             .title("QnA 제목입니다.")
-            .isLocked(true)
+            .pwd("1234")
             .createdDate(LocalDateTime.of(2023, 11, 27, 19, 7))
             .build();
         PageRequest pageRequest = PageRequest.of(0, 10);
