@@ -1,6 +1,7 @@
 package com.travelsketch.travel.domain.qna.repository;
 
 import com.travelsketch.travel.IntegrationTestSupport;
+import com.travelsketch.travel.api.controller.qna.response.QnaDetailResponse;
 import com.travelsketch.travel.api.controller.qna.response.QnaResponse;
 import com.travelsketch.travel.domain.member.Member;
 import com.travelsketch.travel.domain.member.Role;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
@@ -72,6 +74,20 @@ class QnaQueryRepositoryTest extends IntegrationTestSupport {
 
         //then
         assertThat(count).isEqualTo(3);
+    }
+
+    @DisplayName("QnA 아이디로 상세 조회한다.")
+    @Test
+    void findById() {
+        //given
+        Member member = saveMember();
+        Qna qna = saveQna(member, "카리나 최고인가요?", "1234", null);
+
+        //when
+        Optional<QnaDetailResponse> findResponse = qnaQueryRepository.findById(qna.getId());
+
+        //then
+        assertThat(findResponse).isPresent();
     }
 
     private Member saveMember() {

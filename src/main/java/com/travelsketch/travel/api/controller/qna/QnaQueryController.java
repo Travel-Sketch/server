@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
 import static com.travelsketch.travel.api.ApiResponse.ok;
+import static com.travelsketch.travel.domain.qna.QnaType.ACCOUNT;
 
 @RequiredArgsConstructor
 @RestController
@@ -39,7 +40,7 @@ public class QnaQueryController {
     public ApiResponse<QnaDetailResponse> searchQna(@PathVariable Long qnaId) {
         QnaDetailResponse response  = QnaDetailResponse.builder()
             .qnaId(1L)
-            .type("계정")
+            .type(ACCOUNT)
             .title("QnA 제목입니다.")
             .content("QnA 내용입니다.")
             .answer("QnA 답변입니다.")
