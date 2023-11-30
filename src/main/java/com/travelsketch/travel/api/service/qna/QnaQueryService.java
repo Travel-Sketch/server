@@ -32,16 +32,24 @@ public class QnaQueryService {
     }
 
     public QnaDetailResponse searchQna(Long qnaId) {
+        QnaDetailResponse response = getQnaDetailResponse(qnaId);
+
+        checkDeleted(response);
+
+        return response;
+    }
+
+    private void checkDeleted(QnaDetailResponse response) {
+        if (response.getIsDeleted()) {
+            throw new IllegalArgumentException("삭제된 QnA입니다.");
+        }
+    }
+
+    private QnaDetailResponse getQnaDetailResponse(Long qnaId) {
         Optional<QnaDetailResponse> findResponse = qnaQueryRepository.findById(qnaId);
         if (findResponse.isEmpty()) {
             throw new NoSuchElementException("등록되지 않은 QnA입니다.");
         }
-        QnaDetailResponse response = findResponse.get();
-
-        if (response.getIsDeleted()) {
-            throw new IllegalArgumentException("삭제된 QnA입니다.");
-        }
-
-        return response;
+        return findResponse.get();
     }
 }
