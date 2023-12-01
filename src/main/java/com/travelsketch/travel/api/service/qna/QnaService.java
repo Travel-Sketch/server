@@ -60,8 +60,18 @@ public class QnaService {
         return CreateAnswerResponse.of(modifiedQna);
     }
 
-    public RemoveQnaResponse removeQna(Long qnaId) {
-        return null;
+    public RemoveQnaResponse removeQna(String email, Long qnaId) {
+        Optional<Qna> findQna = qnaRepository.findById(qnaId);
+        if (findQna.isEmpty()) {
+            throw new NoSuchElementException("등록되지 않은 QnA입니다.");
+        }
+        Qna qna = findQna.get();
+
+        Member member = getMember(email);
+
+        qna.remove(member);
+
+        return RemoveQnaResponse.of(qna);
     }
 
     private Member getMember(String email) {

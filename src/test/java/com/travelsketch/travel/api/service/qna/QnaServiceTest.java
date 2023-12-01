@@ -96,8 +96,11 @@ class QnaServiceTest extends IntegrationTestSupport {
     @DisplayName("입력 받은 아이디와 일치하는 QnA가 존재하지 않으면 예외가 발생한다.")
     @Test
     void removeQnaNoSuchQna() {
-        //given //when //then
-        assertThatThrownBy(() -> qnaService.removeQna(1L))
+        //given
+        Member member = savedMember();
+
+        //when //then
+        assertThatThrownBy(() -> qnaService.removeQna("karina@naver.com", 1L))
             .isInstanceOf(NoSuchElementException.class)
             .hasMessage("등록되지 않은 QnA입니다.");
     }
@@ -110,7 +113,7 @@ class QnaServiceTest extends IntegrationTestSupport {
         Qna qna = savedQna(member, "QnA 답변입니다.");
 
         //when
-        RemoveQnaResponse response = qnaService.removeQna(qna.getId());
+        RemoveQnaResponse response = qnaService.removeQna("karina@naver.com", qna.getId());
 
         //then
         Optional<Qna> findQna = qnaRepository.findById(response.getQnaId());

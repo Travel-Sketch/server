@@ -1,5 +1,6 @@
 package com.travelsketch.travel.api.controller.qna.response;
 
+import com.travelsketch.travel.domain.qna.Qna;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,5 +20,14 @@ public class RemoveQnaResponse {
         this.type = type;
         this.title = title;
         this.removedDate = removedDate;
+    }
+
+    public static RemoveQnaResponse of(Qna qna) {
+        return RemoveQnaResponse.builder()
+            .qnaId(qna.getId())
+            .type(qna.getType().getText())
+            .title(qna.getTitle())
+            .removedDate(qna.getLastModifiedDate())
+            .build();
     }
 }
