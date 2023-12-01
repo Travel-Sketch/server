@@ -1,10 +1,10 @@
 package com.travelsketch.travel.api.controller.board.request;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
 public class CreateCommentRequest {
     // String 객체를 반환하는 API에 responseFields를 설정하려고 하면

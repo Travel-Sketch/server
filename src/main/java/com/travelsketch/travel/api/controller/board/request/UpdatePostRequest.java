@@ -1,12 +1,10 @@
 package com.travelsketch.travel.api.controller.board.request;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
-@Data
+@Getter
 @NoArgsConstructor
 public class UpdatePostRequest {
 
