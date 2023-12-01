@@ -25,6 +25,9 @@ public class QnaQueryController {
         @RequestParam(defaultValue = "1") Integer page,
         @RequestParam(defaultValue = "") String query
     ) {
+        if (isNegativeOrZero(page)) {
+            throw new IllegalArgumentException("페이지는 1이상입니다.");
+        }
 
         PageRequest pageRequest = PageRequest.of(page - 1, 10);
 
@@ -39,5 +42,9 @@ public class QnaQueryController {
         QnaDetailResponse response = qnaQueryService.searchQna(qnaId);
 
         return ok(response);
+    }
+
+    private boolean isNegativeOrZero(int number) {
+        return number <= 0;
     }
 }
