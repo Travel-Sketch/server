@@ -5,6 +5,7 @@ import com.travelsketch.travel.api.controller.qna.request.CreateAnswerRequest;
 import com.travelsketch.travel.api.controller.qna.request.CreateQuestionRequest;
 import com.travelsketch.travel.api.controller.qna.response.CreateAnswerResponse;
 import com.travelsketch.travel.api.controller.qna.response.CreateQuestionResponse;
+import com.travelsketch.travel.api.controller.qna.response.RemoveQnaResponse;
 import com.travelsketch.travel.api.service.qna.QnaService;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import com.travelsketch.travel.domain.qna.QnaType;
@@ -182,6 +183,19 @@ public class QnaControllerDocsTest extends RestDocsSupport {
     @DisplayName("QnA 삭제 API")
     @Test
     void removeQna() throws Exception {
+        given(securityUtils.getCurrentEmail())
+            .willReturn("karina@naver.com");
+
+        RemoveQnaResponse response = RemoveQnaResponse.builder()
+            .qnaId(1L)
+            .type("계정")
+            .title("질문 제목입니다.")
+            .removedDate(LocalDateTime.of(2023, 11, 27, 19, 0))
+            .build();
+
+        given(qnaService.removeQna(anyString(), anyLong()))
+            .willReturn(response);
+
         mockMvc.perform(
                 delete(BASE_URL + "/{qnaId}", 1L)
                     .header("Authorization", "Bearer Access Token")
