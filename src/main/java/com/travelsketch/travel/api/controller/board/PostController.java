@@ -13,11 +13,12 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/v1/posts")
+@RequestMapping("/api/v1/posts")
 public class PostController {
 
     /**
      * 게시물 등록 API
+     *
      * @param request 등록할 게시물 정보
      * @return 등록된 게시물 정보
      */
@@ -34,10 +35,12 @@ public class PostController {
 
     /**
      * 게시물 목록 조회 API
+     *
      * @return 게시물 목록
      */
     @GetMapping
     public ApiResponse<List<GetPostListResponse>> getPostList() {
+        //searchPosts
         GetPostListResponse response1 = GetPostListResponse.builder()
                 .postId(1L)
                 .title("게시물 제목1")
@@ -53,10 +56,12 @@ public class PostController {
 
     /**
      * 게시물 상세 정보 조회 API
+     *
      * @return 게시물 상세 정보
      */
     @GetMapping("/{postId}")
-    public ApiResponse<GetPostDetailResponse> getPostDetail() {
+    public ApiResponse<GetPostDetailResponse> getPostDetail(@PathVariable Long postId) {
+        //searchPost
         GetPostDetailResponse response = GetPostDetailResponse.builder()
                 .postId(1L)
                 .category("게시물 카테고리 1")
@@ -68,16 +73,24 @@ public class PostController {
                 .createdDate(LocalDateTime.of(2023, 11, 30, 1, 50))
                 .lastModifiedDate(LocalDateTime.of(2023, 11, 30, 1, 55))
                 .build();
+
+
+
         return ApiResponse.ok(response);
     }
 
     /**
      * 게시물 수정 API
+     *
      * @param request 게시물 수정 내용
      * @return 게시물 수정 내용
      */
-    @PatchMapping ("/{postId}")
-    public ApiResponse<UpdatePostResponse> updatePost(@RequestBody UpdatePostRequest request) {
+    @PatchMapping("/{postId}")
+    public ApiResponse<UpdatePostResponse> updatePost(
+            @PathVariable Long postId,
+            @RequestBody UpdatePostRequest request
+    ) {
+        //edit, modify(O)
         UpdatePostResponse response = UpdatePostResponse.builder()
                 .postId(1L)
                 .category("게시물 카테고리 수정")
@@ -90,10 +103,12 @@ public class PostController {
 
     /**
      * 게시물 삭제 API
+     *
      * @return 삭제된 게시물
      */
     @DeleteMapping("/{postId}")
-    public ApiResponse<DeletePostResponse> deletePost() {
+    public ApiResponse<DeletePostResponse> deletePost(@PathVariable Long postId) {
+        //removePost
         DeletePostResponse response = DeletePostResponse.builder()
                 .postId(1L)
                 .title("게시물 제목 1")

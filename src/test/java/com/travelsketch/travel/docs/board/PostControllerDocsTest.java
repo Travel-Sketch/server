@@ -8,9 +8,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.time.LocalDateTime;
 
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentRequest;
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
@@ -37,9 +34,9 @@ public class PostControllerDocsTest extends RestDocsSupport {
     @Test
     void createPost() throws Exception {
         CreatePostRequest request = CreatePostRequest.builder()
-                .title("게시물 제목 1")
-                .content("게시물 내용 1")
-                .build();
+            .title("게시물 제목 1")
+            .content("게시물 내용 1")
+            .build();
 
         mockMvc.perform(
                 post(BASE_URL)
@@ -47,120 +44,117 @@ public class PostControllerDocsTest extends RestDocsSupport {
                     .contentType(MediaType.APPLICATION_JSON)
 //                    .characterEncoding("utf-8")
                     .content(objectMapper.writeValueAsString(request))
+            )
+            .andDo(print())
+            .andExpect(status().isCreated())
+            .andDo(document("create-post",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestHeaders(
+                    headerWithName("Authorization")
+                        .description("Bearer Access Token")
+                ),
+                requestFields(
+                    fieldWithPath("title").type(JsonFieldType.STRING)
+                        .description("게시물 제목"),
+                    fieldWithPath("content").type(JsonFieldType.STRING)
+                        .description("게시물 내용")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.postId").type(JsonFieldType.NUMBER)
+                        .description("게시물 아이디"),
+                    fieldWithPath("data.title").type(JsonFieldType.STRING)
+                        .description("게시물 제목"),
+                    fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY)
+                        .description("게시물 등록 일시")
                 )
-                .andDo(print())
-                .andExpect(status().isCreated())
-                .andDo(document("create-post",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestHeaders(
-                                headerWithName("Authorization")
-                                        .description("Bearer Access Token")
-                        ),
-                        requestFields(
-                                fieldWithPath("title").type(JsonFieldType.STRING)
-                                        .description("게시물 제목"),
-                                fieldWithPath("content").type(JsonFieldType.STRING)
-                                        .description("게시물 내용")
-                        ),
-                        responseFields(
-                                fieldWithPath("code").type(JsonFieldType.NUMBER)
-                                        .description("코드"),
-                                fieldWithPath("status").type(JsonFieldType.STRING)
-                                        .description("상태"),
-                                fieldWithPath("message").type(JsonFieldType.STRING)
-                                        .description("메시지"),
-                                fieldWithPath("data").type(JsonFieldType.OBJECT)
-                                        .description("응답 데이터"),
-                                fieldWithPath("data.postId").type(JsonFieldType.NUMBER)
-                                        .description("게시물 아이디"),
-                                fieldWithPath("data.title").type(JsonFieldType.STRING)
-                                        .description("게시물 제목"),
-                                fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY)
-                                        .description("게시물 등록 일시")
-                        )
-                ));
+            ));
     }
-
 
     @DisplayName("게시물 목록 조회 API")
     @Test
     void getPostList() throws Exception {
 
         mockMvc.perform(get(BASE_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("get-post-list",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.ARRAY)
+                        .description("응답 데이터"),
+                    fieldWithPath("data[].postId").type(JsonFieldType.NUMBER)
+                        .description("게시물 아이디"),
+                    fieldWithPath("data[].title").type(JsonFieldType.STRING)
+                        .description("게시물 제목"),
+                    fieldWithPath("data[].createdDate").type(JsonFieldType.ARRAY)
+                        .description("게시물 등록 일시")
                 )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("get-post-list",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        responseFields(
-                                fieldWithPath("code").type(JsonFieldType.NUMBER)
-                                        .description("코드"),
-                                fieldWithPath("status").type(JsonFieldType.STRING)
-                                        .description("상태"),
-                                fieldWithPath("message").type(JsonFieldType.STRING)
-                                        .description("메시지"),
-                                fieldWithPath("data").type(JsonFieldType.ARRAY)
-                                        .description("응답 데이터"),
-                                fieldWithPath("data[].postId").type(JsonFieldType.NUMBER)
-                                        .description("게시물 아이디"),
-                                fieldWithPath("data[].title").type(JsonFieldType.STRING)
-                                        .description("게시물 제목"),
-                                fieldWithPath("data[].createdDate").type(JsonFieldType.ARRAY)
-                                        .description("게시물 등록 일시")
-                        )
-
-                ));
+            ));
     }
-
 
     @DisplayName("게시물 상세 조회 API")
     @Test
     void getPostDetail() throws Exception {
 
         mockMvc.perform(get(BASE_URL + "/{postId}", 1)
-                        .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("get-post-detail",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                pathParameters(
+                    parameterWithName("postId").description("게시글id")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.postId").type(JsonFieldType.NUMBER)
+                        .description("게시물 아이디"),
+                    fieldWithPath("data.category").type(JsonFieldType.STRING)
+                        .description("게시물 카테고리"),
+                    fieldWithPath("data.title").type(JsonFieldType.STRING)
+                        .description("게시물 제목"),
+                    fieldWithPath("data.content").type(JsonFieldType.STRING)
+                        .description("게시물 내용"),
+                    fieldWithPath("data.scrapCount").type(JsonFieldType.NUMBER)
+                        .description("게시물 스크랩 수"),
+                    fieldWithPath("data.commentCount").type(JsonFieldType.NUMBER)
+                        .description("게시물 댓글 수"),
+                    fieldWithPath("data.isDeleted").type(JsonFieldType.BOOLEAN)
+                        .description("게시물 삭제 여부"),
+                    fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY)
+                        .description("게시물 등록 일시"),
+                    fieldWithPath("data.lastModifiedDate").type(JsonFieldType.ARRAY)
+                        .description("게시물 최근 수정 일시")
                 )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("get-post-detail",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        pathParameters(
-                                parameterWithName("postId").description("게시글id")
-                        ),
-                        responseFields(
-                                fieldWithPath("code").type(JsonFieldType.NUMBER)
-                                        .description("코드"),
-                                fieldWithPath("status").type(JsonFieldType.STRING)
-                                        .description("상태"),
-                                fieldWithPath("message").type(JsonFieldType.STRING)
-                                        .description("메시지"),
-                                fieldWithPath("data").type(JsonFieldType.OBJECT)
-                                        .description("응답 데이터"),
-                                fieldWithPath("data.postId").type(JsonFieldType.NUMBER)
-                                        .description("게시물 아이디"),
-                                fieldWithPath("data.category").type(JsonFieldType.STRING)
-                                        .description("게시물 카테고리"),
-                                fieldWithPath("data.title").type(JsonFieldType.STRING)
-                                        .description("게시물 제목"),
-                                fieldWithPath("data.content").type(JsonFieldType.STRING)
-                                        .description("게시물 내용"),
-                                fieldWithPath("data.scrapCount").type(JsonFieldType.NUMBER)
-                                        .description("게시물 스크랩 수"),
-                                fieldWithPath("data.commentCount").type(JsonFieldType.NUMBER)
-                                        .description("게시물 댓글 수"),
-                                fieldWithPath("data.isDeleted").type(JsonFieldType.BOOLEAN)
-                                        .description("게시물 삭제 여부"),
-                                fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY)
-                                        .description("게시물 등록 일시"),
-                                fieldWithPath("data.lastModifiedDate").type(JsonFieldType.ARRAY)
-                                        .description("게시물 최근 수정 일시")
-                        )
 
-                ));
+            ));
     }
 
 
@@ -168,58 +162,58 @@ public class PostControllerDocsTest extends RestDocsSupport {
     @Test
     void updatePost() throws Exception {
         UpdatePostRequest request = UpdatePostRequest.builder()
-                .category("게시물 카테고리 수정")
-                .title("게시물 제목 수정")
-                .content("게시물 내용 수정")
-                .build();
+            .category("게시물 카테고리 수정")
+            .title("게시물 제목 수정")
+            .content("게시물 내용 수정")
+            .build();
 
         mockMvc.perform(patch(BASE_URL + "/{postId}", 1)
-                        .header("Authorization", "Bearer Access Token")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request))
-                )
-                .andDo(print())
+                .header("Authorization", "Bearer Access Token")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request))
+            )
+            .andDo(print())
 //                .andExpect(status().isOk())
-                .andDo(document("update-post",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestHeaders(
-                                headerWithName("Authorization")
-                                        .description("Bearer Access Token")
-                        ),
-                        pathParameters(
-                                parameterWithName("postId").description("게시글id")
-                        ),
-                        requestFields(
-                                fieldWithPath("category").type(JsonFieldType.STRING)
-                                        .description("게시물 카테고리"),
-                                fieldWithPath("title").type(JsonFieldType.STRING)
-                                        .description("게시물 제목"),
-                                fieldWithPath("content").type(JsonFieldType.STRING)
-                                        .description("게시물 내용")
-                        ),
-                        responseFields(
-                                fieldWithPath("code").type(JsonFieldType.NUMBER)
-                                        .description("코드"),
-                                fieldWithPath("status").type(JsonFieldType.STRING)
-                                        .description("상태"),
-                                fieldWithPath("message").type(JsonFieldType.STRING)
-                                        .description("메시지"),
-                                fieldWithPath("data").type(JsonFieldType.OBJECT)
-                                        .description("응답 데이터"),
-                                fieldWithPath("data.postId").type(JsonFieldType.NUMBER)
-                                        .description("게시물 아이디"),
-                                fieldWithPath("data.category").type(JsonFieldType.STRING)
-                                        .description("게시물 카테고리"),
-                                fieldWithPath("data.title").type(JsonFieldType.STRING)
-                                        .description("게시물 제목"),
-                                fieldWithPath("data.content").type(JsonFieldType.STRING)
-                                        .description("게시물 내용"),
-                                fieldWithPath("data.lastModifiedDate").type(JsonFieldType.ARRAY)
-                                        .description("게시물 최근 수정 일시")
-                        )
+            .andDo(document("update-post",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestHeaders(
+                    headerWithName("Authorization")
+                        .description("Bearer Access Token")
+                ),
+                pathParameters(
+                    parameterWithName("postId").description("게시글id")
+                ),
+                requestFields(
+                    fieldWithPath("category").type(JsonFieldType.STRING)
+                        .description("게시물 카테고리"),
+                    fieldWithPath("title").type(JsonFieldType.STRING)
+                        .description("게시물 제목"),
+                    fieldWithPath("content").type(JsonFieldType.STRING)
+                        .description("게시물 내용")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.postId").type(JsonFieldType.NUMBER)
+                        .description("게시물 아이디"),
+                    fieldWithPath("data.category").type(JsonFieldType.STRING)
+                        .description("게시물 카테고리"),
+                    fieldWithPath("data.title").type(JsonFieldType.STRING)
+                        .description("게시물 제목"),
+                    fieldWithPath("data.content").type(JsonFieldType.STRING)
+                        .description("게시물 내용"),
+                    fieldWithPath("data.lastModifiedDate").type(JsonFieldType.ARRAY)
+                        .description("게시물 최근 수정 일시")
+                )
 
-                ));
+            ));
     }
 
 
@@ -228,39 +222,39 @@ public class PostControllerDocsTest extends RestDocsSupport {
     void deletePost() throws Exception {
 
         mockMvc.perform(delete(BASE_URL + "/{postId}", 1)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer Access Token")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer Access Token")
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("delete-post",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestHeaders(
+                    headerWithName("Authorization")
+                        .description("Bearer Access Token")
+                ),
+                pathParameters(
+                    parameterWithName("postId").description("게시글id")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.postId").type(JsonFieldType.NUMBER)
+                        .description("게시물 아이디"),
+                    fieldWithPath("data.title").type(JsonFieldType.STRING)
+                        .description("게시물 제목"),
+                    fieldWithPath("data.isDeleted").type(JsonFieldType.BOOLEAN)
+                        .description("게시물 삭제 여부")
                 )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("delete-post",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestHeaders(
-                                headerWithName("Authorization")
-                                        .description("Bearer Access Token")
-                        ),
-                        pathParameters(
-                                parameterWithName("postId").description("게시글id")
-                        ),
-                        responseFields(
-                                fieldWithPath("code").type(JsonFieldType.NUMBER)
-                                        .description("코드"),
-                                fieldWithPath("status").type(JsonFieldType.STRING)
-                                        .description("상태"),
-                                fieldWithPath("message").type(JsonFieldType.STRING)
-                                        .description("메시지"),
-                                fieldWithPath("data").type(JsonFieldType.OBJECT)
-                                        .description("응답 데이터"),
-                                fieldWithPath("data.postId").type(JsonFieldType.NUMBER)
-                                        .description("게시물 아이디"),
-                                fieldWithPath("data.title").type(JsonFieldType.STRING)
-                                        .description("게시물 제목"),
-                                fieldWithPath("data.isDeleted").type(JsonFieldType.BOOLEAN)
-                                        .description("게시물 삭제 여부")
-                        )
 
-                ));
+            ));
     }
 
 

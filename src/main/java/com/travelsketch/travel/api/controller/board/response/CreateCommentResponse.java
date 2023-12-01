@@ -1,13 +1,11 @@
 package com.travelsketch.travel.api.controller.board.response;
 
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-@Data
-@NoArgsConstructor
+@Getter
 public class CreateCommentResponse {
 
     private Long commentId;

@@ -12,29 +12,29 @@ import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @RestController
-//@RequestMapping("api/v1/comments")
-@RequestMapping("api/v1/posts/{postId}/comments")
+@RequestMapping("/api/v1/posts/{postId}/comments")
 public class CommentController {
 
     /**
      * 게시물 댓글 등록 API
+     *
      * @param request 등록할 댓글 정보
      * @return 등록된 댓글 정보
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-//    public ApiResponse<CreateCommentResponse> createComment(@RequestBody String request) {
     public ApiResponse<CreateCommentResponse> createComment(@RequestBody CreateCommentRequest request, @PathVariable Long postId) {
         CreateCommentResponse response = CreateCommentResponse.builder()
-                .commentId(1L)
-                .content("게시물 댓글1")
-                .createdDate(LocalDateTime.now())
-                .build();
+            .commentId(1L)
+            .content("게시물 댓글1")
+            .createdDate(LocalDateTime.now())
+            .build();
         return ApiResponse.created(response);
     }
 
     /**
      * 게시물 댓글 삭제 API
+     *
      * @return 삭제된 댓글 내용
      */
     @DeleteMapping("/{commentId}")

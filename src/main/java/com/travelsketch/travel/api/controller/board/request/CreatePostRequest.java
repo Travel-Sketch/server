@@ -1,11 +1,10 @@
 package com.travelsketch.travel.api.controller.board.request;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
 public class CreatePostRequest {
 

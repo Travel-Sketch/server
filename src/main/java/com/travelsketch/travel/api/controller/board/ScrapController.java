@@ -4,22 +4,22 @@ import com.travelsketch.travel.api.ApiResponse;
 import com.travelsketch.travel.api.controller.board.response.GetScrapResponse;
 import com.travelsketch.travel.api.controller.board.response.ToggleScrapResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/v1/scraps")
+@RequestMapping("/api/v1/posts/{postId}/scraps")
 public class ScrapController {
 
     /**
      * 게시물 스크랩 설정 API
+     *
      * @param postId 게시물 id
      * @return 스크랩 여부
      */
-    @PostMapping("/{postId}")
+    @PostMapping
     public ApiResponse<ToggleScrapResponse> toggleScrap(@PathVariable Long postId) {
         ToggleScrapResponse response = ToggleScrapResponse.builder()
                 .postId(1L)
@@ -30,10 +30,11 @@ public class ScrapController {
 
     /**
      * 스크랩 게시물 목록 조회
+     *
      * @return 스크랩 게시물 목록
      */
     @GetMapping
-    public ApiResponse<List<GetScrapResponse>> getScrap() {
+    public ApiResponse<List<GetScrapResponse>> getScrap(@PathVariable Long postId) {
         GetScrapResponse response = GetScrapResponse.builder()
                 .postId(1L)
                 .title("게시물 제목1")

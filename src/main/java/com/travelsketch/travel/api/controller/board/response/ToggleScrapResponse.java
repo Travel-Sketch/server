@@ -1,11 +1,9 @@
 package com.travelsketch.travel.api.controller.board.response;
 
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@Data
-@NoArgsConstructor
+@Getter
 public class ToggleScrapResponse {
 
     private Long postId;

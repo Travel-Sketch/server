@@ -21,7 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 
-
 public class ScrapControllerDocsTest extends RestDocsSupport {
 
     private static final String BASE_URL = "/api/v1/scraps";
@@ -36,37 +35,37 @@ public class ScrapControllerDocsTest extends RestDocsSupport {
     void toggleScrap() throws Exception {
 
         mockMvc.perform(post(BASE_URL + "/{postId}", 1)
-                                .header("Authorization", "Bearer Access Token")
-                                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer Access Token")
+                .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("toggle-scrap",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestHeaders(
+                    headerWithName("Authorization")
+                        .description("Bearer Access Token")
+                ),
+                pathParameters(
+                    parameterWithName("postId").description("게시글id")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.postId").type(JsonFieldType.NUMBER)
+                        .description("게시물 아이디"),
+                    fieldWithPath("data.deleted").type(JsonFieldType.BOOLEAN)
+                        .description("토글 체크여부")
                 )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("toggle-scrap",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestHeaders(
-                                headerWithName("Authorization")
-                                        .description("Bearer Access Token")
-                        ),
-                        pathParameters(
-                            parameterWithName("postId").description("게시글id")
-                        ),
-                        responseFields(
-                                fieldWithPath("code").type(JsonFieldType.NUMBER)
-                                        .description("코드"),
-                                fieldWithPath("status").type(JsonFieldType.STRING)
-                                        .description("상태"),
-                                fieldWithPath("message").type(JsonFieldType.STRING)
-                                        .description("메시지"),
-                                fieldWithPath("data").type(JsonFieldType.OBJECT)
-                                        .description("응답 데이터"),
-                                fieldWithPath("data.postId").type(JsonFieldType.NUMBER)
-                                        .description("게시물 아이디"),
-                                fieldWithPath("data.deleted").type(JsonFieldType.BOOLEAN)
-                                        .description("토글 체크여부")
-                        )
 
-                ));
+            ));
     }
 
     @DisplayName("스크랩 목록 조회 API")
@@ -74,34 +73,34 @@ public class ScrapControllerDocsTest extends RestDocsSupport {
     void getScrap() throws Exception {
 
         mockMvc.perform(get(BASE_URL)
-                        .header("Authorization", "Bearer Access Token")
-                        .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer Access Token")
+                .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("get-scrap",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestHeaders(
+                    headerWithName("Authorization")
+                        .description("Bearer Access Token")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.ARRAY)
+                        .description("응답 데이터"),
+                    fieldWithPath("data[].postId").type(JsonFieldType.NUMBER)
+                        .description("게시물 아이디"),
+                    fieldWithPath("data[].title").type(JsonFieldType.STRING)
+                        .description("게시물 제목")
                 )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("get-scrap",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestHeaders(
-                                headerWithName("Authorization")
-                                        .description("Bearer Access Token")
-                        ),
-                        responseFields(
-                                fieldWithPath("code").type(JsonFieldType.NUMBER)
-                                        .description("코드"),
-                                fieldWithPath("status").type(JsonFieldType.STRING)
-                                        .description("상태"),
-                                fieldWithPath("message").type(JsonFieldType.STRING)
-                                        .description("메시지"),
-                                fieldWithPath("data").type(JsonFieldType.ARRAY)
-                                        .description("응답 데이터"),
-                                fieldWithPath("data[].postId").type(JsonFieldType.NUMBER)
-                                        .description("게시물 아이디"),
-                                fieldWithPath("data[].title").type(JsonFieldType.STRING)
-                                        .description("게시물 제목")
-                        )
 
-                ));
+            ));
     }
 
 
