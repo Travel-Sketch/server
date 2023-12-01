@@ -2,6 +2,7 @@ package com.travelsketch.travel.docs.qna;
 
 import com.travelsketch.travel.api.PageResponse;
 import com.travelsketch.travel.api.controller.qna.QnaQueryController;
+import com.travelsketch.travel.api.controller.qna.response.QnaDetailResponse;
 import com.travelsketch.travel.api.controller.qna.response.QnaResponse;
 import com.travelsketch.travel.api.service.qna.QnaQueryService;
 import com.travelsketch.travel.docs.RestDocsSupport;
@@ -16,8 +17,7 @@ import java.util.List;
 
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
 import static com.travelsketch.travel.domain.qna.QnaType.ACCOUNT;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -115,6 +115,19 @@ public class QnaQueryControllerDocsTest extends RestDocsSupport {
     @DisplayName("QnA 상세 조회 API")
     @Test
     void searchQna() throws Exception {
+        QnaDetailResponse response  = QnaDetailResponse.builder()
+            .qnaId(1L)
+            .type(ACCOUNT)
+            .title("QnA 제목입니다.")
+            .content("QnA 내용입니다.")
+            .answer("QnA 답변입니다.")
+            .isDeleted(false)
+            .createdDate(LocalDateTime.of(2023, 11, 27, 9, 27))
+            .build();
+
+        given(qnaQueryService.searchQna(anyLong()))
+            .willReturn(response);
+
         mockMvc.perform(
                 get(BASE_URL + "/{qnaId}", 1L)
                     .header("Authorization", "Bearer Access Token")
@@ -151,6 +164,8 @@ public class QnaQueryControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.answer").type(JsonFieldType.STRING)
                         .optional()
                         .description("QnA 답변"),
+                    fieldWithPath("data.isDeleted").type(JsonFieldType.BOOLEAN)
+                        .description("QnA 삭제 여부"),
                     fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY)
                         .description("QnA 등록 일시")
                 )

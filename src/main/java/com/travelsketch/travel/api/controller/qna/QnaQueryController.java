@@ -10,10 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
 import static com.travelsketch.travel.api.ApiResponse.ok;
-import static com.travelsketch.travel.domain.qna.QnaType.ACCOUNT;
 
 @RequiredArgsConstructor
 @RestController
@@ -38,14 +35,9 @@ public class QnaQueryController {
 
     @GetMapping("/{qnaId}")
     public ApiResponse<QnaDetailResponse> searchQna(@PathVariable Long qnaId) {
-        QnaDetailResponse response  = QnaDetailResponse.builder()
-            .qnaId(1L)
-            .type(ACCOUNT)
-            .title("QnA 제목입니다.")
-            .content("QnA 내용입니다.")
-            .answer("QnA 답변입니다.")
-            .createdDate(LocalDateTime.of(2023, 11, 27, 9, 27))
-            .build();
+
+        QnaDetailResponse response = qnaQueryService.searchQna(qnaId);
+
         return ok(response);
     }
 }
