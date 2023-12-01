@@ -2,6 +2,7 @@ package com.travelsketch.travel.api.service.qna;
 
 import com.travelsketch.travel.api.controller.qna.response.CreateAnswerResponse;
 import com.travelsketch.travel.api.controller.qna.response.CreateQuestionResponse;
+import com.travelsketch.travel.api.controller.qna.response.RemoveQnaResponse;
 import com.travelsketch.travel.api.service.qna.dto.CreateQuestionDto;
 import com.travelsketch.travel.domain.member.Member;
 import com.travelsketch.travel.domain.member.repository.MemberRepository;
@@ -57,6 +58,10 @@ public class QnaService {
         Qna modifiedQna = qna.createAnswer(member, answer);
 
         return CreateAnswerResponse.of(modifiedQna);
+    }
+
+    public RemoveQnaResponse removeQna(Long qnaId) {
+        return null;
     }
 
     private Member getMember(String email) {

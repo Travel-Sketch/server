@@ -3,6 +3,7 @@ package com.travelsketch.travel.api.service.qna;
 import com.travelsketch.travel.IntegrationTestSupport;
 import com.travelsketch.travel.api.controller.qna.response.CreateAnswerResponse;
 import com.travelsketch.travel.api.controller.qna.response.CreateQuestionResponse;
+import com.travelsketch.travel.api.controller.qna.response.RemoveQnaResponse;
 import com.travelsketch.travel.api.service.qna.dto.CreateQuestionDto;
 import com.travelsketch.travel.domain.member.Member;
 import com.travelsketch.travel.domain.member.Role;
@@ -90,6 +91,31 @@ class QnaServiceTest extends IntegrationTestSupport {
         Optional<Qna> findQna = qnaRepository.findById(qna.getId());
         assertThat(findQna).isPresent();
         assertThat(findQna.get().getAnswer()).isEqualTo("QnA 답변입니다.");
+    }
+
+    @DisplayName("입력 받은 아이디와 일치하는 QnA가 존재하지 않으면 예외가 발생한다.")
+    @Test
+    void removeQnaNoSuchQna() {
+        //given //when //then
+        assertThatThrownBy(() -> qnaService.removeQna(1L))
+            .isInstanceOf(NoSuchElementException.class)
+            .hasMessage("등록되지 않은 QnA입니다.");
+    }
+
+    @DisplayName("아이디를 입력 받아 QnA를 삭제할 수 있다.")
+    @Test
+    void removeQna() {
+        //given
+        Member member = savedMember();
+        Qna qna = savedQna(member, "QnA 답변입니다.");
+
+        //when
+        RemoveQnaResponse response = qnaService.removeQna(qna.getId());
+
+        //then
+        Optional<Qna> findQna = qnaRepository.findById(response.getQnaId());
+        assertThat(findQna).isPresent();
+        assertThat(findQna.get().getIsDeleted()).isTrue();
     }
 
     private Member savedMember() {
