@@ -71,7 +71,7 @@ class QnaServiceTest extends IntegrationTestSupport {
         Qna qna = savedQna(member, "QnA 답변입니다.");
 
         //when //then
-        assertThatThrownBy(() -> qnaService.createAnswer("karina@naver.com", 1L, "QnA 답변입니다."))
+        assertThatThrownBy(() -> qnaService.createAnswer("karina@naver.com", qna.getId(), "QnA 답변입니다."))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("이미 답변이 등록된 QnA입니다.");
     }
