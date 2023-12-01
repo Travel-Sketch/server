@@ -65,7 +65,7 @@ class QnaQueryServiceTest extends IntegrationTestSupport {
         //given
 
         //when //then
-        assertThatThrownBy(() -> qnaQueryService.searchQna(1L))
+        assertThatThrownBy(() -> qnaQueryService.searchQna(1L, "1234"))
             .isInstanceOf(NoSuchElementException.class)
             .hasMessage("등록되지 않은 QnA입니다.");
     }
@@ -79,9 +79,22 @@ class QnaQueryServiceTest extends IntegrationTestSupport {
         qna.remove();
 
         //when //then
-        assertThatThrownBy(() -> qnaQueryService.searchQna(qna.getId()))
+        assertThatThrownBy(() -> qnaQueryService.searchQna(qna.getId(), "1234"))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("삭제된 QnA입니다.");
+    }
+
+    @DisplayName("조회된 QnA의 비밀번호가 일치하지 않는 경우 예외가 발생한다.")
+    @Test
+    void searchQnaNotEqualPwd() {
+        //given
+        Member member = saveMember();
+        Qna qna = saveQna(member, "QnA 제목입니다.", "1234", "QnA 답변입니다.");
+
+        //when //then
+        assertThatThrownBy(() -> qnaQueryService.searchQna(qna.getId(), "0000"))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("비밀번호가 일치하지 않습니다.");
     }
 
     @DisplayName("QnA 아이디를 입력 받아 정보를 조회할 수 있다.")
@@ -92,7 +105,7 @@ class QnaQueryServiceTest extends IntegrationTestSupport {
         Qna qna = saveQna(member, "QnA 제목입니다.", "1234", "QnA 답변입니다.");
 
         //when
-        QnaDetailResponse response = qnaQueryService.searchQna(qna.getId());
+        QnaDetailResponse response = qnaQueryService.searchQna(qna.getId(), "1234");
 
         //then
         assertThat(response.getTitle()).isEqualTo("QnA 제목입니다.");

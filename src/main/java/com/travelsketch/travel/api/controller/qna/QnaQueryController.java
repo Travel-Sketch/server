@@ -39,7 +39,7 @@ public class QnaQueryController {
     @GetMapping("/{qnaId}")
     public ApiResponse<QnaDetailResponse> searchQna(@PathVariable Long qnaId) {
 
-        QnaDetailResponse response = qnaQueryService.searchQna(qnaId);
+        QnaDetailResponse response = qnaQueryService.searchQna(qnaId, "1234");
 
         return ok(response);
     }

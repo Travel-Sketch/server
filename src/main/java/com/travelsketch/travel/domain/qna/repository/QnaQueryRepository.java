@@ -2,8 +2,8 @@ package com.travelsketch.travel.domain.qna.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.travelsketch.travel.api.controller.qna.response.QnaDetailResponse;
 import com.travelsketch.travel.api.controller.qna.response.QnaResponse;
+import com.travelsketch.travel.domain.qna.Qna;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -71,24 +71,13 @@ public class QnaQueryRepository {
             .size();
     }
 
-    public Optional<QnaDetailResponse> findById(Long qnaId) {
-        QnaDetailResponse response = queryFactory
-            .select(
-                Projections.constructor(
-                    QnaDetailResponse.class,
-                    qna.id,
-                    qna.type,
-                    qna.title,
-                    qna.content,
-                    qna.answer,
-                    qna.isDeleted,
-                    qna.createdDate
-                )
-            )
+    public Optional<Qna> findById(Long qnaId) {
+        Qna content = queryFactory
+            .select(qna)
             .from(qna)
             .where(qna.id.eq(qnaId))
             .fetchOne();
 
-        return Optional.ofNullable(response);
+        return Optional.ofNullable(content);
     }
 }

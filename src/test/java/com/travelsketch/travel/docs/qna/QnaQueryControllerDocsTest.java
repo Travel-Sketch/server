@@ -125,7 +125,7 @@ public class QnaQueryControllerDocsTest extends RestDocsSupport {
             .createdDate(LocalDateTime.of(2023, 11, 27, 9, 27))
             .build();
 
-        given(qnaQueryService.searchQna(anyLong()))
+        given(qnaQueryService.searchQna(anyLong(), anyString()))
             .willReturn(response);
 
         mockMvc.perform(

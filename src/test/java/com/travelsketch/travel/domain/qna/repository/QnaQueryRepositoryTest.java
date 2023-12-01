@@ -1,7 +1,6 @@
 package com.travelsketch.travel.domain.qna.repository;
 
 import com.travelsketch.travel.IntegrationTestSupport;
-import com.travelsketch.travel.api.controller.qna.response.QnaDetailResponse;
 import com.travelsketch.travel.api.controller.qna.response.QnaResponse;
 import com.travelsketch.travel.domain.member.Member;
 import com.travelsketch.travel.domain.member.Role;
@@ -84,10 +83,10 @@ class QnaQueryRepositoryTest extends IntegrationTestSupport {
         Qna qna = saveQna(member, "카리나 최고인가요?", "1234", null);
 
         //when
-        Optional<QnaDetailResponse> findResponse = qnaQueryRepository.findById(qna.getId());
+        Optional<Qna> findQna = qnaQueryRepository.findById(qna.getId());
 
         //then
-        assertThat(findResponse).isPresent();
+        assertThat(findQna).isPresent();
     }
 
     private Member saveMember() {
