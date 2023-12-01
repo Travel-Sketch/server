@@ -7,11 +7,13 @@ import com.travelsketch.travel.api.controller.member.MemberQueryController;
 import com.travelsketch.travel.api.controller.notice.NoticeController;
 import com.travelsketch.travel.api.controller.notice.NoticeQueryController;
 import com.travelsketch.travel.api.controller.qna.QnaController;
+import com.travelsketch.travel.api.controller.qna.QnaQueryController;
 import com.travelsketch.travel.api.service.member.AccountService;
 import com.travelsketch.travel.api.service.member.MemberQueryService;
 import com.travelsketch.travel.api.service.member.MemberService;
 import com.travelsketch.travel.api.service.notice.NoticeQueryService;
 import com.travelsketch.travel.api.service.notice.NoticeService;
+import com.travelsketch.travel.api.service.qna.QnaQueryService;
 import com.travelsketch.travel.api.service.qna.QnaService;
 import com.travelsketch.travel.interceptor.query.ApiQueryCounter;
 import com.travelsketch.travel.security.SecurityUtils;
@@ -24,7 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @WithMockUser
 @WebMvcTest(controllers = {AccountController.class, MemberController.class, MemberQueryController.class,
     NoticeController.class, NoticeQueryController.class,
-    QnaController.class
+    QnaController.class, QnaQueryController.class
 })
 public abstract class ControllerTestSupport {
 
@@ -57,4 +59,7 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected QnaService qnaService;
+
+    @MockBean
+    protected QnaQueryService qnaQueryService;
 }
