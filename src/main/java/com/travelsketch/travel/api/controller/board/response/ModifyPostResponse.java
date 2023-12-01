@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class UpdatePostResponse {
+public class ModifyPostResponse {
 
     private Long postId;
     private String category;
@@ -15,7 +15,7 @@ public class UpdatePostResponse {
     private LocalDateTime lastModifiedDate;
 
     @Builder
-    private UpdatePostResponse(Long postId, String category, String title, String content, LocalDateTime lastModifiedDate) {
+    private ModifyPostResponse(Long postId, String category, String title, String content, LocalDateTime lastModifiedDate) {
         this.postId = postId;
         this.category = category;
         this.title = title;

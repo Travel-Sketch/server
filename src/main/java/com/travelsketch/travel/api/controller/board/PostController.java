@@ -39,14 +39,13 @@ public class PostController {
      * @return 게시물 목록
      */
     @GetMapping
-    public ApiResponse<List<GetPostListResponse>> getPostList() {
-        //searchPosts
-        GetPostListResponse response1 = GetPostListResponse.builder()
+    public ApiResponse<List<SearchPostsResponse>> searchPosts() {
+        SearchPostsResponse response1 = SearchPostsResponse.builder()
                 .postId(1L)
                 .title("게시물 제목1")
                 .createdDate(LocalDateTime.of(2023, 11, 30, 1, 30))
                 .build();
-        GetPostListResponse response2 = GetPostListResponse.builder()
+        SearchPostsResponse response2 = SearchPostsResponse.builder()
                 .postId(2L)
                 .title("게시물 제목2")
                 .createdDate(LocalDateTime.of(2023, 11, 30, 1, 40))
@@ -60,9 +59,8 @@ public class PostController {
      * @return 게시물 상세 정보
      */
     @GetMapping("/{postId}")
-    public ApiResponse<GetPostDetailResponse> getPostDetail(@PathVariable Long postId) {
-        //searchPost
-        GetPostDetailResponse response = GetPostDetailResponse.builder()
+    public ApiResponse<SearchPostResponse> searchPost(@PathVariable Long postId) {
+        SearchPostResponse response = SearchPostResponse.builder()
                 .postId(1L)
                 .category("게시물 카테고리 1")
                 .title("게시물 제목 1")
@@ -86,12 +84,11 @@ public class PostController {
      * @return 게시물 수정 내용
      */
     @PatchMapping("/{postId}")
-    public ApiResponse<UpdatePostResponse> updatePost(
+    public ApiResponse<ModifyPostResponse> modifyPost(
             @PathVariable Long postId,
             @RequestBody UpdatePostRequest request
     ) {
-        //edit, modify(O)
-        UpdatePostResponse response = UpdatePostResponse.builder()
+        ModifyPostResponse response = ModifyPostResponse.builder()
                 .postId(1L)
                 .category("게시물 카테고리 수정")
                 .title("게시물 제목 수정")
@@ -107,9 +104,8 @@ public class PostController {
      * @return 삭제된 게시물
      */
     @DeleteMapping("/{postId}")
-    public ApiResponse<DeletePostResponse> deletePost(@PathVariable Long postId) {
-        //removePost
-        DeletePostResponse response = DeletePostResponse.builder()
+    public ApiResponse<RemovePostResponse> removePost(@PathVariable Long postId) {
+        RemovePostResponse response = RemovePostResponse.builder()
                 .postId(1L)
                 .title("게시물 제목 1")
                 .isDeleted(true)

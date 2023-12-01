@@ -4,18 +4,16 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class DeleteCommentResponse {
+public class RemovePostResponse {
 
     private Long postId;
-    private Long commentId;
-    private String content;
+    private String title;
     private Boolean isDeleted;
 
     @Builder
-    private DeleteCommentResponse(Long postId, Long commentId, String content, Boolean isDeleted) {
+    private RemovePostResponse(Long postId, String title, Boolean isDeleted) {
         this.postId = postId;
-        this.commentId = commentId;
-        this.content = content;
+        this.title = title;
         this.isDeleted = isDeleted;
     }
 

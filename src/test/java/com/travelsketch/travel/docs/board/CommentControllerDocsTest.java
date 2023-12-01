@@ -36,8 +36,6 @@ public class CommentControllerDocsTest extends RestDocsSupport {
     @DisplayName("댓글 등록 API")
     @Test
     void createComment() throws Exception {
-//        String request = "test1";
-// https://lannstark.tistory.com/10
         CreateCommentRequest request = CreateCommentRequest.builder()
             .content("comment content 1")
             .build();
@@ -45,10 +43,8 @@ public class CommentControllerDocsTest extends RestDocsSupport {
         mockMvc.perform(
                 post(BASE_URL, 1)
                     .header("Authorization", "Bearer Access Token")
-//                                .contentType("text/plain")
                     .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding("utf-8")
-//                                .content(request)
                     .content(objectMapper.writeValueAsString(request))
             )
             .andDo(print())
@@ -89,7 +85,7 @@ public class CommentControllerDocsTest extends RestDocsSupport {
 
     @DisplayName("댓글 삭제 API")
     @Test
-    void deleteComment() throws Exception {
+    void removeComment() throws Exception {
 
         mockMvc.perform(delete(BASE_URL + "/{commentId}", 1, 1)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -97,7 +93,7 @@ public class CommentControllerDocsTest extends RestDocsSupport {
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("delete-comment",
+            .andDo(document("remove-comment",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 pathParameters(

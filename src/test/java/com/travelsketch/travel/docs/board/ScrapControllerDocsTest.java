@@ -23,7 +23,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 
 public class ScrapControllerDocsTest extends RestDocsSupport {
 
-    private static final String BASE_URL = "/api/v1/scraps";
+    private static final String BASE_URL = "/api/v1/posts/{postId}/scraps";
 
     @Override
     protected Object initController() {
@@ -34,7 +34,7 @@ public class ScrapControllerDocsTest extends RestDocsSupport {
     @Test
     void toggleScrap() throws Exception {
 
-        mockMvc.perform(post(BASE_URL + "/{postId}", 1)
+        mockMvc.perform(post(BASE_URL, 1)
                 .header("Authorization", "Bearer Access Token")
                 .contentType(MediaType.APPLICATION_JSON)
             )
@@ -70,15 +70,15 @@ public class ScrapControllerDocsTest extends RestDocsSupport {
 
     @DisplayName("스크랩 목록 조회 API")
     @Test
-    void getScrap() throws Exception {
+    void searchScraps() throws Exception {
 
-        mockMvc.perform(get(BASE_URL)
+        mockMvc.perform(get(BASE_URL, 1)
                 .header("Authorization", "Bearer Access Token")
                 .contentType(MediaType.APPLICATION_JSON)
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("get-scrap",
+            .andDo(document("search-scraps",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 requestHeaders(

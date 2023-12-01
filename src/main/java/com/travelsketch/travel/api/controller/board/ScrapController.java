@@ -1,7 +1,7 @@
 package com.travelsketch.travel.api.controller.board;
 
 import com.travelsketch.travel.api.ApiResponse;
-import com.travelsketch.travel.api.controller.board.response.GetScrapResponse;
+import com.travelsketch.travel.api.controller.board.response.SearchScrapsResponse;
 import com.travelsketch.travel.api.controller.board.response.ToggleScrapResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -34,12 +34,12 @@ public class ScrapController {
      * @return 스크랩 게시물 목록
      */
     @GetMapping
-    public ApiResponse<List<GetScrapResponse>> getScrap(@PathVariable Long postId) {
-        GetScrapResponse response = GetScrapResponse.builder()
+    public ApiResponse<List<SearchScrapsResponse>> searchScraps(@PathVariable Long postId) {
+        SearchScrapsResponse response = SearchScrapsResponse.builder()
                 .postId(1L)
                 .title("게시물 제목1")
                 .build();
-        GetScrapResponse response2 = GetScrapResponse.builder()
+        SearchScrapsResponse response2 = SearchScrapsResponse.builder()
                 .postId(2L)
                 .title("게시물 제목2")
                 .build();

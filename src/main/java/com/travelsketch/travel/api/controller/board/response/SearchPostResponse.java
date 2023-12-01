@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class GetPostDetailResponse {
+public class SearchPostResponse {
 
     private Long postId;
     private String category;
@@ -19,7 +19,7 @@ public class GetPostDetailResponse {
     private LocalDateTime lastModifiedDate;
 
     @Builder
-    private GetPostDetailResponse(Long postId, String category, String title, String content, Integer scrapCount, Integer commentCount, Boolean isDeleted, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
+    private SearchPostResponse(Long postId, String category, String title, String content, Integer scrapCount, Integer commentCount, Boolean isDeleted, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
         this.postId = postId;
         this.category = category;
         this.title = title;

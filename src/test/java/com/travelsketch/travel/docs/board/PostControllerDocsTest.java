@@ -81,14 +81,14 @@ public class PostControllerDocsTest extends RestDocsSupport {
 
     @DisplayName("게시물 목록 조회 API")
     @Test
-    void getPostList() throws Exception {
+    void searchPosts() throws Exception {
 
         mockMvc.perform(get(BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("get-post-list",
+            .andDo(document("search-posts",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 responseFields(
@@ -112,14 +112,14 @@ public class PostControllerDocsTest extends RestDocsSupport {
 
     @DisplayName("게시물 상세 조회 API")
     @Test
-    void getPostDetail() throws Exception {
+    void searchPost() throws Exception {
 
         mockMvc.perform(get(BASE_URL + "/{postId}", 1)
                 .contentType(MediaType.APPLICATION_JSON)
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("get-post-detail",
+            .andDo(document("search-post",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 pathParameters(
@@ -160,7 +160,7 @@ public class PostControllerDocsTest extends RestDocsSupport {
 
     @DisplayName("게시물 수정 API")
     @Test
-    void updatePost() throws Exception {
+    void modifyPost() throws Exception {
         UpdatePostRequest request = UpdatePostRequest.builder()
             .category("게시물 카테고리 수정")
             .title("게시물 제목 수정")
@@ -174,7 +174,7 @@ public class PostControllerDocsTest extends RestDocsSupport {
             )
             .andDo(print())
 //                .andExpect(status().isOk())
-            .andDo(document("update-post",
+            .andDo(document("modify-post",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 requestHeaders(
@@ -219,7 +219,7 @@ public class PostControllerDocsTest extends RestDocsSupport {
 
     @DisplayName("게시물 삭제 API")
     @Test
-    void deletePost() throws Exception {
+    void removePost() throws Exception {
 
         mockMvc.perform(delete(BASE_URL + "/{postId}", 1)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -227,7 +227,7 @@ public class PostControllerDocsTest extends RestDocsSupport {
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("delete-post",
+            .andDo(document("remove-post",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 requestHeaders(

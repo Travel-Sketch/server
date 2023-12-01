@@ -3,7 +3,7 @@ package com.travelsketch.travel.api.controller.board;
 import com.travelsketch.travel.api.ApiResponse;
 import com.travelsketch.travel.api.controller.board.request.CreateCommentRequest;
 import com.travelsketch.travel.api.controller.board.response.CreateCommentResponse;
-import com.travelsketch.travel.api.controller.board.response.DeleteCommentResponse;
+import com.travelsketch.travel.api.controller.board.response.RemoveCommentResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +38,8 @@ public class CommentController {
      * @return 삭제된 댓글 내용
      */
     @DeleteMapping("/{commentId}")
-    public ApiResponse<DeleteCommentResponse> deleteComment(@PathVariable String commentId, @PathVariable Long postId) {
-        DeleteCommentResponse response = DeleteCommentResponse.builder()
+    public ApiResponse<RemoveCommentResponse> removeComment(@PathVariable String commentId, @PathVariable Long postId) {
+        RemoveCommentResponse response = RemoveCommentResponse.builder()
                 .postId(1L)
                 .commentId(1L)
                 .content("댓글 내용")
