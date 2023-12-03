@@ -19,6 +19,7 @@ public class CommentController {
      * 게시물 댓글 등록 API
      *
      * @param request 등록할 댓글 정보
+     * @param postId  게시물 id
      * @return 등록된 댓글 정보
      */
     @PostMapping
@@ -35,16 +36,18 @@ public class CommentController {
     /**
      * 게시물 댓글 삭제 API
      *
+     * @param commentId 댓글 id
+     * @param postId    게시글 id
      * @return 삭제된 댓글 내용
      */
     @DeleteMapping("/{commentId}")
     public ApiResponse<RemoveCommentResponse> removeComment(@PathVariable String commentId, @PathVariable Long postId) {
         RemoveCommentResponse response = RemoveCommentResponse.builder()
-                .postId(1L)
-                .commentId(1L)
-                .content("댓글 내용")
-                .isDeleted(true)
-                .build();
+            .postId(1L)
+            .commentId(1L)
+            .content("댓글 내용")
+            .isDeleted(true)
+            .build();
         return ApiResponse.ok(response);
     }
 

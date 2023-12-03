@@ -55,6 +55,7 @@ public class PostQueryController {
     /**
      * 게시물 상세 정보 조회 API
      *
+     * @param postId 게시물 id
      * @return 게시물 상세 정보
      */
     @GetMapping("/{postId}")

@@ -18,7 +18,9 @@ public class ScrapQueryController {
 
     /**
      * 스크랩 게시물 목록 조회
-     *
+     * @param postId 게시물 id
+     * @param page 조회할 페이지 번호
+     * @param query 조회할 검색 쿼리
      * @return 스크랩 게시물 목록
      */
     @GetMapping
