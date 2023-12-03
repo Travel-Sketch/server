@@ -1,13 +1,13 @@
-[[delete-comment]]
+[[remove-comment]]
 === 댓글 삭제 API
 
 ==== HTTP Request
 
-include::{snippets}/delete-comment/http-request.adoc[]
-include::{snippets}/delete-comment/path-parameters.adoc[]
-include::{snippets}/delete-comment/request-headers.adoc[]
+include::{snippets}/remove-comment/http-request.adoc[]
+include::{snippets}/remove-comment/path-parameters.adoc[]
+include::{snippets}/remove-comment/request-headers.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/delete-comment/http-response.adoc[]
-include::{snippets}/delete-comment/response-fields.adoc[]
+include::{snippets}/remove-comment/http-response.adoc[]
+include::{snippets}/remove-comment/response-fields.adoc[]

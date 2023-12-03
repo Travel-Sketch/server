@@ -1,12 +1,13 @@
 package com.travelsketch.travel.api.controller.board;
 
 import com.travelsketch.travel.api.ApiResponse;
+import com.travelsketch.travel.api.PageResponse;
+import com.travelsketch.travel.api.controller.board.response.SearchPostsResponse;
 import com.travelsketch.travel.api.controller.board.response.SearchScrapsResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,8 +22,18 @@ public class ScrapQueryController {
      * @return 스크랩 게시물 목록
      */
     @GetMapping
-    public ApiResponse<List<SearchScrapsResponse>> searchScraps(@PathVariable Long postId) {
-        SearchScrapsResponse response = SearchScrapsResponse.builder()
+    public ApiResponse<PageResponse<SearchScrapsResponse>> searchScraps(
+        @PathVariable Long postId,
+        @RequestParam(defaultValue = "1") Integer page,
+        @RequestParam(defaultValue = "") String query
+    ) {
+        if (isNegativeOrZero(page)) {
+            throw new IllegalArgumentException("페이지는 1이상입니다.");
+        }
+
+        PageRequest pageRequest = PageRequest.of(page - 1, 10);
+
+        SearchScrapsResponse response1 = SearchScrapsResponse.builder()
             .postId(1L)
             .title("게시물 제목1")
             .build();
@@ -30,7 +41,21 @@ public class ScrapQueryController {
             .postId(2L)
             .title("게시물 제목2")
             .build();
-        return ApiResponse.ok(List.of(response, response2));
+
+        List<SearchScrapsResponse> scraps = List.of(response1, response2);
+        PageImpl<SearchScrapsResponse> content = new PageImpl<>(scraps, pageRequest, 2);
+
+        return ApiResponse.ok(new PageResponse<>(content));
+    }
+
+    /**
+     * 입력 받은 숫자가 양수인 경우 true를 반환한다.
+     *
+     * @param number 검증 숫자
+     * @return 양수인 경우 true 반환
+     */
+    private boolean isNegativeOrZero(int number) {
+        return number <= 0;
     }
 
 }

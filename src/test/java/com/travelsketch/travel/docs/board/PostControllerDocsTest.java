@@ -42,7 +42,6 @@ public class PostControllerDocsTest extends RestDocsSupport {
                 post(BASE_URL)
                     .header("Authorization", "Bearer Access Token")
                     .contentType(MediaType.APPLICATION_JSON)
-//                    .characterEncoding("utf-8")
                     .content(objectMapper.writeValueAsString(request))
             )
             .andDo(print())
@@ -79,85 +78,6 @@ public class PostControllerDocsTest extends RestDocsSupport {
             ));
     }
 
-    @DisplayName("게시물 목록 조회 API")
-    @Test
-    void searchPosts() throws Exception {
-
-        mockMvc.perform(get(BASE_URL)
-                .contentType(MediaType.APPLICATION_JSON)
-            )
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andDo(document("search-posts",
-                getDocumentRequest(),
-                getDocumentResponse(),
-                responseFields(
-                    fieldWithPath("code").type(JsonFieldType.NUMBER)
-                        .description("코드"),
-                    fieldWithPath("status").type(JsonFieldType.STRING)
-                        .description("상태"),
-                    fieldWithPath("message").type(JsonFieldType.STRING)
-                        .description("메시지"),
-                    fieldWithPath("data").type(JsonFieldType.ARRAY)
-                        .description("응답 데이터"),
-                    fieldWithPath("data[].postId").type(JsonFieldType.NUMBER)
-                        .description("게시물 아이디"),
-                    fieldWithPath("data[].title").type(JsonFieldType.STRING)
-                        .description("게시물 제목"),
-                    fieldWithPath("data[].createdDate").type(JsonFieldType.ARRAY)
-                        .description("게시물 등록 일시")
-                )
-            ));
-    }
-
-    @DisplayName("게시물 상세 조회 API")
-    @Test
-    void searchPost() throws Exception {
-
-        mockMvc.perform(get(BASE_URL + "/{postId}", 1)
-                .contentType(MediaType.APPLICATION_JSON)
-            )
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andDo(document("search-post",
-                getDocumentRequest(),
-                getDocumentResponse(),
-                pathParameters(
-                    parameterWithName("postId").description("게시글id")
-                ),
-                responseFields(
-                    fieldWithPath("code").type(JsonFieldType.NUMBER)
-                        .description("코드"),
-                    fieldWithPath("status").type(JsonFieldType.STRING)
-                        .description("상태"),
-                    fieldWithPath("message").type(JsonFieldType.STRING)
-                        .description("메시지"),
-                    fieldWithPath("data").type(JsonFieldType.OBJECT)
-                        .description("응답 데이터"),
-                    fieldWithPath("data.postId").type(JsonFieldType.NUMBER)
-                        .description("게시물 아이디"),
-                    fieldWithPath("data.category").type(JsonFieldType.STRING)
-                        .description("게시물 카테고리"),
-                    fieldWithPath("data.title").type(JsonFieldType.STRING)
-                        .description("게시물 제목"),
-                    fieldWithPath("data.content").type(JsonFieldType.STRING)
-                        .description("게시물 내용"),
-                    fieldWithPath("data.scrapCount").type(JsonFieldType.NUMBER)
-                        .description("게시물 스크랩 수"),
-                    fieldWithPath("data.commentCount").type(JsonFieldType.NUMBER)
-                        .description("게시물 댓글 수"),
-                    fieldWithPath("data.isDeleted").type(JsonFieldType.BOOLEAN)
-                        .description("게시물 삭제 여부"),
-                    fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY)
-                        .description("게시물 등록 일시"),
-                    fieldWithPath("data.lastModifiedDate").type(JsonFieldType.ARRAY)
-                        .description("게시물 최근 수정 일시")
-                )
-
-            ));
-    }
-
-
     @DisplayName("게시물 수정 API")
     @Test
     void modifyPost() throws Exception {
@@ -173,7 +93,6 @@ public class PostControllerDocsTest extends RestDocsSupport {
                 .content(objectMapper.writeValueAsString(request))
             )
             .andDo(print())
-//                .andExpect(status().isOk())
             .andDo(document("modify-post",
                 getDocumentRequest(),
                 getDocumentResponse(),
@@ -216,7 +135,6 @@ public class PostControllerDocsTest extends RestDocsSupport {
             ));
     }
 
-
     @DisplayName("게시물 삭제 API")
     @Test
     void removePost() throws Exception {
@@ -256,6 +174,5 @@ public class PostControllerDocsTest extends RestDocsSupport {
 
             ));
     }
-
 
 }
