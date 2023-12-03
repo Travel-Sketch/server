@@ -4,7 +4,7 @@
 ==== HTTP Request
 
 include::{snippets}/create-comment/http-request.adoc[]
-include::{snippets}/delete-comment/path-parameters.adoc[]
+include::{snippets}/create-comment/path-parameters.adoc[]
 include::{snippets}/create-comment/request-headers.adoc[]
 include::{snippets}/create-comment/request-fields.adoc[]
 
