@@ -28,22 +28,4 @@ public class ScrapController {
         return ApiResponse.created(response);
     }
 
-    /**
-     * 스크랩 게시물 목록 조회
-     *
-     * @return 스크랩 게시물 목록
-     */
-    @GetMapping
-    public ApiResponse<List<SearchScrapsResponse>> searchScraps(@PathVariable Long postId) {
-        SearchScrapsResponse response = SearchScrapsResponse.builder()
-                .postId(1L)
-                .title("게시물 제목1")
-                .build();
-        SearchScrapsResponse response2 = SearchScrapsResponse.builder()
-                .postId(2L)
-                .title("게시물 제목2")
-                .build();
-        return ApiResponse.ok(List.of(response, response2));
-    }
-
 }
