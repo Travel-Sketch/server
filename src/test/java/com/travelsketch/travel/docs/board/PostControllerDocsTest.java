@@ -36,6 +36,7 @@ public class PostControllerDocsTest extends RestDocsSupport {
         CreatePostRequest request = CreatePostRequest.builder()
             .title("게시물 제목 1")
             .content("게시물 내용 1")
+            .category("카테고리 1")
             .build();
 
         mockMvc.perform(
@@ -57,7 +58,13 @@ public class PostControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("title").type(JsonFieldType.STRING)
                         .description("게시물 제목"),
                     fieldWithPath("content").type(JsonFieldType.STRING)
-                        .description("게시물 내용")
+                        .description("게시물 내용"),
+                    fieldWithPath("category").type(JsonFieldType.STRING)
+                        .description("카테고리"),
+                    fieldWithPath("attached_file").type(JsonFieldType.STRING)
+                        .description("첨부파일").optional(),
+                    fieldWithPath("place").type(JsonFieldType.STRING)
+                        .description("장소").optional()
                 ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER)

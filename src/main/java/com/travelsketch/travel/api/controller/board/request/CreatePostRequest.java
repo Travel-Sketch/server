@@ -10,11 +10,13 @@ public class CreatePostRequest {
 
     private String title;
     private String content;
+    private String category;
 
     @Builder
-    private CreatePostRequest(String title, String content) {
+    private CreatePostRequest(String title, String content, String category) {
         this.title = title;
         this.content = content;
+        this.category = category;
     }
 
 }
