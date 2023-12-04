@@ -1,0 +1,13 @@
+[[search-scraps]]
+=== 스크랩 목록 조회 API
+
+==== HTTP Request
+
+include::{snippets}/search-scraps/http-request.adoc[]
+include::{snippets}/search-scraps/request-headers.adoc[]
+include::{snippets}/search-scraps/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/search-scraps/http-response.adoc[]
+include::{snippets}/search-scraps/response-fields.adoc[]

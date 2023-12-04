@@ -1,0 +1,14 @@
+[[create-post]]
+=== 게시물 등록 API
+
+==== HTTP Request
+
+include::{snippets}/create-post/http-request.adoc[]
+include::{snippets}/create-post/request-headers.adoc[]
+include::{snippets}/create-post/request-fields.adoc[]
+
+
+==== HTTP Response
+
+include::{snippets}/create-post/http-response.adoc[]
+include::{snippets}/create-post/response-fields.adoc[]

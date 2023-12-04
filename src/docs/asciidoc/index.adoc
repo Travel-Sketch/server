@@ -33,6 +33,19 @@ include::api/notice/search-notice.adoc[]
 include::api/notice/modify-notice.adoc[]
 include::api/notice/remove-notice.adoc[]
 
+[[Board-API]]
+== Board API
+
+include::api/board/create-comment.adoc[]
+include::api/board/create-post.adoc[]
+include::api/board/modify-post.adoc[]
+include::api/board/remove-comment.adoc[]
+include::api/board/remove-post.adoc[]
+include::api/board/search-post.adoc[]
+include::api/board/search-posts.adoc[]
+include::api/board/search-scraps.adoc[]
+include::api/board/toggle-scrap.adoc[]
+
 [[QnA-API]]
 == QnA API
 

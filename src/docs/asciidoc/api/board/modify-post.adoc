@@ -1,0 +1,14 @@
+[[modify-post]]
+=== 게시물 수정 API
+
+==== HTTP Request
+
+include::{snippets}/modify-post/http-request.adoc[]
+include::{snippets}/modify-post/request-fields.adoc[]
+include::{snippets}/modify-post/path-parameters.adoc[]
+include::{snippets}/modify-post/request-headers.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/modify-post/http-response.adoc[]
+include::{snippets}/modify-post/response-fields.adoc[]
