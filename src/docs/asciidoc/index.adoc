@@ -45,3 +45,12 @@ include::api/board/search-post.adoc[]
 include::api/board/search-posts.adoc[]
 include::api/board/search-scraps.adoc[]
 include::api/board/toggle-scrap.adoc[]
+
+[[QnA-API]]
+== QnA API
+
+include::api/qna/create-question.adoc[]
+include::api/qna/create-answer.adoc[]
+include::api/qna/search-qnas.adoc[]
+include::api/qna/search-qna.adoc[]
+include::api/qna/remove-qna.adoc[]

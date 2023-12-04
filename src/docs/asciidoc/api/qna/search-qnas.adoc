@@ -1,0 +1,14 @@
+[[search-qnas]]
+=== 질문 등록 API
+
+==== HTTP Request
+
+include::{snippets}/search-qnas/http-request.adoc[]
+include::{snippets}/search-qnas/request-headers.adoc[]
+include::{snippets}/search-qnas/query-parameters.adoc[]
+
+
+==== HTTP Response
+
+include::{snippets}/search-qnas/http-response.adoc[]
+include::{snippets}/search-qnas/response-fields.adoc[]

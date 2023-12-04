@@ -1,0 +1,15 @@
+[[create-answer]]
+=== 질문 등록 API
+
+==== HTTP Request
+
+include::{snippets}/create-answer/http-request.adoc[]
+include::{snippets}/create-answer/request-headers.adoc[]
+include::{snippets}/create-answer/path-parameters.adoc[]
+include::{snippets}/create-answer/request-fields.adoc[]
+
+
+==== HTTP Response
+
+include::{snippets}/create-answer/http-response.adoc[]
+include::{snippets}/create-answer/response-fields.adoc[]
