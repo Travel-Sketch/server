@@ -14,10 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
-import static com.travelsketch.travel.api.ApiResponse.*;
-import static com.travelsketch.travel.api.controller.qna.QnaCustomValid.*;
+import static com.travelsketch.travel.api.ApiResponse.created;
+import static com.travelsketch.travel.api.ApiResponse.ok;
+import static com.travelsketch.travel.api.controller.qna.QnaCustomValid.validPwd;
 
 @RequiredArgsConstructor
 @RestController
@@ -51,12 +50,10 @@ public class QnaController {
 
     @DeleteMapping("/{qnaId}")
     public ApiResponse<RemoveQnaResponse> removeQna(@PathVariable Long qnaId) {
-        RemoveQnaResponse response = RemoveQnaResponse.builder()
-            .qnaId(1L)
-            .type("계정")
-            .title("질문 제목입니다.")
-            .removedDate(LocalDateTime.of(2023, 11, 27, 19, 0))
-            .build();
+        String email = securityUtils.getCurrentEmail();
+
+        RemoveQnaResponse response = qnaService.removeQna(email, qnaId);
+
         return ok(response);
     }
 }

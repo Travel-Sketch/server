@@ -52,4 +52,9 @@ public class Qna extends BaseEntity {
         this.answer = answer;
         return this;
     }
+
+    public void remove(Member member) {
+        super.remove();
+        super.updateLastModifiedBy(member);
+    }
 }
