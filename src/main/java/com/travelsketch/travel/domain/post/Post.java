@@ -1,6 +1,6 @@
 package com.travelsketch.travel.domain.post;
 
-import com.travelsketch.travel.domain.BaseEntity;
+import com.travelsketch.travel.domain.TimeBaseEntity;
 import com.travelsketch.travel.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-public class Post extends BaseEntity {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Post extends TimeBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,25 +31,49 @@ public class Post extends BaseEntity {
     @Column(nullable = false)
     private String content;
 
-    private int scrap_count;
+    @Column(nullable = false, columnDefinition = "int default 0")
+    private Integer scrapCount;
 
-    private int comment_count;
-
-    protected Post() {
-        this.scrap_count = 0;
-        this.comment_count = 0;
-    }
+    @Column(nullable = false)
+    private Integer commentCount;
 
     @Builder
-    private Post(Long id, Member member, String category, String title, String content, Integer scrap_count, Integer comment_count) {
+    private Post(Long id, Member member, String category, String title, String content, Integer scrapCount, Integer commentCount) {
         this.id = id;
         this.member = member;
         this.category = category;
         this.title = title;
         this.content = content;
-        this.scrap_count = scrap_count;
-        this.comment_count = comment_count;
+        this.scrapCount = scrapCount;
+        this.commentCount = commentCount;
     }
 
+    // 스크랩 수 증가
+    public void increaseScrapCount(){
+        this.scrapCount += 1;
+    }
+
+    // 스크랩 수 감소
+    public void decreaseScrapCount() {
+        int count = scrapCount -1;
+        if (count < 0) {
+            throw new IllegalArgumentException();
+        }
+        this.scrapCount = count;
+    }
+
+    // 댓글 수 증가
+    public void increaseCommentCount(){
+        this.commentCount += 1;
+    }
+
+    // 댓글 수 감소
+    public void decreaseCommentCount() {
+        int count = commentCount - 1;
+        if (count < 0) {
+            throw new IllegalArgumentException();
+        }
+        this.commentCount = count;
+    }
 
 }
