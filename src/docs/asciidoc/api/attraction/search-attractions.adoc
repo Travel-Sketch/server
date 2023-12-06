@@ -1,0 +1,12 @@
+[[search-attractions]]
+=== 관광지 목록 조회 API
+
+==== HTTP Request
+
+include::{snippets}/search-attractions/http-request.adoc[]
+include::{snippets}/search-attractions/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/search-attractions/http-response.adoc[]
+include::{snippets}/search-attractions/response-fields.adoc[]
