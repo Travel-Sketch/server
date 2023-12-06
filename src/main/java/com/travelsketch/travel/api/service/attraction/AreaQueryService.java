@@ -1,5 +1,6 @@
 package com.travelsketch.travel.api.service.attraction;
 
+import com.travelsketch.travel.api.controller.attraction.response.GugunResponse;
 import com.travelsketch.travel.api.controller.attraction.response.SidoResponse;
 import com.travelsketch.travel.domain.attraction.Sido;
 import com.travelsketch.travel.domain.attraction.repository.SidoRepository;
@@ -22,5 +23,9 @@ public class AreaQueryService {
         return findSidos.stream()
             .map(SidoResponse::of)
             .toList();
+    }
+
+    public List<GugunResponse> searchGuguns(Long sidoId) {
+        return null;
     }
 }
