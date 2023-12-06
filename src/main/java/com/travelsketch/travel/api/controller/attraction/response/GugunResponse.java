@@ -1,5 +1,6 @@
 package com.travelsketch.travel.api.controller.attraction.response;
 
+import com.travelsketch.travel.domain.attraction.Gugun;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,8 +11,15 @@ public class GugunResponse {
     private final String name;
 
     @Builder
-    public GugunResponse(Long gugunId, String name) {
+    private GugunResponse(Long gugunId, String name) {
         this.gugunId = gugunId;
         this.name = name;
+    }
+
+    public static GugunResponse of(Gugun gugun) {
+        return GugunResponse.builder()
+            .gugunId(gugun.getId())
+            .name(gugun.getName())
+            .build();
     }
 }

@@ -1,12 +1,20 @@
 package com.travelsketch.travel.docs.attraction;
 
 import com.travelsketch.travel.api.controller.attraction.AttractionQueryController;
+import com.travelsketch.travel.api.controller.attraction.response.GugunResponse;
+import com.travelsketch.travel.api.controller.attraction.response.SidoResponse;
+import com.travelsketch.travel.api.service.attraction.AreaQueryService;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.util.List;
+
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -18,16 +26,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class AttractionQueryControllerDocsTest extends RestDocsSupport {
 
+    private final AreaQueryService areaQueryService = mock(AreaQueryService.class);
     private static final String BASE_URL = "/api/v1/sidos";
 
     @Override
     protected Object initController() {
-        return new AttractionQueryController();
+        return new AttractionQueryController(areaQueryService);
     }
 
     @DisplayName("시도 목록 조회 API")
     @Test
     void searchSidos() throws Exception {
+        SidoResponse response = SidoResponse.builder()
+            .sidoId(1L)
+            .name("서울")
+            .build();
+
+        given(areaQueryService.searchSidos())
+            .willReturn(List.of(response));
+
         mockMvc.perform(
                 get(BASE_URL)
             )
@@ -55,6 +72,14 @@ public class AttractionQueryControllerDocsTest extends RestDocsSupport {
     @DisplayName("구군 목록 조회 API")
     @Test
     void searchGuguns() throws Exception {
+        GugunResponse response = GugunResponse.builder()
+            .gugunId(1L)
+            .name("강남구")
+            .build();
+
+        given(areaQueryService.searchGuguns(anyLong()))
+            .willReturn(List.of(response));
+
         mockMvc.perform(
                 get(BASE_URL + "/{sidoId}/guguns", 1L)
             )
