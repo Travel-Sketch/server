@@ -1,6 +1,7 @@
 package com.travelsketch.travel.docs.attraction;
 
 import com.travelsketch.travel.api.controller.attraction.AttractionQueryController;
+import com.travelsketch.travel.api.controller.attraction.response.GugunResponse;
 import com.travelsketch.travel.api.controller.attraction.response.SidoResponse;
 import com.travelsketch.travel.api.service.attraction.AreaQueryService;
 import com.travelsketch.travel.docs.RestDocsSupport;
@@ -11,6 +12,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import java.util.List;
 
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -70,6 +72,14 @@ public class AttractionQueryControllerDocsTest extends RestDocsSupport {
     @DisplayName("구군 목록 조회 API")
     @Test
     void searchGuguns() throws Exception {
+        GugunResponse response = GugunResponse.builder()
+            .gugunId(1L)
+            .name("강남구")
+            .build();
+
+        given(areaQueryService.searchGuguns(anyLong()))
+            .willReturn(List.of(response));
+
         mockMvc.perform(
                 get(BASE_URL + "/{sidoId}/guguns", 1L)
             )

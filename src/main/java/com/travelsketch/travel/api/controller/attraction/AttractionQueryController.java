@@ -34,11 +34,10 @@ public class AttractionQueryController {
 
     @GetMapping("/{sidoId}/guguns")
     public ApiResponse<List<GugunResponse>> searchGuguns(@PathVariable Long sidoId) {
-        GugunResponse response = GugunResponse.builder()
-            .gugunId(1L)
-            .name("강남구")
-            .build();
-        return ok(List.of(response));
+
+        List<GugunResponse> responses = areaQueryService.searchGuguns(sidoId);
+
+        return ok(responses);
     }
 
     @GetMapping("/{sidoId}/guguns/{gugunId}/attractions")
