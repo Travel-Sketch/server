@@ -1,6 +1,7 @@
 package com.travelsketch.travel.api.controller.attraction;
 
 import com.travelsketch.travel.api.ApiResponse;
+import com.travelsketch.travel.api.controller.attraction.response.AttractionResponse;
 import com.travelsketch.travel.api.controller.attraction.response.GugunResponse;
 import com.travelsketch.travel.api.controller.attraction.response.SidoResponse;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,21 @@ public class AttractionQueryController {
         GugunResponse response = GugunResponse.builder()
             .gugunId(1L)
             .name("강남구")
+            .build();
+        return ok(List.of(response));
+    }
+
+    @GetMapping("/{sidoId}/guguns/{gugunId}/attractions")
+    public ApiResponse<List<AttractionResponse>> searchAttractions(@PathVariable Long sidoId, @PathVariable Long gugunId) {
+        AttractionResponse response = AttractionResponse.builder()
+            .attractionId(126498L)
+            .title("롯데월드")
+            .zipcode("5554")
+            .address("서울특별시 송파구 올림픽로 240")
+            .tel(null)
+            .image("http://tong.visitkorea.or.kr/cms/resource/36/2540136_image2_1.JPG")
+            .longitude(127.09793950000000000)
+            .latitude(37.51122948000000000)
             .build();
         return ok(List.of(response));
     }

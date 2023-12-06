@@ -75,6 +75,45 @@ public class AttractionQueryControllerDocsTest extends RestDocsSupport {
                         .description("구군 이름")
                 )
             ));
+    }
 
+    @DisplayName("관광지 목록 조회 API")
+    @Test
+    void searchAttractions() throws Exception {
+        mockMvc.perform(
+                get(BASE_URL + "/{sidoId}/guguns/{gugunId}/attractions", 1L, 1L)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("search-attractions",
+                getDocumentResponse(),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.ARRAY)
+                        .description("응답 데이터"),
+                    fieldWithPath("data[].attractionId").type(JsonFieldType.NUMBER)
+                        .description("관광지 아이디"),
+                    fieldWithPath("data[].title").type(JsonFieldType.STRING)
+                        .description("관광지 제목"),
+                    fieldWithPath("data[].zipcode").type(JsonFieldType.STRING)
+                        .description("우편 번호"),
+                    fieldWithPath("data[].address").type(JsonFieldType.STRING)
+                        .description("주소"),
+                    fieldWithPath("data[].tel").type(JsonFieldType.STRING)
+                        .optional()
+                        .description("관광지 연락처"),
+                    fieldWithPath("data[].image").type(JsonFieldType.STRING)
+                        .description("관광지 이미지"),
+                    fieldWithPath("data[].longitude").type(JsonFieldType.NUMBER)
+                        .description("경도"),
+                    fieldWithPath("data[].latitude").type(JsonFieldType.NUMBER)
+                        .description("위도")
+                )
+            ));
     }
 }
