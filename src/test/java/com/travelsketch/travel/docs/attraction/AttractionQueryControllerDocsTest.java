@@ -25,7 +25,7 @@ public class AttractionQueryControllerDocsTest extends RestDocsSupport {
 
     @DisplayName("시도 목록 조회 API")
     @Test
-    void searchNotices() throws Exception {
+    void searchSidos() throws Exception {
         mockMvc.perform(
                 get(BASE_URL)
             )
@@ -48,5 +48,33 @@ public class AttractionQueryControllerDocsTest extends RestDocsSupport {
                         .description("시도 이름")
                 )
             ));
+    }
+
+    @DisplayName("구군 목록 조회 API")
+    @Test
+    void searchGuguns() throws Exception {
+        mockMvc.perform(
+                get(BASE_URL + "/{sidoId}/guguns", 1L)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("search-guguns",
+                getDocumentResponse(),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.ARRAY)
+                        .description("응답 데이터"),
+                    fieldWithPath("data[].gugunId").type(JsonFieldType.NUMBER)
+                        .description("구군 아이디"),
+                    fieldWithPath("data[].name").type(JsonFieldType.STRING)
+                        .description("구군 이름")
+                )
+            ));
+
     }
 }
