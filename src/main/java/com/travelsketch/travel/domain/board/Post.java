@@ -1,4 +1,4 @@
-package com.travelsketch.travel.domain.post;
+package com.travelsketch.travel.domain.board;
 
 import com.travelsketch.travel.domain.TimeBaseEntity;
 import com.travelsketch.travel.domain.member.Member;
