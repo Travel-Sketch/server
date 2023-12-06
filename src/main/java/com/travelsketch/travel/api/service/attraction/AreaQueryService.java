@@ -1,6 +1,7 @@
 package com.travelsketch.travel.api.service.attraction;
 
 import com.travelsketch.travel.api.controller.attraction.response.SidoResponse;
+import com.travelsketch.travel.domain.attraction.Sido;
 import com.travelsketch.travel.domain.attraction.repository.SidoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,10 @@ public class AreaQueryService {
     private final SidoRepository sidoRepository;
 
     public List<SidoResponse> searchSidos() {
-        return null;
+        List<Sido> findSidos = sidoRepository.findAll();
+
+        return findSidos.stream()
+            .map(SidoResponse::of)
+            .toList();
     }
 }
