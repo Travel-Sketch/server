@@ -1,0 +1,12 @@
+[[search-guguns]]
+=== 구군 목록 조회 API
+
+==== HTTP Request
+
+include::{snippets}/search-guguns/http-request.adoc[]
+include::{snippets}/search-guguns/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/search-guguns/http-response.adoc[]
+include::{snippets}/search-guguns/response-fields.adoc[]
