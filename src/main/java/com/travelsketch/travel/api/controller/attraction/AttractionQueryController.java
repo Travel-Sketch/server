@@ -4,6 +4,7 @@ import com.travelsketch.travel.api.ApiResponse;
 import com.travelsketch.travel.api.controller.attraction.response.AttractionResponse;
 import com.travelsketch.travel.api.controller.attraction.response.GugunResponse;
 import com.travelsketch.travel.api.controller.attraction.response.SidoResponse;
+import com.travelsketch.travel.api.service.attraction.AreaQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,13 +22,14 @@ import static com.travelsketch.travel.api.ApiResponse.ok;
 @RequestMapping("/api/v1/sidos")
 public class AttractionQueryController {
 
+    private final AreaQueryService areaQueryService;
+
     @GetMapping
     public ApiResponse<List<SidoResponse>> searchSidos() {
-        SidoResponse response = SidoResponse.builder()
-            .sidoId(1L)
-            .name("서울")
-            .build();
-        return ok(List.of(response));
+
+        List<SidoResponse> responses = areaQueryService.searchSidos();
+
+        return ok(responses);
     }
 
     @GetMapping("/{sidoId}/guguns")
