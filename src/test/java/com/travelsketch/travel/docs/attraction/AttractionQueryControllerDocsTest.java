@@ -11,6 +11,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -60,6 +62,10 @@ public class AttractionQueryControllerDocsTest extends RestDocsSupport {
             .andExpect(status().isOk())
             .andDo(document("search-guguns",
                 getDocumentResponse(),
+                pathParameters(
+                    parameterWithName("sidoId")
+                        .description("시도 아이디")
+                ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER)
                         .description("코드"),
@@ -87,6 +93,12 @@ public class AttractionQueryControllerDocsTest extends RestDocsSupport {
             .andExpect(status().isOk())
             .andDo(document("search-attractions",
                 getDocumentResponse(),
+                pathParameters(
+                    parameterWithName("sidoId")
+                        .description("시도 아이디"),
+                    parameterWithName("gugunId")
+                        .description("구군 아이디")
+                ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER)
                         .description("코드"),
