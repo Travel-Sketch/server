@@ -27,7 +27,7 @@ class PostServiceTest extends IntegrationTestSupport {
     private MemberRepository memberRepository;
 
 
-    @DisplayName("제목, 내용, 카테고리를 입력 받아 게시물을 등록할 수 있다.")
+    @DisplayName("제목, 내용을 입력 받아 게시물을 등록할 수 있다.")
     @Test
     void createPost() {
         // given
@@ -40,10 +40,10 @@ class PostServiceTest extends IntegrationTestSupport {
             .nickname("체리")
             .role(Role.USER)
             .build();
-        Member savedMember = memberRepository.save(member);
+        memberRepository.save(member);
 
         // when
-        CreatePostResponse response = postService.createPost(member.getEmail(), "게시물 제목", "게시물 내용", "게시물 카테고리");
+        CreatePostResponse response = postService.createPost(member.getEmail(), "게시물 제목", "게시물 내용");
 
         // then (post 등록 확인)
         Optional<Post> findPost = postRepository.findById(response.getPostId());

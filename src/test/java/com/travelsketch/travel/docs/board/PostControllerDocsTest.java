@@ -3,14 +3,23 @@ package com.travelsketch.travel.docs.board;
 import com.travelsketch.travel.api.controller.board.PostController;
 import com.travelsketch.travel.api.controller.board.request.CreatePostRequest;
 import com.travelsketch.travel.api.controller.board.request.UpdatePostRequest;
+import com.travelsketch.travel.api.controller.board.response.CreatePostResponse;
+import com.travelsketch.travel.api.service.board.PostService;
 import com.travelsketch.travel.docs.RestDocsSupport;
+import com.travelsketch.travel.domain.board.PostCategory;
+import com.travelsketch.travel.security.SecurityUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.time.LocalDateTime;
+
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentRequest;
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -23,21 +32,34 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class PostControllerDocsTest extends RestDocsSupport {
 
+    private final PostService postService = mock(PostService.class);
+    private final SecurityUtils securityUtils = mock(SecurityUtils.class);
     private static final String BASE_URL = "/api/v1/posts";
 
     @Override
     protected Object initController() {
-        return new PostController();
+        return new PostController(securityUtils, postService);
     }
 
     @DisplayName("게시물 등록 API")
     @Test
     void createPost() throws Exception {
+        given(securityUtils.getCurrentEmail())
+            .willReturn("cherry@naver.com");
+
         CreatePostRequest request = CreatePostRequest.builder()
             .title("게시물 제목 1")
             .content("게시물 내용 1")
-            .category("카테고리 1")
             .build();
+
+        CreatePostResponse response = CreatePostResponse.builder()
+            .postId(1L)
+            .title("공지사항 제목")
+            .createdDate(LocalDateTime.of(2023, 12, 7, 10, 30))
+            .build();
+
+        given(postService.createPost(anyString(), anyString(), anyString()))
+            .willReturn(response);
 
         mockMvc.perform(
                 post(BASE_URL)
@@ -59,8 +81,6 @@ public class PostControllerDocsTest extends RestDocsSupport {
                         .description("게시물 제목"),
                     fieldWithPath("content").type(JsonFieldType.STRING)
                         .description("게시물 내용"),
-                    fieldWithPath("category").type(JsonFieldType.STRING)
-                        .description("카테고리"),
                     fieldWithPath("attached_file").type(JsonFieldType.STRING)
                         .description("첨부파일").optional(),
                     fieldWithPath("place").type(JsonFieldType.STRING)

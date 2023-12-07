@@ -20,7 +20,6 @@ public class CreatePostResponse {
         this.createdDate = createdDate;
     }
 
-    // static 함수 : 인스턴트를 만들지 않고도 쓸 수 있는 함수
     public static CreatePostResponse of(Post post) {
         return CreatePostResponse.builder()
             .postId(post.getId())

@@ -23,7 +23,8 @@ public class Post extends TimeBaseEntity {
     private Member member;
 
     @Column(nullable = false, length = 10)
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private PostCategory category;
 
     @Column(nullable = false, length = 50)
     private String title;
@@ -34,11 +35,11 @@ public class Post extends TimeBaseEntity {
     @Column(nullable = false, columnDefinition = "int default 0")
     private Integer scrapCount;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer commentCount;
 
     @Builder
-    private Post(Long id, Member member, String category, String title, String content, Integer scrapCount, Integer commentCount) {
+    private Post(Long id, Member member, PostCategory category, String title, String content, Integer scrapCount, Integer commentCount) {
         this.id = id;
         this.member = member;
         this.category = category;

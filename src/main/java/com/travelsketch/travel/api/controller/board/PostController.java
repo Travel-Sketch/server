@@ -7,6 +7,9 @@ import com.travelsketch.travel.api.controller.board.response.CreatePostResponse;
 import com.travelsketch.travel.api.controller.board.response.ModifyPostResponse;
 import com.travelsketch.travel.api.controller.board.response.RemovePostResponse;
 import com.travelsketch.travel.api.controller.board.response.SearchPostResponse;
+import com.travelsketch.travel.api.service.board.PostService;
+import com.travelsketch.travel.security.SecurityUtils;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +21,9 @@ import java.time.LocalDateTime;
 @RequestMapping("/api/v1/posts")
 public class PostController {
 
+    private final SecurityUtils securityUtils;
+    private final PostService postService;
+
     /**
      * 게시물 등록 API
      *
@@ -26,12 +32,9 @@ public class PostController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<CreatePostResponse> createPost(@RequestBody CreatePostRequest request) {
-        CreatePostResponse response = CreatePostResponse.builder()
-            .postId(1L)
-            .title("게시물 제목")
-            .createdDate(LocalDateTime.of(2023, 11, 29, 1, 30))
-            .build();
+    public ApiResponse<CreatePostResponse> createNotice(@Valid @RequestBody CreatePostRequest request) {
+        String email = securityUtils.getCurrentEmail();
+        CreatePostResponse response = postService.createPost(email, request.getTitle(), request.getContent());
         return ApiResponse.created(response);
     }
 
