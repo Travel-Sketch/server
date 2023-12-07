@@ -13,14 +13,14 @@ public class Gugun {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "gugun_code")
-    private Long id;
+    @Column(name = "gugun_id")
+    private Integer id;
 
-    @Column(name = "gugun_name", nullable = false, length = 30)
+    @Column(nullable = false, length = 10)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sido_code")
+    @JoinColumn(name = "sido_id")
     private Sido sido;
 
     @Builder

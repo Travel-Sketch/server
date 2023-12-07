@@ -13,13 +13,16 @@ public class Attraction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "content_id")
-    private Long id;
+    @Column(name = "attraction_id")
+    private Integer id;
+
+    @Column(nullable = false)
+    private Integer attractionTypeId;
 
     @Column(length = 100)
     private String title;
 
-    @Column(length = 50)
+    @Column(length = 10)
     private String zipcode;
 
     @Column(length = 100)
@@ -37,16 +40,20 @@ public class Attraction {
     @Column(precision = 20, scale = 17)
     private Double latitude;
 
+    @Column(nullable = false, length = 2)
+    private String mlevel;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sido_code")
+    @JoinColumn(name = "sido_id")
     private Sido sido;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gugun_code")
+    @JoinColumn(name = "gugun_id")
     private Gugun gugun;
 
     @Builder
-    private Attraction(String title, String zipcode, String address, String tel, String image, Double longitude, Double latitude, Sido sido, Gugun gugun) {
+    private Attraction(Integer attractionTypeId, String title, String zipcode, String address, String tel, String image, Double longitude, Double latitude, String mlevel, Sido sido, Gugun gugun) {
+        this.attractionTypeId = attractionTypeId;
         this.title = title;
         this.zipcode = zipcode;
         this.address = address;
@@ -54,6 +61,7 @@ public class Attraction {
         this.image = image;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.mlevel = mlevel;
         this.sido = sido;
         this.gugun = gugun;
     }
