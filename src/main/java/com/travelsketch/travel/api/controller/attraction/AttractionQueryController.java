@@ -43,7 +43,7 @@ public class AttractionQueryController {
     @GetMapping("/{sidoId}/guguns/{gugunId}/attractions")
     public ApiResponse<List<AttractionResponse>> searchAttractions(@PathVariable Long sidoId, @PathVariable Long gugunId) {
         AttractionResponse response = AttractionResponse.builder()
-            .attractionId(126498L)
+            .attractionId(126498)
             .title("롯데월드")
             .zipcode("5554")
             .address("서울특별시 송파구 올림픽로 240")

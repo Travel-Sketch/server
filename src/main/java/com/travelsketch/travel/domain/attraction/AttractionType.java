@@ -18,4 +18,14 @@ public enum AttractionType {
 
     private final int code;
     private final String text;
+
+    public static String getText(int code) {
+        for (AttractionType type : values()) {
+            if (type.code == code) {
+                return type.getText();
+            }
+        }
+
+        throw new IllegalArgumentException();
+    }
 }
