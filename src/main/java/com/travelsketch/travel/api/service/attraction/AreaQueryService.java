@@ -28,7 +28,7 @@ public class AreaQueryService {
             .toList();
     }
 
-    public List<GugunResponse> searchGuguns(Long sidoId) {
+    public List<GugunResponse> searchGuguns(int sidoId) {
         List<Gugun> findGuguns = gugunRepository.findBySidoId(sidoId);
 
         return findGuguns.stream()

@@ -7,11 +7,11 @@ import lombok.Getter;
 @Getter
 public class SidoResponse {
 
-    private final Long sidoId;
+    private final Integer sidoId;
     private final String name;
 
     @Builder
-    public SidoResponse(Long sidoId, String name) {
+    public SidoResponse(Integer sidoId, String name) {
         this.sidoId = sidoId;
         this.name = name;
     }

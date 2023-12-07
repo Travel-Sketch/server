@@ -13,10 +13,10 @@ public class Sido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "sido_code")
-    private Long id;
+    @Column(name = "sido_id")
+    private Integer id;
 
-    @Column(name = "sido_name", nullable = false, length = 30)
+    @Column(nullable = false, length = 10)
     private String name;
 
     @Builder
