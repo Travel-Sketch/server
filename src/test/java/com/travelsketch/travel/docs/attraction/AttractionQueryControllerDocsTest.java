@@ -149,6 +149,7 @@ public class AttractionQueryControllerDocsTest extends RestDocsSupport {
                     parameterWithName("typeId")
                         .description("관광지 유형 아이디"),
                     parameterWithName("query")
+                        .optional()
                         .description("검색 쿼리")
                 ),
                 responseFields(
