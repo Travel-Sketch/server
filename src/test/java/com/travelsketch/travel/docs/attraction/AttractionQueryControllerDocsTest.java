@@ -12,7 +12,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import java.util.List;
 
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -38,7 +38,7 @@ public class AttractionQueryControllerDocsTest extends RestDocsSupport {
     @Test
     void searchSidos() throws Exception {
         SidoResponse response = SidoResponse.builder()
-            .sidoId(1L)
+            .sidoId(1)
             .name("서울")
             .build();
 
@@ -73,11 +73,11 @@ public class AttractionQueryControllerDocsTest extends RestDocsSupport {
     @Test
     void searchGuguns() throws Exception {
         GugunResponse response = GugunResponse.builder()
-            .gugunId(1L)
+            .gugunId(1)
             .name("강남구")
             .build();
 
-        given(areaQueryService.searchGuguns(anyLong()))
+        given(areaQueryService.searchGuguns(anyInt()))
             .willReturn(List.of(response));
 
         mockMvc.perform(

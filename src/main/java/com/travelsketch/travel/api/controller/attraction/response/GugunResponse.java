@@ -7,11 +7,11 @@ import lombok.Getter;
 @Getter
 public class GugunResponse {
 
-    private final Long gugunId;
+    private final Integer gugunId;
     private final String name;
 
     @Builder
-    private GugunResponse(Long gugunId, String name) {
+    private GugunResponse(Integer gugunId, String name) {
         this.gugunId = gugunId;
         this.name = name;
     }

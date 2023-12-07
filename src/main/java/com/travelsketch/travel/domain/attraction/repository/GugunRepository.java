@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface GugunRepository extends JpaRepository<Gugun, Long> {
+public interface GugunRepository extends JpaRepository<Gugun, Integer> {
 
     @Query("select g from Gugun g where g.sido.id=:sidoId")
-    List<Gugun> findBySidoId(@Param("sidoId") Long sidoId);
+    List<Gugun> findBySidoId(@Param("sidoId") Integer sidoId);
 }

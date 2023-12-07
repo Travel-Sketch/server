@@ -33,7 +33,7 @@ public class AttractionQueryController {
     }
 
     @GetMapping("/{sidoId}/guguns")
-    public ApiResponse<List<GugunResponse>> searchGuguns(@PathVariable Long sidoId) {
+    public ApiResponse<List<GugunResponse>> searchGuguns(@PathVariable Integer sidoId) {
 
         List<GugunResponse> responses = areaQueryService.searchGuguns(sidoId);
 

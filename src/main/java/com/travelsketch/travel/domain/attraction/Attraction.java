@@ -34,10 +34,10 @@ public class Attraction {
     @Column(length = 200)
     private String image;
 
-    @Column(precision = 20, scale = 17)
+//    @Column(precision = 20, scale = 17)
     private Double longitude;
 
-    @Column(precision = 20, scale = 17)
+//    @Column(precision = 20, scale = 17)
     private Double latitude;
 
     @Column(nullable = false, length = 2)

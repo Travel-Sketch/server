@@ -7,6 +7,7 @@ import lombok.Getter;
 public class AttractionResponse {
 
     private final Long attractionId;
+    private final String type;
     private final String title;
     private final String zipcode;
     private final String address;
@@ -16,8 +17,9 @@ public class AttractionResponse {
     private final double latitude;
 
     @Builder
-    public AttractionResponse(Long attractionId, String title, String zipcode, String address, String tel, String image, double longitude, double latitude) {
+    public AttractionResponse(Long attractionId, String type, String title, String zipcode, String address, String tel, String image, double longitude, double latitude) {
         this.attractionId = attractionId;
+        this.type = type;
         this.title = title;
         this.zipcode = zipcode;
         this.address = address;
