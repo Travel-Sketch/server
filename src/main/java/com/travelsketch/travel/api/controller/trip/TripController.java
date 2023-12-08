@@ -5,6 +5,7 @@ import com.travelsketch.travel.api.controller.trip.request.CreateTripRequest;
 import com.travelsketch.travel.api.controller.trip.request.ModifyTripRequest;
 import com.travelsketch.travel.api.controller.trip.response.CreateTripResponse;
 import com.travelsketch.travel.api.controller.trip.response.ModifyTripResponse;
+import com.travelsketch.travel.api.controller.trip.response.RemoveTripResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,17 @@ public class TripController {
             .title("수정된 여행 계획 제목")
             .attractionCount(3)
             .modifiedDate(LocalDateTime.of(2023, 12, 8, 14, 52))
+            .build();
+
+        return ok(response);
+    }
+
+    @DeleteMapping("/{tripId}")
+    public ApiResponse<RemoveTripResponse> removeTrip(@PathVariable Long tripId) {
+        RemoveTripResponse response = RemoveTripResponse.builder()
+            .tripId(1L)
+            .title("삭제된 여행 계획 제목")
+            .removedDate(LocalDateTime.of(2023, 12, 8, 14, 52))
             .build();
 
         return ok(response);

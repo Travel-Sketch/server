@@ -11,10 +11,10 @@ import java.util.List;
 public class ModifyTripRequest {
 
     private String title;
-    private List<Long> attractions;
+    private List<Integer> attractions;
 
     @Builder
-    private ModifyTripRequest(String title, List<Long> attractions) {
+    private ModifyTripRequest(String title, List<Integer> attractions) {
         this.title = title;
         this.attractions = attractions;
     }
