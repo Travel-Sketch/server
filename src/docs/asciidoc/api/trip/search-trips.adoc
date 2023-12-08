@@ -1,0 +1,13 @@
+[[search-trips]]
+=== 여행 계획 목록 조회 API
+
+==== HTTP Request
+
+include::{snippets}/search-trips/http-request.adoc[]
+include::{snippets}/search-trips/request-headers.adoc[]
+include::{snippets}/search-trips/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/search-trips/http-response.adoc[]
+include::{snippets}/search-trips/response-fields.adoc[]

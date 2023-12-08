@@ -54,3 +54,12 @@ include::api/qna/create-answer.adoc[]
 include::api/qna/search-qnas.adoc[]
 include::api/qna/search-qna.adoc[]
 include::api/qna/remove-qna.adoc[]
+
+[[Trip-API]]
+== Trip API
+
+include::api/trip/create-trip.adoc[]
+include::api/trip/search-trips.adoc[]
+include::api/trip/search-trip.adoc[]
+include::api/trip/modify-trip.adoc[]
+include::api/trip/remove-trip.adoc[]

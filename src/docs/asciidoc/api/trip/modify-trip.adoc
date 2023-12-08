@@ -1,0 +1,15 @@
+[[modify-trip]]
+=== 여행 계획 수정 API
+
+==== HTTP Request
+
+include::{snippets}/modify-trip/http-request.adoc[]
+include::{snippets}/modify-trip/request-headers.adoc[]
+include::{snippets}/modify-trip/path-parameters.adoc[]
+include::{snippets}/modify-trip/request-fields.adoc[]
+
+
+==== HTTP Response
+
+include::{snippets}/modify-trip/http-response.adoc[]
+include::{snippets}/modify-trip/response-fields.adoc[]
