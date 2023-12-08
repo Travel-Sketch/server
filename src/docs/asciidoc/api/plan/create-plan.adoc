@@ -1,0 +1,14 @@
+[[create-plan]]
+=== 여행 계획 등록 API
+
+==== HTTP Request
+
+include::{snippets}/create-plan/http-request.adoc[]
+include::{snippets}/create-plan/request-headers.adoc[]
+include::{snippets}/create-plan/request-fields.adoc[]
+
+
+==== HTTP Response
+
+include::{snippets}/create-plan/http-response.adoc[]
+include::{snippets}/create-plan/response-fields.adoc[]

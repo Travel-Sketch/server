@@ -1,8 +1,8 @@
-package com.travelsketch.travel.docs.trip;
+package com.travelsketch.travel.docs.plan;
 
-import com.travelsketch.travel.api.controller.trip.TripController;
-import com.travelsketch.travel.api.controller.trip.request.CreateTripRequest;
-import com.travelsketch.travel.api.controller.trip.request.ModifyTripRequest;
+import com.travelsketch.travel.api.controller.plan.PlanController;
+import com.travelsketch.travel.api.controller.plan.request.CreatePlanRequest;
+import com.travelsketch.travel.api.controller.plan.request.ModifyPlanRequest;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,19 +23,19 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class TripControllerDocsTest extends RestDocsSupport {
+public class PlanControllerDocsTest extends RestDocsSupport {
 
-    private static final String BASE_URL = "/api/v1/trips";
+    private static final String BASE_URL = "/api/v1/plans";
 
     @Override
     protected Object initController() {
-        return new TripController();
+        return new PlanController();
     }
 
     @DisplayName("여행 계획 등록 API")
     @Test
-    void createTrip() throws Exception {
-        CreateTripRequest request = CreateTripRequest.builder()
+    void createPlan() throws Exception {
+        CreatePlanRequest request = CreatePlanRequest.builder()
             .title("나의 여행 계획 제목")
             .attractions(List.of(111111, 111112, 111113))
             .build();
@@ -48,7 +48,7 @@ public class TripControllerDocsTest extends RestDocsSupport {
             )
             .andDo(print())
             .andExpect(status().isCreated())
-            .andDo(document("create-trip",
+            .andDo(document("create-plan",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 requestHeaders(
@@ -70,7 +70,7 @@ public class TripControllerDocsTest extends RestDocsSupport {
                         .description("메시지"),
                     fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
-                    fieldWithPath("data.tripId").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.planId").type(JsonFieldType.NUMBER)
                         .description("여행 계획 아이디"),
                     fieldWithPath("data.title").type(JsonFieldType.STRING)
                         .description("여행 계획 제목"),
@@ -84,21 +84,21 @@ public class TripControllerDocsTest extends RestDocsSupport {
 
     @DisplayName("여행 계획 수정 API")
     @Test
-    void modifyTrip() throws Exception {
-        ModifyTripRequest request = ModifyTripRequest.builder()
+    void modifyPlan() throws Exception {
+        ModifyPlanRequest request = ModifyPlanRequest.builder()
             .title("수정된 여행 계획 제목")
             .attractions(List.of(111111, 111112, 111113))
             .build();
 
         mockMvc.perform(
-                patch(BASE_URL + "/{tripId}", 1)
+                patch(BASE_URL + "/{planId}", 1)
                     .header("Authorization", "Bearer Access Token")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(MediaType.APPLICATION_JSON)
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("modify-trip",
+            .andDo(document("modify-plan",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 requestHeaders(
@@ -106,7 +106,7 @@ public class TripControllerDocsTest extends RestDocsSupport {
                         .description("Bearer Access Token")
                 ),
                 pathParameters(
-                    parameterWithName("tripId")
+                    parameterWithName("planId")
                         .description("여행 계획 아이디")
                 ),
                 requestFields(
@@ -124,7 +124,7 @@ public class TripControllerDocsTest extends RestDocsSupport {
                         .description("메시지"),
                     fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
-                    fieldWithPath("data.tripId").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.planId").type(JsonFieldType.NUMBER)
                         .description("여행 계획 아이디"),
                     fieldWithPath("data.title").type(JsonFieldType.STRING)
                         .description("여행 계획 제목"),
@@ -138,21 +138,21 @@ public class TripControllerDocsTest extends RestDocsSupport {
 
     @DisplayName("여행 계획 삭제 API")
     @Test
-    void removeTrip() throws Exception {
+    void removePlan() throws Exception {
         mockMvc.perform(
-                delete(BASE_URL + "/{tripId}", 1)
+                delete(BASE_URL + "/{planId}", 1)
                     .header("Authorization", "Bearer Access Token")
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("remove-trip",
+            .andDo(document("remove-plan",
                 getDocumentResponse(),
                 requestHeaders(
                     headerWithName("Authorization")
                         .description("Bearer Access Token")
                 ),
                 pathParameters(
-                    parameterWithName("tripId")
+                    parameterWithName("planId")
                         .description("여행 계획 아이디")
                 ),
                 responseFields(
@@ -164,7 +164,7 @@ public class TripControllerDocsTest extends RestDocsSupport {
                         .description("메시지"),
                     fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
-                    fieldWithPath("data.tripId").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.planId").type(JsonFieldType.NUMBER)
                         .description("여행 계획 아이디"),
                     fieldWithPath("data.title").type(JsonFieldType.STRING)
                         .description("여행 계획 제목"),

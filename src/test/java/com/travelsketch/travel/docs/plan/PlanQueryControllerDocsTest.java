@@ -1,6 +1,6 @@
-package com.travelsketch.travel.docs.trip;
+package com.travelsketch.travel.docs.plan;
 
-import com.travelsketch.travel.api.controller.trip.TripQueryController;
+import com.travelsketch.travel.api.controller.plan.PlanQueryController;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,18 +17,18 @@ import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class TripQueryControllerDocsTest extends RestDocsSupport {
+public class PlanQueryControllerDocsTest extends RestDocsSupport {
 
-    private static final String BASE_URL = "/api/v1/trips";
+    private static final String BASE_URL = "/api/v1/plans";
 
     @Override
     protected Object initController() {
-        return new TripQueryController();
+        return new PlanQueryController();
     }
 
     @DisplayName("여행 계획 목록 조회 API")
     @Test
-    void searchTrips() throws Exception {
+    void searchPlans() throws Exception {
         mockMvc.perform(
                 get(BASE_URL)
                     .header("Authorization", "Bearer Access Token")
@@ -37,7 +37,7 @@ public class TripQueryControllerDocsTest extends RestDocsSupport {
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("search-trips",
+            .andDo(document("search-plans",
                 getDocumentResponse(),
                 requestHeaders(
                     headerWithName("Authorization")
@@ -61,7 +61,7 @@ public class TripQueryControllerDocsTest extends RestDocsSupport {
                         .description("응답 데이터"),
                     fieldWithPath("data.content").type(JsonFieldType.ARRAY)
                         .description("조회된 QnA 목록"),
-                    fieldWithPath("data.content[].tripId").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.content[].planId").type(JsonFieldType.NUMBER)
                         .description("여행 계획 아이디"),
                     fieldWithPath("data.content[].title").type(JsonFieldType.STRING)
                         .description("여행 계획 제목"),
@@ -83,21 +83,21 @@ public class TripQueryControllerDocsTest extends RestDocsSupport {
 
     @DisplayName("여행 계획 상세 조회 API")
     @Test
-    void searchTrip() throws Exception {
+    void searchPlan() throws Exception {
         mockMvc.perform(
-                get(BASE_URL + "/{tripId}", 1)
+                get(BASE_URL + "/{planId}", 1)
                     .header("Authorization", "Bearer Access Token")
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("search-trip",
+            .andDo(document("search-plan",
                 getDocumentResponse(),
                 requestHeaders(
                     headerWithName("Authorization")
                         .description("Bearer Access Token")
                 ),
                 pathParameters(
-                    parameterWithName("tripId")
+                    parameterWithName("planId")
                         .description("여행 계획 아이디")
                 ),
                 responseFields(
@@ -109,7 +109,7 @@ public class TripQueryControllerDocsTest extends RestDocsSupport {
                         .description("메시지"),
                     fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
-                    fieldWithPath("data.tripId").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.planId").type(JsonFieldType.NUMBER)
                         .description("여행 계획 아이디"),
                     fieldWithPath("data.title").type(JsonFieldType.STRING)
                         .description("여행 계획 제목"),

@@ -1,4 +1,4 @@
-package com.travelsketch.travel.api.controller.trip.request;
+package com.travelsketch.travel.api.controller.plan.request;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,13 +8,13 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class ModifyTripRequest {
+public class ModifyPlanRequest {
 
     private String title;
     private List<Integer> attractions;
 
     @Builder
-    private ModifyTripRequest(String title, List<Integer> attractions) {
+    private ModifyPlanRequest(String title, List<Integer> attractions) {
         this.title = title;
         this.attractions = attractions;
     }
