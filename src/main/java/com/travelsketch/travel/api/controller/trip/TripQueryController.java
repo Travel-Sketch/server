@@ -2,15 +2,13 @@ package com.travelsketch.travel.api.controller.trip;
 
 import com.travelsketch.travel.api.ApiResponse;
 import com.travelsketch.travel.api.PageResponse;
+import com.travelsketch.travel.api.controller.trip.response.TripDetailResponse;
 import com.travelsketch.travel.api.controller.trip.response.TripResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,5 +40,17 @@ public class TripQueryController {
         PageResponse<TripResponse> result = new PageResponse<>(content);
 
         return ok(result);
+    }
+
+    @GetMapping("/{tripId}")
+    public ApiResponse<TripDetailResponse> searchTrip(@PathVariable Long tripId) {
+        TripDetailResponse response = TripDetailResponse.builder()
+            .tripId(1L)
+            .title("나의 여행 계획 제목")
+            .writer("카리나")
+            .createdDate(LocalDateTime.of(2023, 12, 8, 14, 52))
+            .build();
+
+        return ok(response);
     }
 }
