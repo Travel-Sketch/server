@@ -1,7 +1,7 @@
 package com.travelsketch.travel.api.service.board;
 
-//import com.amazonaws.services.s3.AmazonS3Client;
-//import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.travelsketch.travel.domain.board.UploadFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,14 +17,13 @@ import java.util.UUID;
 @Component
 public class FileStore {
 
-//    private final AmazonS3Client amazonS3Client;
+    private final AmazonS3Client amazonS3Client;
 
-    //    @Value("${cloud.aws.s3.bucket}")
+    @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
     public String getFullPath(String storeFileName) {
-        return null;
-//        return String.valueOf(amazonS3Client.getUrl(bucket, storeFileName));
+        return String.valueOf(amazonS3Client.getUrl(bucket, storeFileName));
     }
 
     public List<UploadFile> storeFiles(List<MultipartFile> multipartFiles) throws IOException {
@@ -45,10 +44,10 @@ public class FileStore {
         String originalFilename = multipartFile.getOriginalFilename();
         String storeFileName = createStoreFileName(originalFilename);
 
-//        ObjectMetadata metadata = new ObjectMetadata();
-//        metadata.setContentType(multipartFile.getContentType());
-//        metadata.setContentLength(multipartFile.getSize());
-//        amazonS3Client.putObject(bucket, storeFileName, multipartFile.getInputStream(), metadata);
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType(multipartFile.getContentType());
+        metadata.setContentLength(multipartFile.getSize());
+        amazonS3Client.putObject(bucket, storeFileName, multipartFile.getInputStream(), metadata);
 
         return new UploadFile(originalFilename, storeFileName);
     }

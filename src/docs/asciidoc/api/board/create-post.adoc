@@ -5,7 +5,6 @@
 
 include::{snippets}/create-post/http-request.adoc[]
 include::{snippets}/create-post/request-headers.adoc[]
-include::{snippets}/create-post/request-fields.adoc[]
 include::{snippets}/create-post/request-parts.adoc[]
 include::{snippets}/create-post/request-part-request-fields.adoc[]
 

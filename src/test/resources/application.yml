@@ -18,3 +18,15 @@ logging:
 
 jwt:
   secret: temptemptemptemptemptemptemptemptemptemptemp
+
+cloud:
+  aws:
+    credentials:
+      access-key: temptemptemptemp
+      secret-key: temptemptemptemp
+    s3:
+      bucket: travel-sketch-img-storage
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
