@@ -13,8 +13,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -32,9 +34,9 @@ public class PostController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<CreatePostResponse> createNotice(@Valid @RequestBody CreatePostRequest request) {
+    public ApiResponse<CreatePostResponse> createPost(@Valid @RequestPart CreatePostRequest request, @RequestPart(required = false) List<MultipartFile> files) {
         String email = securityUtils.getCurrentEmail();
-        CreatePostResponse response = postService.createPost(email, request.getTitle(), request.getContent());
+        CreatePostResponse response = postService.createPost(email, request.getTitle(), request.getContent(), files);
         return ApiResponse.created(response);
     }
 

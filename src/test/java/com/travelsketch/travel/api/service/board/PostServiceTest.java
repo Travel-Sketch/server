@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,7 +44,7 @@ class PostServiceTest extends IntegrationTestSupport {
         memberRepository.save(member);
 
         // when
-        CreatePostResponse response = postService.createPost(member.getEmail(), "게시물 제목", "게시물 내용");
+        CreatePostResponse response = postService.createPost(member.getEmail(), "게시물 제목", "게시물 내용", List.of());
 
         // then (post 등록 확인)
         Optional<Post> findPost = postRepository.findById(response.getPostId());

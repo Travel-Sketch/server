@@ -6,7 +6,9 @@ import com.travelsketch.travel.domain.board.PostCategory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -16,6 +18,74 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class PostControllerTest extends ControllerTestSupport {
 
     private static final String BASE_URL = "/api/v1/posts";
+
+    @DisplayName("게시물을 등록할 수 있다")
+    @Test
+    void createPost() throws Exception {
+        //given
+        CreatePostRequest request = CreatePostRequest.builder()
+            .title("게시물 제목")
+            .content("게시물 내용")
+            .build();
+
+        MockMultipartFile multipartRequest = new MockMultipartFile(
+            "request",
+            "",
+            MediaType.APPLICATION_JSON_VALUE,
+            objectMapper.writeValueAsString(request).getBytes()
+        );
+
+        //when //then
+        mockMvc.perform(
+                multipart(BASE_URL)
+                    .file(multipartRequest)
+                    .with(csrf())
+            )
+            .andDo(print())
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.code").value("201"));
+    }
+
+    @DisplayName("게시물 등록시 다수의 파일을 첨부할 수 있다.")
+    @Test
+    void createPostWithFiles() throws Exception {
+        //given
+        CreatePostRequest request = CreatePostRequest.builder()
+            .title("게시물 제목")
+            .content("게시물 내용")
+            .build();
+
+        MockMultipartFile multipartRequest = new MockMultipartFile(
+            "request",
+            "",
+            MediaType.APPLICATION_JSON_VALUE,
+            objectMapper.writeValueAsString(request).getBytes()
+        );
+        MockMultipartFile image1 = new MockMultipartFile(
+            "files", //name
+            "abc1.png", //originalFilename
+            "image/png",
+            "<<png data>>".getBytes()
+        );
+        MockMultipartFile image2 = new MockMultipartFile(
+            "files", //name
+            "abc2.png", //originalFilename
+            "image/png",
+            "<<png data>>".getBytes()
+        );
+
+        //when //then
+        mockMvc.perform(
+                multipart(BASE_URL)
+                    .file(multipartRequest)
+                    .file(image1)
+                    .file(image2)
+                    .with(csrf())
+            )
+            .andDo(print())
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.code").value("201"));
+    }
 
     @DisplayName("게시물 등록시 제목은 필수값이다.")
     @Test
@@ -28,10 +98,14 @@ class PostControllerTest extends ControllerTestSupport {
 
         //when //then
         mockMvc.perform(
-                post(BASE_URL)
+                multipart(BASE_URL)
+                    .file(new MockMultipartFile(
+                        "request",
+                        "",
+                        MediaType.APPLICATION_JSON_VALUE,
+                        objectMapper.writeValueAsString(request).getBytes()
+                    ))
                     .with(csrf())
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(MediaType.APPLICATION_JSON)
             )
             .andDo(print())
             .andExpect(status().isBadRequest())
@@ -51,10 +125,14 @@ class PostControllerTest extends ControllerTestSupport {
 
         //when //then
         mockMvc.perform(
-                post(BASE_URL)
+                multipart(BASE_URL)
+                    .file(new MockMultipartFile(
+                        "request",
+                        "",
+                        MediaType.APPLICATION_JSON_VALUE,
+                        objectMapper.writeValueAsString(request).getBytes()
+                    ))
                     .with(csrf())
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(MediaType.APPLICATION_JSON)
             )
             .andDo(print())
             .andExpect(status().isBadRequest())
@@ -74,10 +152,14 @@ class PostControllerTest extends ControllerTestSupport {
 
         //when //then
         mockMvc.perform(
-                post(BASE_URL)
+                multipart(BASE_URL)
+                    .file(new MockMultipartFile(
+                        "request",
+                        "",
+                        MediaType.APPLICATION_JSON_VALUE,
+                        objectMapper.writeValueAsString(request).getBytes()
+                    ))
                     .with(csrf())
-                    .content(objectMapper.writeValueAsString(request))
-                    .contentType(MediaType.APPLICATION_JSON)
             )
             .andDo(print())
             .andExpect(status().isBadRequest())

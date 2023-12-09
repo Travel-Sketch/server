@@ -7,16 +7,20 @@ import com.travelsketch.travel.api.controller.board.response.CreatePostResponse;
 import com.travelsketch.travel.api.service.board.PostService;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import com.travelsketch.travel.domain.board.PostCategory;
+import com.travelsketch.travel.domain.board.UploadFile;
 import com.travelsketch.travel.security.SecurityUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentRequest;
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -25,8 +29,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -52,20 +55,48 @@ public class PostControllerDocsTest extends RestDocsSupport {
             .content("게시물 내용 1")
             .build();
 
+        MockMultipartFile image1 = new MockMultipartFile(
+            "files", //name
+            "image1.png", //originalFilename
+            "image/png",
+            "<<png data>>".getBytes()
+        );
+        MockMultipartFile image2 = new MockMultipartFile(
+            "files", //name
+            "image2.png", //originalFilename
+            "image/png",
+            "<<png data>>".getBytes()
+        );
+
+
         CreatePostResponse response = CreatePostResponse.builder()
             .postId(1L)
-            .title("공지사항 제목")
+            .title("게시물 제목")
             .createdDate(LocalDateTime.of(2023, 12, 7, 10, 30))
+            .files(List.of(UploadFile.builder()
+                    .storeFileName("image1.png")
+                    .uploadFileName("034903bd-0a11-4476-812b-2f6c660df239.png")
+                    .build(),
+                UploadFile.builder()
+                    .storeFileName("image2.png")
+                    .uploadFileName("555903bd-0a11-4476-812b-2f6c660df141.png")
+                    .build()))
             .build();
 
-        given(postService.createPost(anyString(), anyString(), anyString()))
+        given(postService.createPost(anyString(), anyString(), anyString(), anyList()))
             .willReturn(response);
 
         mockMvc.perform(
-                post(BASE_URL)
+                multipart(BASE_URL)
+                    .file(new MockMultipartFile(
+                        "request",
+                        "",
+                        MediaType.APPLICATION_JSON_VALUE,
+                        objectMapper.writeValueAsString(request).getBytes()
+                    ))
+                    .file(image1)
+                    .file(image2)
                     .header("Authorization", "Bearer Access Token")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(request))
             )
             .andDo(print())
             .andExpect(status().isCreated())
@@ -76,15 +107,15 @@ public class PostControllerDocsTest extends RestDocsSupport {
                     headerWithName("Authorization")
                         .description("Bearer Access Token")
                 ),
-                requestFields(
+                requestParts(
+                    partWithName("files").description("첨부파일"),
+                    partWithName("request").description("게시물 정보")
+                ),
+                requestPartFields("request",
                     fieldWithPath("title").type(JsonFieldType.STRING)
                         .description("게시물 제목"),
                     fieldWithPath("content").type(JsonFieldType.STRING)
-                        .description("게시물 내용"),
-                    fieldWithPath("attached_file").type(JsonFieldType.STRING)
-                        .description("첨부파일").optional(),
-                    fieldWithPath("place").type(JsonFieldType.STRING)
-                        .description("장소").optional()
+                        .description("게시물 내용")
                 ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER)
@@ -100,7 +131,11 @@ public class PostControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.title").type(JsonFieldType.STRING)
                         .description("게시물 제목"),
                     fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY)
-                        .description("게시물 등록 일시")
+                        .description("게시물 등록 일시"),
+                    fieldWithPath("data.files[].uploadFileName").type(JsonFieldType.STRING)
+                        .description("기존 첨부파일 이름"),
+                    fieldWithPath("data.files[].storeFileName").type(JsonFieldType.STRING)
+                        .description("저장된 첨부파일 이름")
                 )
             ));
     }
