@@ -6,7 +6,6 @@ import com.travelsketch.travel.api.controller.board.request.UpdatePostRequest;
 import com.travelsketch.travel.api.controller.board.response.CreatePostResponse;
 import com.travelsketch.travel.api.controller.board.response.ModifyPostResponse;
 import com.travelsketch.travel.api.controller.board.response.RemovePostResponse;
-import com.travelsketch.travel.api.controller.board.response.SearchPostResponse;
 import com.travelsketch.travel.api.service.board.PostService;
 import com.travelsketch.travel.security.SecurityUtils;
 import jakarta.validation.Valid;
@@ -30,6 +29,7 @@ public class PostController {
      * 게시물 등록 API
      *
      * @param request 등록할 게시물 정보
+     * @param files   게시물 업로드 파일
      * @return 등록된 게시물 정보
      */
     @PostMapping

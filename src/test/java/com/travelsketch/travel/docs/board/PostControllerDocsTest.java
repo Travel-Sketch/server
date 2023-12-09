@@ -6,7 +6,6 @@ import com.travelsketch.travel.api.controller.board.request.UpdatePostRequest;
 import com.travelsketch.travel.api.controller.board.response.CreatePostResponse;
 import com.travelsketch.travel.api.service.board.PostService;
 import com.travelsketch.travel.docs.RestDocsSupport;
-import com.travelsketch.travel.domain.board.PostCategory;
 import com.travelsketch.travel.domain.board.UploadFile;
 import com.travelsketch.travel.security.SecurityUtils;
 import org.junit.jupiter.api.DisplayName;
