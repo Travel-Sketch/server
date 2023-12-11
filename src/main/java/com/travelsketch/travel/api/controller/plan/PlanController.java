@@ -30,6 +30,10 @@ public class PlanController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<CreatePlanResponse> createPlan(@Valid @RequestBody CreatePlanRequest request) {
+        if (request.getAttractions().size() > 10) {
+            throw new IllegalArgumentException("등록할 수 있는 관광지 수는 최대 10개입니다.");
+        }
+
         String email = securityUtils.getCurrentEmail();
 
         CreatePlanResponse response = planService.createPlan(email, request.getTitle(), request.getAttractions());
