@@ -44,14 +44,13 @@ public class PlanController {
     @PatchMapping("/{planId}")
     public ApiResponse<ModifyPlanResponse> modifyPlan(
         @PathVariable Long planId,
-        @RequestBody ModifyPlanRequest request
+        @Valid @RequestBody ModifyPlanRequest request
     ) {
-        ModifyPlanResponse response = ModifyPlanResponse.builder()
-            .planId(1L)
-            .title("수정된 여행 계획 제목")
-            .attractionCount(3)
-            .modifiedDate(LocalDateTime.of(2023, 12, 8, 14, 52))
-            .build();
+        if (request.getAttractions().size() > 10) {
+            throw new IllegalArgumentException("등록할 수 있는 관광지 수는 최대 10개입니다.");
+        }
+
+        ModifyPlanResponse response = planService.modifyPlan(planId, request.getTitle(), request.getAttractions());
 
         return ok(response);
     }
