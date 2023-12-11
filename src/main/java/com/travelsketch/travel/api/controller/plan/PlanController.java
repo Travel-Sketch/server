@@ -6,6 +6,9 @@ import com.travelsketch.travel.api.controller.plan.request.ModifyPlanRequest;
 import com.travelsketch.travel.api.controller.plan.response.CreatePlanResponse;
 import com.travelsketch.travel.api.controller.plan.response.ModifyPlanResponse;
 import com.travelsketch.travel.api.controller.plan.response.RemovePlanResponse;
+import com.travelsketch.travel.api.service.plan.PlanService;
+import com.travelsketch.travel.security.SecurityUtils;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,15 +24,15 @@ import static com.travelsketch.travel.api.ApiResponse.*;
 @RequestMapping("/api/v1/plans")
 public class PlanController {
 
+    private final PlanService planService;
+    private final SecurityUtils securityUtils;
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<CreatePlanResponse> createPlan(@RequestBody CreatePlanRequest request) {
-        CreatePlanResponse response = CreatePlanResponse.builder()
-            .planId(1L)
-            .title("나의 여행 계획 제목")
-            .attractionCount(3)
-            .createdDate(LocalDateTime.of(2023, 12, 8, 14, 52))
-            .build();
+    public ApiResponse<CreatePlanResponse> createPlan(@Valid @RequestBody CreatePlanRequest request) {
+        String email = securityUtils.getCurrentEmail();
+
+        CreatePlanResponse response = planService.createPlan(email, request.getTitle(), request.getAttractions());
 
         return created(response);
     }
