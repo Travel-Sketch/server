@@ -4,6 +4,7 @@ import com.travelsketch.travel.api.controller.plan.PlanController;
 import com.travelsketch.travel.api.controller.plan.request.CreatePlanRequest;
 import com.travelsketch.travel.api.controller.plan.request.ModifyPlanRequest;
 import com.travelsketch.travel.api.controller.plan.response.CreatePlanResponse;
+import com.travelsketch.travel.api.controller.plan.response.ModifyPlanResponse;
 import com.travelsketch.travel.api.service.plan.PlanService;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import com.travelsketch.travel.security.SecurityUtils;
@@ -17,8 +18,7 @@ import java.util.List;
 
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentRequest;
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -112,6 +112,16 @@ public class PlanControllerDocsTest extends RestDocsSupport {
             .title("수정된 여행 계획 제목")
             .attractions(List.of(111111, 111112, 111113))
             .build();
+
+        ModifyPlanResponse response = ModifyPlanResponse.builder()
+            .planId(1L)
+            .title("수정된 여행 계획 제목")
+            .attractionCount(3)
+            .modifiedDate(LocalDateTime.of(2023, 12, 8, 14, 52))
+            .build();
+
+        given(planService.modifyPlan(anyLong(), anyString(), anyList()))
+            .willReturn(response);
 
         mockMvc.perform(
                 patch(BASE_URL + "/{planId}", 1)
