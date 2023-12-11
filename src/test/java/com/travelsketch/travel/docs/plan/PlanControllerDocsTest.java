@@ -3,16 +3,24 @@ package com.travelsketch.travel.docs.plan;
 import com.travelsketch.travel.api.controller.plan.PlanController;
 import com.travelsketch.travel.api.controller.plan.request.CreatePlanRequest;
 import com.travelsketch.travel.api.controller.plan.request.ModifyPlanRequest;
+import com.travelsketch.travel.api.controller.plan.response.CreatePlanResponse;
+import com.travelsketch.travel.api.service.plan.PlanService;
 import com.travelsketch.travel.docs.RestDocsSupport;
+import com.travelsketch.travel.security.SecurityUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentRequest;
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -25,20 +33,35 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class PlanControllerDocsTest extends RestDocsSupport {
 
+    private final PlanService planService = mock(PlanService.class);
+    private final SecurityUtils securityUtils = mock(SecurityUtils.class);
     private static final String BASE_URL = "/api/v1/plans";
 
     @Override
     protected Object initController() {
-        return new PlanController();
+        return new PlanController(planService, securityUtils);
     }
 
     @DisplayName("여행 계획 등록 API")
     @Test
     void createPlan() throws Exception {
+        given(securityUtils.getCurrentEmail())
+            .willReturn("karina@naver.com");
+
         CreatePlanRequest request = CreatePlanRequest.builder()
             .title("나의 여행 계획 제목")
             .attractions(List.of(111111, 111112, 111113))
             .build();
+
+        CreatePlanResponse response = CreatePlanResponse.builder()
+            .planId(1L)
+            .title("나의 여행 계획 제목")
+            .attractionCount(3)
+            .createdDate(LocalDateTime.of(2023, 12, 8, 14, 52))
+            .build();
+
+        given(planService.createPlan(anyString(), anyString(), anyList()))
+            .willReturn(response);
 
         mockMvc.perform(
                 post(BASE_URL)
