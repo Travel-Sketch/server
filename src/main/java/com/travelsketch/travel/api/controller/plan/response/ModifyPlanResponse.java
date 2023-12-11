@@ -1,4 +1,4 @@
-package com.travelsketch.travel.api.controller.trip.response;
+package com.travelsketch.travel.api.controller.plan.response;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,16 +6,16 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class ModifyTripResponse {
+public class ModifyPlanResponse {
 
-    private final Long tripId;
+    private final Long planId;
     private final String title;
     private final int attractionCount;
     private final LocalDateTime modifiedDate;
 
     @Builder
-    private ModifyTripResponse(Long tripId, String title, int attractionCount, LocalDateTime modifiedDate) {
-        this.tripId = tripId;
+    private ModifyPlanResponse(Long planId, String title, int attractionCount, LocalDateTime modifiedDate) {
+        this.planId = planId;
         this.title = title;
         this.attractionCount = attractionCount;
         this.modifiedDate = modifiedDate;
