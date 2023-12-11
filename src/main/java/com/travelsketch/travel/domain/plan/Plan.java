@@ -60,4 +60,16 @@ public class Plan extends TimeBaseEntity {
             .build();
         attractionPlans.add(attractionPlan);
     }
+
+    //== 비즈니스 로직 ==//
+    public Plan modifyPlan(String title, List<Attraction> attractions) {
+        this.title = title;
+        this.attractionPlans = new ArrayList<>();
+
+        for (Attraction attraction : attractions) {
+            this.addAttractionPlan(attraction);
+        }
+
+        return this;
+    }
 }

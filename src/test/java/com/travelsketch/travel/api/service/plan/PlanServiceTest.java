@@ -103,11 +103,12 @@ class PlanServiceTest extends IntegrationTestSupport {
 
         Plan plan = savePlan(member, List.of(attraction));
 
-        List<Integer> attractionIds = List.of(1);
+        List<Integer> attractionIds = List.of(100);
         //when //then
         assertThatThrownBy(() -> planService.modifyPlan(plan.getId(), "수정된 나의 여행 계획 제목입니다.", attractionIds))
             .isInstanceOf(NoSuchElementException.class)
-            .hasMessage("등록되지 않은 계획입니다.");
+            .hasMessage("존재하지 않는 관광지 정보입니다.");
+
     }
 
     @DisplayName("제목과 관광지 아이디 리스트를 입력 받아 여행 계획을 수정할 수 있다.")
