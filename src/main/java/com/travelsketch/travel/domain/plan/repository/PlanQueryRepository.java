@@ -2,6 +2,7 @@ package com.travelsketch.travel.domain.plan.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.travelsketch.travel.api.controller.plan.response.PlanDetailResponse;
 import com.travelsketch.travel.api.controller.plan.response.PlanResponse;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Pageable;
@@ -67,5 +68,9 @@ public class PlanQueryRepository {
             )
             .fetch()
             .size();
+    }
+
+    public PlanDetailResponse findById(Long planId) {
+        return null;
     }
 }
