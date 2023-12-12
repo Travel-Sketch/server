@@ -2,6 +2,7 @@ package com.travelsketch.travel.api.service.plan;
 
 import com.travelsketch.travel.IntegrationTestSupport;
 import com.travelsketch.travel.api.PageResponse;
+import com.travelsketch.travel.api.controller.plan.response.PlanDetailResponse;
 import com.travelsketch.travel.api.controller.plan.response.PlanResponse;
 import com.travelsketch.travel.domain.attraction.Attraction;
 import com.travelsketch.travel.domain.attraction.Gugun;
@@ -67,6 +68,24 @@ class PlanQueryServiceTest extends IntegrationTestSupport {
         assertThat(response.getContent()).hasSize(2);
     }
 
+    @DisplayName("아이디를 입력 받아 여행 계획을 상세 조회할 수 있다.")
+    @Test
+    void searchPlan() {
+        //given
+        Member member = savedMember();
+        Sido sido = saveSido();
+        Gugun gugun = saveGugun(sido);
+        Attraction attraction1 = saveAttraction(sido, gugun, "롯데월드");
+        Attraction attraction2 = saveAttraction(sido, gugun, "롯데타워");
+        Attraction attraction3 = saveAttraction(sido, gugun, "석촌호수");
+        Plan plan = savePlan("잠실 여행 계획입니다.", member, List.of(attraction1, attraction2, attraction3));
+
+        //when
+        PlanDetailResponse response = planQueryService.searchPlan(plan.getId());
+
+        //then
+        assertThat(response.getTitle()).isEqualTo("잠실 여행 계획입니다.");
+    }
 
     private Member savedMember() {
         Member member = Member.builder()

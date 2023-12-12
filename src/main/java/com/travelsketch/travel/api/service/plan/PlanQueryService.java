@@ -1,6 +1,7 @@
 package com.travelsketch.travel.api.service.plan;
 
 import com.travelsketch.travel.api.PageResponse;
+import com.travelsketch.travel.api.controller.plan.response.PlanDetailResponse;
 import com.travelsketch.travel.api.controller.plan.response.PlanResponse;
 import com.travelsketch.travel.domain.plan.repository.PlanQueryRepository;
 import jakarta.transaction.Transactional;
@@ -26,5 +27,9 @@ public class PlanQueryService {
         PageImpl<PlanResponse> result = new PageImpl<>(content, pageable, count);
 
         return new PageResponse<>(result);
+    }
+
+    public PlanDetailResponse searchPlan(Long planId) {
+        return null;
     }
 }
