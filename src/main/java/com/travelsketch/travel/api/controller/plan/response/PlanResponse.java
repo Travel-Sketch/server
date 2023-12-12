@@ -14,7 +14,7 @@ public class PlanResponse {
     private final LocalDateTime createdDate;
 
     @Builder
-    private PlanResponse(Long planId, String title, String writer, LocalDateTime createdDate) {
+    public PlanResponse(Long planId, String title, String writer, LocalDateTime createdDate) {
         this.planId = planId;
         this.title = title;
         this.writer = writer;
