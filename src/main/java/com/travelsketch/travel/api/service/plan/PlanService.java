@@ -2,6 +2,7 @@ package com.travelsketch.travel.api.service.plan;
 
 import com.travelsketch.travel.api.controller.plan.response.CreatePlanResponse;
 import com.travelsketch.travel.api.controller.plan.response.ModifyPlanResponse;
+import com.travelsketch.travel.api.controller.plan.response.RemovePlanResponse;
 import com.travelsketch.travel.domain.attraction.Attraction;
 import com.travelsketch.travel.domain.attraction.repository.AttractionRepository;
 import com.travelsketch.travel.domain.member.Member;
@@ -57,6 +58,18 @@ public class PlanService {
         Plan modifiedPlan = plan.modifyPlan(title, attractions);
 
         return ModifyPlanResponse.of(modifiedPlan);
+    }
+
+    public RemovePlanResponse removePlan(Long planId) {
+        Optional<Plan> findPlan = planRepository.findById(planId);
+        if (findPlan.isEmpty()) {
+            throw new NoSuchElementException("등록되지 않은 계획입니다.");
+        }
+        Plan plan = findPlan.get();
+
+        plan.remove();
+
+        return RemovePlanResponse.of(plan);
     }
 
     private Member getMember(String email) {

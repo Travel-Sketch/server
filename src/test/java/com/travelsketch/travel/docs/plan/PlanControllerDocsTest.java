@@ -5,6 +5,7 @@ import com.travelsketch.travel.api.controller.plan.request.CreatePlanRequest;
 import com.travelsketch.travel.api.controller.plan.request.ModifyPlanRequest;
 import com.travelsketch.travel.api.controller.plan.response.CreatePlanResponse;
 import com.travelsketch.travel.api.controller.plan.response.ModifyPlanResponse;
+import com.travelsketch.travel.api.controller.plan.response.RemovePlanResponse;
 import com.travelsketch.travel.api.service.plan.PlanService;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import com.travelsketch.travel.security.SecurityUtils;
@@ -172,6 +173,15 @@ public class PlanControllerDocsTest extends RestDocsSupport {
     @DisplayName("여행 계획 삭제 API")
     @Test
     void removePlan() throws Exception {
+        RemovePlanResponse response = RemovePlanResponse.builder()
+            .planId(1L)
+            .title("삭제된 여행 계획 제목")
+            .removedDate(LocalDateTime.of(2023, 12, 8, 14, 52))
+            .build();
+
+        given(planService.removePlan(anyLong()))
+            .willReturn(response);
+
         mockMvc.perform(
                 delete(BASE_URL + "/{planId}", 1)
                     .header("Authorization", "Bearer Access Token")
