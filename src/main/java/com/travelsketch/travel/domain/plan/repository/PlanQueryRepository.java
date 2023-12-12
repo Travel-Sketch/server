@@ -58,6 +58,14 @@ public class PlanQueryRepository {
     }
 
     public int findCountByCond(String query) {
-        return 0;
+        return queryFactory
+            .select(plan.id)
+            .from(plan)
+            .where(
+                plan.isDeleted.isFalse(),
+                plan.title.like("%" + query + "%")
+            )
+            .fetch()
+            .size();
     }
 }
