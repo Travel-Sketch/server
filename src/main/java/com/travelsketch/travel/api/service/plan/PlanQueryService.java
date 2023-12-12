@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -30,6 +32,10 @@ public class PlanQueryService {
     }
 
     public PlanDetailResponse searchPlan(Long planId) {
-        return null;
+        Optional<PlanDetailResponse> findContent = planQueryRepository.findById(planId);
+        if (findContent.isEmpty()) {
+            throw new NoSuchElementException("등록되지 않은 여행 계획입니다.");
+        }
+        return findContent.get();
     }
 }
