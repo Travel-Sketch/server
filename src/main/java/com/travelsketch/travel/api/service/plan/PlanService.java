@@ -61,7 +61,15 @@ public class PlanService {
     }
 
     public RemovePlanResponse removePlan(Long planId) {
-        return null;
+        Optional<Plan> findPlan = planRepository.findById(planId);
+        if (findPlan.isEmpty()) {
+            throw new NoSuchElementException("등록되지 않은 계획입니다.");
+        }
+        Plan plan = findPlan.get();
+
+        plan.remove();
+
+        return RemovePlanResponse.of(plan);
     }
 
     private Member getMember(String email) {
