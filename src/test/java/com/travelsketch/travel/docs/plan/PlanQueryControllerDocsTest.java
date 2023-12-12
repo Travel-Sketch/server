@@ -1,12 +1,24 @@
 package com.travelsketch.travel.docs.plan;
 
+import com.travelsketch.travel.api.PageResponse;
 import com.travelsketch.travel.api.controller.plan.PlanQueryController;
+import com.travelsketch.travel.api.controller.plan.response.PlanResponse;
+import com.travelsketch.travel.api.service.plan.PlanQueryService;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -19,16 +31,33 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class PlanQueryControllerDocsTest extends RestDocsSupport {
 
+    private final PlanQueryService planQueryService = mock(PlanQueryService.class);
     private static final String BASE_URL = "/api/v1/plans";
 
     @Override
     protected Object initController() {
-        return new PlanQueryController();
+        return new PlanQueryController(planQueryService);
     }
 
     @DisplayName("여행 계획 목록 조회 API")
     @Test
     void searchPlans() throws Exception {
+        PageRequest pageRequest = PageRequest.of(1, 10);
+
+        PlanResponse response = PlanResponse.builder()
+            .planId(1L)
+            .title("나의 여행 계획 제목")
+            .writer("카리나")
+            .createdDate(LocalDateTime.of(2023, 12, 8, 14, 52))
+            .build();
+
+        PageImpl<PlanResponse> content = new PageImpl<>(List.of(response), pageRequest, 1);
+
+        PageResponse<PlanResponse> result = new PageResponse<>(content);
+
+        given(planQueryService.searchByCond(anyString(), any()))
+            .willReturn(result);
+
         mockMvc.perform(
                 get(BASE_URL)
                     .header("Authorization", "Bearer Access Token")
