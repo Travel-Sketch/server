@@ -11,6 +11,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.travelsketch.travel.domain.member.QMember.member;
 import static com.travelsketch.travel.domain.plan.QPlan.plan;
@@ -70,7 +71,22 @@ public class PlanQueryRepository {
             .size();
     }
 
-    public PlanDetailResponse findById(Long planId) {
-        return null;
+    public Optional<PlanDetailResponse> findById(Long planId) {
+        PlanDetailResponse content = queryFactory
+            .select(
+                Projections.constructor(
+                    PlanDetailResponse.class,
+                    plan.id,
+                    plan.title,
+                    plan.member.nickname,
+                    plan.createdDate
+                )
+            )
+            .from(plan)
+            .join(plan.member, member)
+            .where(plan.id.eq(planId))
+            .fetchFirst();
+
+        return Optional.ofNullable(content);
     }
 }

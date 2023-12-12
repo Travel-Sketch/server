@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.travelsketch.travel.domain.attraction.AttractionType.ATTRACTION;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -104,10 +105,11 @@ class PlanQueryRepositoryTest extends IntegrationTestSupport {
         Plan plan = savePlan("잠실 여행 계획입니다.", member, List.of(attraction1, attraction2, attraction3));
 
         //when
-        PlanDetailResponse response = planQueryRepository.findById(plan.getId());
+        Optional<PlanDetailResponse> findResponse = planQueryRepository.findById(plan.getId());
 
         //then
-        assertThat(response.getTitle()).isEqualTo("잠실 여행 계획입니다.");
+        assertThat(findResponse).isPresent();
+        assertThat(findResponse.get().getTitle()).isEqualTo("잠실 여행 계획입니다.");
     }
 
     private Member savedMember() {
