@@ -2,6 +2,7 @@ package com.travelsketch.travel.api.service.plan;
 
 import com.travelsketch.travel.api.controller.plan.response.CreatePlanResponse;
 import com.travelsketch.travel.api.controller.plan.response.ModifyPlanResponse;
+import com.travelsketch.travel.api.controller.plan.response.RemovePlanResponse;
 import com.travelsketch.travel.domain.attraction.Attraction;
 import com.travelsketch.travel.domain.attraction.repository.AttractionRepository;
 import com.travelsketch.travel.domain.member.Member;
@@ -57,6 +58,10 @@ public class PlanService {
         Plan modifiedPlan = plan.modifyPlan(title, attractions);
 
         return ModifyPlanResponse.of(modifiedPlan);
+    }
+
+    public RemovePlanResponse removePlan(Long planId) {
+        return null;
     }
 
     private Member getMember(String email) {

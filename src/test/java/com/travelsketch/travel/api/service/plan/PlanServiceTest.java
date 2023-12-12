@@ -3,6 +3,7 @@ package com.travelsketch.travel.api.service.plan;
 import com.travelsketch.travel.IntegrationTestSupport;
 import com.travelsketch.travel.api.controller.plan.response.CreatePlanResponse;
 import com.travelsketch.travel.api.controller.plan.response.ModifyPlanResponse;
+import com.travelsketch.travel.api.controller.plan.response.RemovePlanResponse;
 import com.travelsketch.travel.domain.attraction.Attraction;
 import com.travelsketch.travel.domain.attraction.Gugun;
 import com.travelsketch.travel.domain.attraction.Sido;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static com.travelsketch.travel.domain.attraction.AttractionType.ATTRACTION;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -131,6 +133,35 @@ class PlanServiceTest extends IntegrationTestSupport {
 
         //then
         assertThat(response.getAttractionCount()).isEqualTo(2);
+    }
+
+    @DisplayName("입력 받은 계획 아이디와 일치하는 계획이 존재하지 않으면 예외가 발생한다.")
+    @Test
+    void removePlanNoSuchPlan() {
+        //given //when //then
+        assertThatThrownBy(() -> planService.removePlan(1L))
+            .isInstanceOf(NoSuchElementException.class)
+            .hasMessage("등록되지 않은 계획입니다.");
+    }
+
+    @DisplayName("여행 계획 아이디를 입력 받아 계획을 삭제할 수 있다.")
+    @Test
+    void removePlan() {
+        //given
+        Member member = savedMember();
+        Sido seoul = saveSido();
+        Gugun songpa = saveGugun(seoul);
+        Attraction attraction1 = saveAttraction(seoul, songpa, "관광지 1");
+
+        Plan plan = savePlan(member, List.of(attraction1));
+
+        //when
+        RemovePlanResponse response = planService.removePlan(plan.getId());
+
+        //then
+        Optional<Plan> findPlan = planRepository.findById(response.getPlanId());
+        assertThat(findPlan).isPresent();
+        assertThat(findPlan.get().getIsDeleted()).isTrue();
     }
 
     private Member savedMember() {
