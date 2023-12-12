@@ -14,9 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
-import static com.travelsketch.travel.api.ApiResponse.*;
+import static com.travelsketch.travel.api.ApiResponse.created;
+import static com.travelsketch.travel.api.ApiResponse.ok;
 
 @RequiredArgsConstructor
 @RestController
@@ -57,11 +56,7 @@ public class PlanController {
 
     @DeleteMapping("/{planId}")
     public ApiResponse<RemovePlanResponse> removePlan(@PathVariable Long planId) {
-        RemovePlanResponse response = RemovePlanResponse.builder()
-            .planId(1L)
-            .title("삭제된 여행 계획 제목")
-            .removedDate(LocalDateTime.of(2023, 12, 8, 14, 52))
-            .build();
+        RemovePlanResponse response = planService.removePlan(planId);
 
         return ok(response);
     }
