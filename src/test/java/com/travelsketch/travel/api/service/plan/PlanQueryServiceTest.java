@@ -1,6 +1,7 @@
-package com.travelsketch.travel.domain.plan.repository;
+package com.travelsketch.travel.api.service.plan;
 
 import com.travelsketch.travel.IntegrationTestSupport;
+import com.travelsketch.travel.api.PageResponse;
 import com.travelsketch.travel.api.controller.plan.response.PlanResponse;
 import com.travelsketch.travel.domain.attraction.Attraction;
 import com.travelsketch.travel.domain.attraction.Gugun;
@@ -12,6 +13,7 @@ import com.travelsketch.travel.domain.member.Member;
 import com.travelsketch.travel.domain.member.Role;
 import com.travelsketch.travel.domain.member.repository.MemberRepository;
 import com.travelsketch.travel.domain.plan.Plan;
+import com.travelsketch.travel.domain.plan.repository.PlanRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +24,10 @@ import java.util.List;
 import static com.travelsketch.travel.domain.attraction.AttractionType.ATTRACTION;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PlanQueryRepositoryTest extends IntegrationTestSupport {
+class PlanQueryServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    private PlanQueryRepository planQueryRepository;
+    private PlanQueryService planQueryService;
 
     @Autowired
     private PlanRepository planRepository;
@@ -42,9 +44,9 @@ class PlanQueryRepositoryTest extends IntegrationTestSupport {
     @Autowired
     private GugunRepository gugunRepository;
 
-    @DisplayName("검색 조건에 맞는 여행 계획을 조회한다.")
+    @DisplayName("검색 조건을 입력 받아 여행 계획 목록을 조회할 수 있다.")
     @Test
-    void findByCond() {
+    void searchByCond() {
         //given
         Member member = savedMember();
         Sido sido = saveSido();
@@ -59,36 +61,12 @@ class PlanQueryRepositoryTest extends IntegrationTestSupport {
         PageRequest pageRequest = PageRequest.of(0, 10);
 
         //when
-        List<PlanResponse> responses = planQueryRepository.findByCond("롯데", pageRequest);
+        PageResponse<PlanResponse> response = planQueryService.searchByCond("롯데", pageRequest);
 
         //then
-        assertThat(responses).hasSize(2)
-            .extracting("title")
-            .containsExactlyInAnyOrder(
-                "잠실 롯데월드 여행 계획입니다.", "부산 롯데월드 여행 계획입니다."
-            );
+        assertThat(response.getContent()).hasSize(2);
     }
 
-    @DisplayName("검색 조건에 맞는 여행 계획을 갯수를 조회한다.")
-    @Test
-    void findCountByCond() {
-        //given
-        Member member = savedMember();
-        Sido sido = saveSido();
-        Gugun gugun = saveGugun(sido);
-        Attraction attraction = saveAttraction(sido, gugun, "롯데월드");
-        Plan plan1 = savePlan("잠실 롯데월드 여행 계획입니다.", member, List.of(attraction));
-        Plan plan2 = savePlan("부산 롯데월드 여행 계획입니다.", member, List.of(attraction));
-        Plan plan3 = savePlan("용산 에버랜드 여행 계획입니다.", member, List.of(attraction));
-        Plan plan4 = savePlan("롯데월드 여행 계획입니다.", member, List.of(attraction));
-        plan4.remove();
-
-        //when
-        int count = planQueryRepository.findCountByCond("롯데");
-
-        //then
-        assertThat(count).isEqualTo(2);
-    }
 
     private Member savedMember() {
         Member member = Member.builder()
