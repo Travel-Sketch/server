@@ -56,4 +56,8 @@ public class PlanQueryRepository {
             .orderBy(plan.createdDate.desc())
             .fetch();
     }
+
+    public int findCountByCond(String query) {
+        return 0;
+    }
 }

@@ -69,6 +69,29 @@ class PlanQueryRepositoryTest extends IntegrationTestSupport {
             );
     }
 
+    @DisplayName("검색 조건에 맞는 여행 계획을 갯수를 조회한다.")
+    @Test
+    void findCountByCond() {
+        //given
+        Member member = savedMember();
+        Sido sido = saveSido();
+        Gugun gugun = saveGugun(sido);
+        Attraction attraction = saveAttraction(sido, gugun, "롯데월드");
+        Plan plan1 = savePlan("잠실 롯데월드 여행 계획입니다.", member, List.of(attraction));
+        Plan plan2 = savePlan("부산 롯데월드 여행 계획입니다.", member, List.of(attraction));
+        Plan plan3 = savePlan("용산 에버랜드 여행 계획입니다.", member, List.of(attraction));
+        Plan plan4 = savePlan("롯데월드 여행 계획입니다.", member, List.of(attraction));
+        plan4.remove();
+
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        //when
+        int count = planQueryRepository.findCountByCond("롯데");
+
+        //then
+        assertThat(count).isEqualTo(2);
+    }
+
     private Member savedMember() {
         Member member = Member.builder()
             .email("karina@naver.com")
