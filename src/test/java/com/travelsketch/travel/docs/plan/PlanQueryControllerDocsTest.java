@@ -2,6 +2,7 @@ package com.travelsketch.travel.docs.plan;
 
 import com.travelsketch.travel.api.PageResponse;
 import com.travelsketch.travel.api.controller.plan.PlanQueryController;
+import com.travelsketch.travel.api.controller.plan.response.PlanDetailResponse;
 import com.travelsketch.travel.api.controller.plan.response.PlanResponse;
 import com.travelsketch.travel.api.service.plan.PlanQueryService;
 import com.travelsketch.travel.docs.RestDocsSupport;
@@ -15,8 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -113,6 +113,16 @@ public class PlanQueryControllerDocsTest extends RestDocsSupport {
     @DisplayName("여행 계획 상세 조회 API")
     @Test
     void searchPlan() throws Exception {
+        PlanDetailResponse response = PlanDetailResponse.builder()
+            .planId(1L)
+            .title("나의 여행 계획 제목")
+            .writer("카리나")
+            .createdDate(LocalDateTime.of(2023, 12, 8, 14, 52))
+            .build();
+
+        given(planQueryService.searchPlan(anyLong()))
+            .willReturn(response);
+
         mockMvc.perform(
                 get(BASE_URL + "/{planId}", 1)
                     .header("Authorization", "Bearer Access Token")

@@ -10,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
 import static com.travelsketch.travel.api.ApiResponse.ok;
 
 @RequiredArgsConstructor
@@ -40,12 +38,8 @@ public class PlanQueryController {
 
     @GetMapping("/{planId}")
     public ApiResponse<PlanDetailResponse> searchPlan(@PathVariable Long planId) {
-        PlanDetailResponse response = PlanDetailResponse.builder()
-            .planId(1L)
-            .title("나의 여행 계획 제목")
-            .writer("카리나")
-            .createdDate(LocalDateTime.of(2023, 12, 8, 14, 52))
-            .build();
+
+        PlanDetailResponse response = planQueryService.searchPlan(planId);
 
         return ok(response);
     }
