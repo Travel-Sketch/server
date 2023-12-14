@@ -1,48 +1,97 @@
 package com.travelsketch.travel.docs.board;
 
 import com.travelsketch.travel.api.controller.board.PostController;
-import com.travelsketch.travel.api.controller.board.request.CreatePostRequest;
 import com.travelsketch.travel.api.controller.board.request.UpdatePostRequest;
+import com.travelsketch.travel.api.controller.board.response.CreatePostResponse;
+import com.travelsketch.travel.api.service.board.FileStore;
+import com.travelsketch.travel.api.service.board.PostService;
 import com.travelsketch.travel.docs.RestDocsSupport;
+import com.travelsketch.travel.security.SecurityUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.mock.web.MockPart;
 import org.springframework.restdocs.payload.JsonFieldType;
+
+import java.time.LocalDateTime;
 
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentRequest;
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class PostControllerDocsTest extends RestDocsSupport {
 
+    private final PostService postService = mock(PostService.class);
+    private final SecurityUtils securityUtils = mock(SecurityUtils.class);
+    private final FileStore fileStore = mock(FileStore.class);
     private static final String BASE_URL = "/api/v1/posts";
 
     @Override
     protected Object initController() {
-        return new PostController();
+        return new PostController(securityUtils, postService, fileStore);
     }
 
     @DisplayName("게시물 등록 API")
     @Test
     void createPost() throws Exception {
-        CreatePostRequest request = CreatePostRequest.builder()
-            .title("게시물 제목 1")
-            .content("게시물 내용 1")
+        given(securityUtils.getCurrentEmail())
+            .willReturn("cherry@naver.com");
+
+//        CreatePostRequest request = CreatePostRequest.builder()
+//            .title("게시물 제목 1")
+//            .content("게시물 내용 1")
+//            .build();
+
+        MockMultipartFile image1 = new MockMultipartFile(
+            "files", //name
+            "image1.png", //originalFilename
+            "image/png",
+            "<<png data>>".getBytes()
+        );
+        MockMultipartFile image2 = new MockMultipartFile(
+            "files", //name
+            "image2.png", //originalFilename
+            "image/png",
+            "<<png data>>".getBytes()
+        );
+
+
+        CreatePostResponse response = CreatePostResponse.builder()
+            .postId(1L)
+            .title("게시물 제목")
+            .createdDate(LocalDateTime.of(2023, 12, 7, 10, 30))
+            .uploadFileCount(2)
             .build();
 
+        given(postService.createPost(anyString(), anyString(), anyString(), anyList()))
+            .willReturn(response);
+
         mockMvc.perform(
-                post(BASE_URL)
+                multipart(BASE_URL)
+//                    .file(new MockMultipartFile(
+//                        "request",
+//                        "",
+//                        MediaType.APPLICATION_JSON_VALUE,
+//                        objectMapper.writeValueAsString(request).getBytes()
+//                    ))
+                    .file(image1)
+                    .file(image2)
+                    .part(new MockPart("title", "게시물 제목".getBytes()))
+                    .part(new MockPart("content", "게시물 내용".getBytes()))
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
                     .header("Authorization", "Bearer Access Token")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(request))
             )
             .andDo(print())
             .andExpect(status().isCreated())
@@ -53,12 +102,18 @@ public class PostControllerDocsTest extends RestDocsSupport {
                     headerWithName("Authorization")
                         .description("Bearer Access Token")
                 ),
-                requestFields(
-                    fieldWithPath("title").type(JsonFieldType.STRING)
-                        .description("게시물 제목"),
-                    fieldWithPath("content").type(JsonFieldType.STRING)
-                        .description("게시물 내용")
+                requestParts(
+                    partWithName("files").description("첨부파일"),
+//                    partWithName("request").description("게시물 정보")
+                    partWithName("title").description("게시물 제목"),
+                    partWithName("content").description("게시물 내용")
                 ),
+//                requestPartFields("request",
+//                    fieldWithPath("title").type(JsonFieldType.STRING)
+//                        .description("게시물 제목"),
+//                    fieldWithPath("content").type(JsonFieldType.STRING)
+//                        .description("게시물 내용")
+//                ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER)
                         .description("코드"),
@@ -73,7 +128,9 @@ public class PostControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.title").type(JsonFieldType.STRING)
                         .description("게시물 제목"),
                     fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY)
-                        .description("게시물 등록 일시")
+                        .description("게시물 등록 일시"),
+                    fieldWithPath("data.uploadFileCount").type(JsonFieldType.NUMBER)
+                        .description("업로드된 첨부파일 수")
                 )
             ));
     }

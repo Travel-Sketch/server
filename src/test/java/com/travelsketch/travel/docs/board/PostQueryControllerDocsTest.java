@@ -30,7 +30,7 @@ public class PostQueryControllerDocsTest extends RestDocsSupport {
     @Test
     void searchPosts() throws Exception {
 
-        mockMvc.perform(get(BASE_URL+"?page=1&query=검색어")
+        mockMvc.perform(get(BASE_URL + "?page=1&query=검색어")
                 .contentType(MediaType.APPLICATION_JSON)
             )
             .andDo(print())

@@ -33,7 +33,7 @@ public class ScrapQueryControllerDocsTest extends RestDocsSupport {
     @Test
     void searchScraps() throws Exception {
 
-        mockMvc.perform(get(BASE_URL+"?page=1&query=검색어", 1)
+        mockMvc.perform(get(BASE_URL + "?page=1&query=검색어", 1)
                 .header("Authorization", "Bearer Access Token")
                 .contentType(MediaType.APPLICATION_JSON)
             )

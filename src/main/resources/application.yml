@@ -11,6 +11,10 @@ spring:
     properties:
       hibernate:
         default_batch_fetch_size: 100
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 1GB
 
 logging:
   level:
@@ -19,3 +23,15 @@ logging:
 
 jwt:
   secret: ${jwt.secret}
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${s3.accessKey}
+      secret-key: ${s3.secretKey}
+    s3:
+      bucket: travel-sketch-img-storage
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
