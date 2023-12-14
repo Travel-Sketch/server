@@ -4,8 +4,8 @@ import com.travelsketch.travel.ControllerTestSupport;
 import com.travelsketch.travel.api.controller.board.request.CreatePostRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.mock.web.MockPart;
 
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -25,18 +25,20 @@ class PostControllerTest extends ControllerTestSupport {
             .title("게시물 제목")
             .content("게시물 내용")
             .build();
-
-        MockMultipartFile multipartRequest = new MockMultipartFile(
-            "request",
-            "",
-            MediaType.APPLICATION_JSON_VALUE,
-            objectMapper.writeValueAsString(request).getBytes()
-        );
+//
+//        MockMultipartFile multipartRequest = new MockMultipartFile(
+//            "request",
+//            "",
+//            MediaType.APPLICATION_JSON_VALUE,
+//            objectMapper.writeValueAsString(request).getBytes()
+//        );
 
         //when //then
         mockMvc.perform(
                 multipart(BASE_URL)
-                    .file(multipartRequest)
+//                    .file(multipartRequest)
+                    .part(new MockPart("title", request.getTitle().getBytes()))
+                    .part(new MockPart("content", request.getContent().getBytes()))
                     .with(csrf())
             )
             .andDo(print())
@@ -53,12 +55,13 @@ class PostControllerTest extends ControllerTestSupport {
             .content("게시물 내용")
             .build();
 
-        MockMultipartFile multipartRequest = new MockMultipartFile(
-            "request",
-            "",
-            MediaType.APPLICATION_JSON_VALUE,
-            objectMapper.writeValueAsString(request).getBytes()
-        );
+//        MockMultipartFile multipartRequest = new MockMultipartFile(
+//            "request",
+//            "",
+//            MediaType.APPLICATION_JSON_VALUE,
+//            objectMapper.writeValueAsString(request).getBytes()
+//        );
+
         MockMultipartFile image1 = new MockMultipartFile(
             "files", //name
             "abc1.png", //originalFilename
@@ -75,7 +78,8 @@ class PostControllerTest extends ControllerTestSupport {
         //when //then
         mockMvc.perform(
                 multipart(BASE_URL)
-                    .file(multipartRequest)
+                    .part(new MockPart("title", request.getTitle().getBytes()))
+                    .part(new MockPart("content", request.getContent().getBytes()))
                     .file(image1)
                     .file(image2)
                     .with(csrf())
@@ -97,12 +101,8 @@ class PostControllerTest extends ControllerTestSupport {
         //when //then
         mockMvc.perform(
                 multipart(BASE_URL)
-                    .file(new MockMultipartFile(
-                        "request",
-                        "",
-                        MediaType.APPLICATION_JSON_VALUE,
-                        objectMapper.writeValueAsString(request).getBytes()
-                    ))
+                    .part(new MockPart("title", request.getTitle().getBytes()))
+                    .part(new MockPart("content", request.getContent().getBytes()))
                     .with(csrf())
             )
             .andDo(print())
@@ -124,12 +124,8 @@ class PostControllerTest extends ControllerTestSupport {
         //when //then
         mockMvc.perform(
                 multipart(BASE_URL)
-                    .file(new MockMultipartFile(
-                        "request",
-                        "",
-                        MediaType.APPLICATION_JSON_VALUE,
-                        objectMapper.writeValueAsString(request).getBytes()
-                    ))
+                    .part(new MockPart("title", request.getTitle().getBytes()))
+                    .part(new MockPart("content", request.getContent().getBytes()))
                     .with(csrf())
             )
             .andDo(print())
@@ -151,12 +147,8 @@ class PostControllerTest extends ControllerTestSupport {
         //when //then
         mockMvc.perform(
                 multipart(BASE_URL)
-                    .file(new MockMultipartFile(
-                        "request",
-                        "",
-                        MediaType.APPLICATION_JSON_VALUE,
-                        objectMapper.writeValueAsString(request).getBytes()
-                    ))
+                    .part(new MockPart("title", request.getTitle().getBytes()))
+                    .part(new MockPart("content", request.getContent().getBytes()))
                     .with(csrf())
             )
             .andDo(print())

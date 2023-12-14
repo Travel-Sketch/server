@@ -11,17 +11,17 @@ import java.util.List;
 @Getter
 public class CreatePostResponse {
 
-    private Long postId;
-    private String title;
-    private LocalDateTime createdDate;
-    private List<UploadFile> files;
+    private final Long postId;
+    private final String title;
+    private final LocalDateTime createdDate;
+    private final int uploadFileCount;
 
     @Builder
-    private CreatePostResponse(Long postId, String title, LocalDateTime createdDate, List<UploadFile> files) {
+    private CreatePostResponse(Long postId, String title, LocalDateTime createdDate, int uploadFileCount) {
         this.postId = postId;
         this.title = title;
         this.createdDate = createdDate;
-        this.files = files;
+        this.uploadFileCount = uploadFileCount;
     }
 
     public static CreatePostResponse of(Post post, List<UploadFile> files) {
@@ -29,7 +29,7 @@ public class CreatePostResponse {
             .postId(post.getId())
             .title(post.getTitle())
             .createdDate(post.getCreatedDate())
-            .files(files)
+            .uploadFileCount(files.size())
             .build();
     }
 

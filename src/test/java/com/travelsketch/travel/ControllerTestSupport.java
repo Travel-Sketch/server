@@ -9,6 +9,7 @@ import com.travelsketch.travel.api.controller.notice.NoticeController;
 import com.travelsketch.travel.api.controller.notice.NoticeQueryController;
 import com.travelsketch.travel.api.controller.qna.QnaController;
 import com.travelsketch.travel.api.controller.qna.QnaQueryController;
+import com.travelsketch.travel.api.service.board.FileStore;
 import com.travelsketch.travel.api.service.board.PostService;
 import com.travelsketch.travel.api.service.member.AccountService;
 import com.travelsketch.travel.api.service.member.MemberQueryService;
@@ -67,4 +68,7 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected PostService postService;
+
+    @MockBean
+    protected FileStore fileStore;
 }

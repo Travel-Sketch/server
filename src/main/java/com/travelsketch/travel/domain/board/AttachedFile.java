@@ -15,17 +15,16 @@ public class AttachedFile {
     @Column(name = "attached_file_id")
     private Long id;
 
+    @Embedded
+    private UploadFile uploadFile;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
-    @Embedded
-    private UploadFile uploadFile;
-
     @Builder
-    private AttachedFile(Long id, Post post, UploadFile uploadFile) {
-        this.id = id;
-        this.post = post;
+    private AttachedFile(UploadFile uploadFile, Post post) {
         this.uploadFile = uploadFile;
+        this.post = post;
     }
 }
