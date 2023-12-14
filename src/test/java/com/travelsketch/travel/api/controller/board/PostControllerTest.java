@@ -17,7 +17,7 @@ class PostControllerTest extends ControllerTestSupport {
 
     private static final String BASE_URL = "/api/v1/posts";
 
-    @DisplayName("게시물을 등록할 수 있다")
+    @DisplayName("제목, 내용을 입력 받아서 게시물을 등록한다.")
     @Test
     void createPost() throws Exception {
         //given
@@ -25,18 +25,10 @@ class PostControllerTest extends ControllerTestSupport {
             .title("게시물 제목")
             .content("게시물 내용")
             .build();
-//
-//        MockMultipartFile multipartRequest = new MockMultipartFile(
-//            "request",
-//            "",
-//            MediaType.APPLICATION_JSON_VALUE,
-//            objectMapper.writeValueAsString(request).getBytes()
-//        );
 
         //when //then
         mockMvc.perform(
                 multipart(BASE_URL)
-//                    .file(multipartRequest)
                     .part(new MockPart("title", request.getTitle().getBytes()))
                     .part(new MockPart("content", request.getContent().getBytes()))
                     .with(csrf())
@@ -54,13 +46,6 @@ class PostControllerTest extends ControllerTestSupport {
             .title("게시물 제목")
             .content("게시물 내용")
             .build();
-
-//        MockMultipartFile multipartRequest = new MockMultipartFile(
-//            "request",
-//            "",
-//            MediaType.APPLICATION_JSON_VALUE,
-//            objectMapper.writeValueAsString(request).getBytes()
-//        );
 
         MockMultipartFile image1 = new MockMultipartFile(
             "files", //name
@@ -89,7 +74,7 @@ class PostControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.code").value("201"));
     }
 
-    @DisplayName("게시물 등록시 제목은 필수값이다.")
+    @DisplayName("입력 받은 제목이 빈 문자열이면 예외가 발생한다.")
     @Test
     void createPostWithoutTitle() throws Exception {
         //given
@@ -112,7 +97,7 @@ class PostControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.message").value("제목은 필수입니다."));
     }
 
-    @DisplayName("게시물 등록시 제목은 최대 50자이다.")
+    @DisplayName("입력 받은 제목의 길이가 50자를 초과하면 예외가 발생한다.")
     @Test
     void createPostOutOfMaxSizeTitle() throws Exception {
         //given
@@ -135,7 +120,7 @@ class PostControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.message").value("제목은 최대 50자입니다."));
     }
 
-    @DisplayName("게시물 등록시 내용은 필수값이다.")
+    @DisplayName("입력 받은 내용이 빈 문자열이면 예외가 발생한다.")
     @Test
     void createPostWithoutContent() throws Exception {
         //given
@@ -156,6 +141,37 @@ class PostControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.code").value("400"))
             .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("내용은 필수입니다."));
+    }
+
+    @DisplayName("첨부 파일의 업로드 파일명 길이가 100자를 초과하면 예외가 발생한다.")
+    @Test
+    void uploadWithExceededUploadFileNameLength() throws Exception {
+        //given
+        CreatePostRequest request = CreatePostRequest.builder()
+            .title("게시물 제목")
+            .content("게시물 내용")
+            .build();
+
+        MockMultipartFile image1 = new MockMultipartFile(
+            "files", //name
+            getText(101), //originalFilename
+            "image/png",
+            "<<png data>>".getBytes()
+        );
+
+        //when //then
+        mockMvc.perform(
+                multipart(BASE_URL)
+                    .part(new MockPart("title", request.getTitle().getBytes()))
+                    .part(new MockPart("content", request.getContent().getBytes()))
+                    .file(image1)
+                    .with(csrf())
+            )
+            .andDo(print())
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.code").value("400"))
+            .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("업로드 파일명 길이가 허용된 최대 크기를 초과했습니다."));
     }
 
     private String getText(int size) {

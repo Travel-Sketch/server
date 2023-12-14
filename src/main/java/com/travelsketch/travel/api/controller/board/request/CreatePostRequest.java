@@ -28,4 +28,5 @@ public class CreatePostRequest {
         this.content = content;
         this.files = files;
     }
+
 }
