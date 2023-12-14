@@ -7,6 +7,7 @@ import com.travelsketch.travel.api.controller.member.MemberController;
 import com.travelsketch.travel.api.controller.member.MemberQueryController;
 import com.travelsketch.travel.api.controller.notice.NoticeController;
 import com.travelsketch.travel.api.controller.notice.NoticeQueryController;
+import com.travelsketch.travel.api.controller.plan.PlanController;
 import com.travelsketch.travel.api.controller.qna.QnaController;
 import com.travelsketch.travel.api.controller.qna.QnaQueryController;
 import com.travelsketch.travel.api.service.board.FileStore;
@@ -16,6 +17,7 @@ import com.travelsketch.travel.api.service.member.MemberQueryService;
 import com.travelsketch.travel.api.service.member.MemberService;
 import com.travelsketch.travel.api.service.notice.NoticeQueryService;
 import com.travelsketch.travel.api.service.notice.NoticeService;
+import com.travelsketch.travel.api.service.plan.PlanService;
 import com.travelsketch.travel.api.service.qna.QnaQueryService;
 import com.travelsketch.travel.api.service.qna.QnaService;
 import com.travelsketch.travel.interceptor.query.ApiQueryCounter;
@@ -29,7 +31,9 @@ import org.springframework.test.web.servlet.MockMvc;
 @WithMockUser
 @WebMvcTest(controllers = {AccountController.class, MemberController.class, MemberQueryController.class,
     NoticeController.class, NoticeQueryController.class,
-    QnaController.class, QnaQueryController.class, PostController.class
+    QnaController.class, QnaQueryController.class,
+    PlanController.class, PostController.class
+
 })
 public abstract class ControllerTestSupport {
 
@@ -71,4 +75,8 @@ public abstract class ControllerTestSupport {
 
     @MockBean
     protected FileStore fileStore;
+
+    @MockBean
+    protected PlanService planService;
+
 }

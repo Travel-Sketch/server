@@ -1,0 +1,11 @@
+[[search-sidos]]
+=== 시도 목록 조회 API
+
+==== HTTP Request
+
+include::{snippets}/search-sidos/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/search-sidos/http-response.adoc[]
+include::{snippets}/search-sidos/response-fields.adoc[]

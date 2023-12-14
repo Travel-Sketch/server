@@ -1,14 +1,13 @@
-package com.travelsketch.travel.docs.qna;
+package com.travelsketch.travel.docs.plan;
 
-import com.travelsketch.travel.api.controller.qna.QnaController;
-import com.travelsketch.travel.api.controller.qna.request.CreateAnswerRequest;
-import com.travelsketch.travel.api.controller.qna.request.CreateQuestionRequest;
-import com.travelsketch.travel.api.controller.qna.response.CreateAnswerResponse;
-import com.travelsketch.travel.api.controller.qna.response.CreateQuestionResponse;
-import com.travelsketch.travel.api.controller.qna.response.RemoveQnaResponse;
-import com.travelsketch.travel.api.service.qna.QnaService;
+import com.travelsketch.travel.api.controller.plan.PlanController;
+import com.travelsketch.travel.api.controller.plan.request.CreatePlanRequest;
+import com.travelsketch.travel.api.controller.plan.request.ModifyPlanRequest;
+import com.travelsketch.travel.api.controller.plan.response.CreatePlanResponse;
+import com.travelsketch.travel.api.controller.plan.response.ModifyPlanResponse;
+import com.travelsketch.travel.api.controller.plan.response.RemovePlanResponse;
+import com.travelsketch.travel.api.service.plan.PlanService;
 import com.travelsketch.travel.docs.RestDocsSupport;
-import com.travelsketch.travel.domain.qna.QnaType;
 import com.travelsketch.travel.security.SecurityUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,55 +15,53 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentRequest;
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.mock;
+import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class QnaControllerDocsTest extends RestDocsSupport {
+public class PlanControllerDocsTest extends RestDocsSupport {
 
-    private final QnaService qnaService = mock(QnaService.class);
+    private final PlanService planService = mock(PlanService.class);
     private final SecurityUtils securityUtils = mock(SecurityUtils.class);
-    private static final String BASE_URL = "/api/v1/qna";
+    private static final String BASE_URL = "/api/v1/plans";
 
     @Override
     protected Object initController() {
-        return new QnaController(qnaService, securityUtils);
+        return new PlanController(planService, securityUtils);
     }
 
-    @DisplayName("질문 등록 API")
+    @DisplayName("여행 계획 등록 API")
     @Test
-    void createQuestion() throws Exception {
+    void createPlan() throws Exception {
         given(securityUtils.getCurrentEmail())
             .willReturn("karina@naver.com");
 
-        CreateQuestionRequest request = CreateQuestionRequest.builder()
-            .type(QnaType.ACCOUNT)
-            .title("질문 제목입니다.")
-            .content("질문 내용입니다.")
-            .pwd("1234")
+        CreatePlanRequest request = CreatePlanRequest.builder()
+            .title("나의 여행 계획 제목")
+            .attractions(List.of(111111, 111112, 111113))
             .build();
 
-        CreateQuestionResponse response = CreateQuestionResponse.builder()
-            .qnaId(1L)
-            .type("계정")
-            .title("질문 제목입니다.")
-            .createdDate(LocalDateTime.of(2023, 11, 27, 16, 39))
+        CreatePlanResponse response = CreatePlanResponse.builder()
+            .planId(1L)
+            .title("나의 여행 계획 제목")
+            .attractionCount(3)
+            .createdDate(LocalDateTime.of(2023, 12, 8, 14, 52))
             .build();
 
-        given(qnaService.createQuestion(anyString(), any()))
+        given(planService.createPlan(anyString(), anyString(), anyList()))
             .willReturn(response);
 
         mockMvc.perform(
@@ -75,7 +72,7 @@ public class QnaControllerDocsTest extends RestDocsSupport {
             )
             .andDo(print())
             .andExpect(status().isCreated())
-            .andDo(document("create-question",
+            .andDo(document("create-plan",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 requestHeaders(
@@ -83,14 +80,10 @@ public class QnaControllerDocsTest extends RestDocsSupport {
                         .description("Bearer Access Token")
                 ),
                 requestFields(
-                    fieldWithPath("type").type(JsonFieldType.STRING)
-                        .description("질문 유형"),
                     fieldWithPath("title").type(JsonFieldType.STRING)
                         .description("제목"),
-                    fieldWithPath("content").type(JsonFieldType.STRING)
-                        .description("내용"),
-                    fieldWithPath("pwd").type(JsonFieldType.STRING)
-                        .description("비밀번호")
+                    fieldWithPath("attractions").type(JsonFieldType.ARRAY)
+                        .description("등록할 관광지 아이디")
                 ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER)
@@ -101,48 +94,45 @@ public class QnaControllerDocsTest extends RestDocsSupport {
                         .description("메시지"),
                     fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
-                    fieldWithPath("data.qnaId").type(JsonFieldType.NUMBER)
-                        .description("QnA 아이디"),
-                    fieldWithPath("data.type").type(JsonFieldType.STRING)
-                        .description("질문 유형"),
+                    fieldWithPath("data.planId").type(JsonFieldType.NUMBER)
+                        .description("여행 계획 아이디"),
                     fieldWithPath("data.title").type(JsonFieldType.STRING)
-                        .description("질문 제목"),
+                        .description("여행 계획 제목"),
+                    fieldWithPath("data.attractionCount").type(JsonFieldType.NUMBER)
+                        .description("등록한 관광지 수"),
                     fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY)
-                        .description("질문 등록 일시")
+                        .description("여행 계획 등록 일시")
                 )
             ));
     }
 
-    @DisplayName("답변 등록 API")
+    @DisplayName("여행 계획 수정 API")
     @Test
-    void createAnswer() throws Exception {
-        given(securityUtils.getCurrentEmail())
-            .willReturn("karina@naver.com");
-
-        CreateAnswerRequest request = CreateAnswerRequest.builder()
-            .answer("질문 답변입니다.")
+    void modifyPlan() throws Exception {
+        ModifyPlanRequest request = ModifyPlanRequest.builder()
+            .title("수정된 여행 계획 제목")
+            .attractions(List.of(111111, 111112, 111113))
             .build();
 
-        CreateAnswerResponse response = CreateAnswerResponse.builder()
-            .qnaId(1L)
-            .type("계정")
-            .title("질문 제목입니다.")
-            .answer("질문 답변입니다.")
-            .modifiedDate(LocalDateTime.of(2023, 11, 27, 17, 32))
+        ModifyPlanResponse response = ModifyPlanResponse.builder()
+            .planId(1L)
+            .title("수정된 여행 계획 제목")
+            .attractionCount(3)
+            .modifiedDate(LocalDateTime.of(2023, 12, 8, 14, 52))
             .build();
 
-        given(qnaService.createAnswer(anyString(), anyLong(), anyString()))
+        given(planService.modifyPlan(anyLong(), anyString(), anyList()))
             .willReturn(response);
 
         mockMvc.perform(
-                post(BASE_URL + "/{qnaId}", 1L)
+                patch(BASE_URL + "/{planId}", 1)
                     .header("Authorization", "Bearer Access Token")
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(MediaType.APPLICATION_JSON)
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("create-answer",
+            .andDo(document("modify-plan",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 requestHeaders(
@@ -150,12 +140,14 @@ public class QnaControllerDocsTest extends RestDocsSupport {
                         .description("Bearer Access Token")
                 ),
                 pathParameters(
-                    parameterWithName("qnaId")
-                        .description("QnA 아이디")
+                    parameterWithName("planId")
+                        .description("여행 계획 아이디")
                 ),
                 requestFields(
-                    fieldWithPath("answer").type(JsonFieldType.STRING)
-                        .description("질문 답변")
+                    fieldWithPath("title").type(JsonFieldType.STRING)
+                        .description("제목"),
+                    fieldWithPath("attractions").type(JsonFieldType.ARRAY)
+                        .description("등록할 관광지 아이디")
                 ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER)
@@ -166,51 +158,45 @@ public class QnaControllerDocsTest extends RestDocsSupport {
                         .description("메시지"),
                     fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
-                    fieldWithPath("data.qnaId").type(JsonFieldType.NUMBER)
-                        .description("QnA 아이디"),
-                    fieldWithPath("data.type").type(JsonFieldType.STRING)
-                        .description("질문 유형"),
+                    fieldWithPath("data.planId").type(JsonFieldType.NUMBER)
+                        .description("여행 계획 아이디"),
                     fieldWithPath("data.title").type(JsonFieldType.STRING)
-                        .description("질문 제목"),
-                    fieldWithPath("data.answer").type(JsonFieldType.STRING)
-                        .description("질문 답변"),
+                        .description("여행 계획 제목"),
+                    fieldWithPath("data.attractionCount").type(JsonFieldType.NUMBER)
+                        .description("등록한 관광지 수"),
                     fieldWithPath("data.modifiedDate").type(JsonFieldType.ARRAY)
-                        .description("답변 등록 일시")
+                        .description("여행 계획 등록 일시")
                 )
             ));
     }
 
-    @DisplayName("QnA 삭제 API")
+    @DisplayName("여행 계획 삭제 API")
     @Test
-    void removeQna() throws Exception {
-        given(securityUtils.getCurrentEmail())
-            .willReturn("karina@naver.com");
-
-        RemoveQnaResponse response = RemoveQnaResponse.builder()
-            .qnaId(1L)
-            .type("계정")
-            .title("질문 제목입니다.")
-            .removedDate(LocalDateTime.of(2023, 11, 27, 19, 0))
+    void removePlan() throws Exception {
+        RemovePlanResponse response = RemovePlanResponse.builder()
+            .planId(1L)
+            .title("삭제된 여행 계획 제목")
+            .removedDate(LocalDateTime.of(2023, 12, 8, 14, 52))
             .build();
 
-        given(qnaService.removeQna(anyString(), anyLong()))
+        given(planService.removePlan(anyLong()))
             .willReturn(response);
 
         mockMvc.perform(
-                delete(BASE_URL + "/{qnaId}", 1L)
+                delete(BASE_URL + "/{planId}", 1)
                     .header("Authorization", "Bearer Access Token")
             )
             .andDo(print())
             .andExpect(status().isOk())
-            .andDo(document("remove-qna",
+            .andDo(document("remove-plan",
                 getDocumentResponse(),
                 requestHeaders(
                     headerWithName("Authorization")
                         .description("Bearer Access Token")
                 ),
                 pathParameters(
-                    parameterWithName("qnaId")
-                        .description("QnA 아이디")
+                    parameterWithName("planId")
+                        .description("여행 계획 아이디")
                 ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER)
@@ -221,14 +207,12 @@ public class QnaControllerDocsTest extends RestDocsSupport {
                         .description("메시지"),
                     fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
-                    fieldWithPath("data.qnaId").type(JsonFieldType.NUMBER)
-                        .description("QnA 아이디"),
-                    fieldWithPath("data.type").type(JsonFieldType.STRING)
-                        .description("질문 유형"),
+                    fieldWithPath("data.planId").type(JsonFieldType.NUMBER)
+                        .description("여행 계획 아이디"),
                     fieldWithPath("data.title").type(JsonFieldType.STRING)
-                        .description("질문 제목"),
+                        .description("여행 계획 제목"),
                     fieldWithPath("data.removedDate").type(JsonFieldType.ARRAY)
-                        .description("삭제 일시")
+                        .description("여행 계획 등록 일시")
                 )
             ));
     }

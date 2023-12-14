@@ -1,0 +1,14 @@
+[[remove-plan]]
+=== 여행 계획 삭제 API
+
+==== HTTP Request
+
+include::{snippets}/remove-plan/http-request.adoc[]
+include::{snippets}/remove-plan/request-headers.adoc[]
+include::{snippets}/remove-plan/path-parameters.adoc[]
+
+
+==== HTTP Response
+
+include::{snippets}/remove-plan/http-response.adoc[]
+include::{snippets}/remove-plan/response-fields.adoc[]
