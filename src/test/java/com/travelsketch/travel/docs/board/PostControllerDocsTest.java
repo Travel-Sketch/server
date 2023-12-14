@@ -49,11 +49,6 @@ public class PostControllerDocsTest extends RestDocsSupport {
         given(securityUtils.getCurrentEmail())
             .willReturn("cherry@naver.com");
 
-//        CreatePostRequest request = CreatePostRequest.builder()
-//            .title("게시물 제목 1")
-//            .content("게시물 내용 1")
-//            .build();
-
         MockMultipartFile image1 = new MockMultipartFile(
             "files", //name
             "image1.png", //originalFilename
@@ -67,7 +62,6 @@ public class PostControllerDocsTest extends RestDocsSupport {
             "<<png data>>".getBytes()
         );
 
-
         CreatePostResponse response = CreatePostResponse.builder()
             .postId(1L)
             .title("게시물 제목")
@@ -80,12 +74,6 @@ public class PostControllerDocsTest extends RestDocsSupport {
 
         mockMvc.perform(
                 multipart(BASE_URL)
-//                    .file(new MockMultipartFile(
-//                        "request",
-//                        "",
-//                        MediaType.APPLICATION_JSON_VALUE,
-//                        objectMapper.writeValueAsString(request).getBytes()
-//                    ))
                     .file(image1)
                     .file(image2)
                     .part(new MockPart("title", "게시물 제목".getBytes()))
@@ -103,17 +91,10 @@ public class PostControllerDocsTest extends RestDocsSupport {
                         .description("Bearer Access Token")
                 ),
                 requestParts(
-                    partWithName("files").description("첨부파일"),
-//                    partWithName("request").description("게시물 정보")
+                    partWithName("files").description("첨부파일").optional(),
                     partWithName("title").description("게시물 제목"),
                     partWithName("content").description("게시물 내용")
                 ),
-//                requestPartFields("request",
-//                    fieldWithPath("title").type(JsonFieldType.STRING)
-//                        .description("게시물 제목"),
-//                    fieldWithPath("content").type(JsonFieldType.STRING)
-//                        .description("게시물 내용")
-//                ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER)
                         .description("코드"),
