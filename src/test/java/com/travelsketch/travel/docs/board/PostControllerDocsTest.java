@@ -1,7 +1,7 @@
 package com.travelsketch.travel.docs.board;
 
 import com.travelsketch.travel.api.controller.board.PostController;
-import com.travelsketch.travel.api.controller.board.request.UpdatePostRequest;
+import com.travelsketch.travel.api.controller.board.request.ModifyPostRequest;
 import com.travelsketch.travel.api.controller.board.response.CreatePostResponse;
 import com.travelsketch.travel.api.service.board.FileStore;
 import com.travelsketch.travel.api.service.board.PostService;
@@ -119,7 +119,7 @@ public class PostControllerDocsTest extends RestDocsSupport {
     @DisplayName("게시물 수정 API")
     @Test
     void modifyPost() throws Exception {
-        UpdatePostRequest request = UpdatePostRequest.builder()
+        ModifyPostRequest request = ModifyPostRequest.builder()
             .category("게시물 카테고리 수정")
             .title("게시물 제목 수정")
             .content("게시물 내용 수정")

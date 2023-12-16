@@ -2,7 +2,7 @@ package com.travelsketch.travel.api.controller.board;
 
 import com.travelsketch.travel.api.ApiResponse;
 import com.travelsketch.travel.api.controller.board.request.CreatePostRequest;
-import com.travelsketch.travel.api.controller.board.request.UpdatePostRequest;
+import com.travelsketch.travel.api.controller.board.request.ModifyPostRequest;
 import com.travelsketch.travel.api.controller.board.response.CreatePostResponse;
 import com.travelsketch.travel.api.controller.board.response.ModifyPostResponse;
 import com.travelsketch.travel.api.controller.board.response.RemovePostResponse;
@@ -58,7 +58,7 @@ public class PostController {
     @PatchMapping("/{postId}")
     public ApiResponse<ModifyPostResponse> modifyPost(
         @PathVariable Long postId,
-        @RequestBody UpdatePostRequest request
+        @RequestBody ModifyPostRequest request
     ) {
         ModifyPostResponse response = ModifyPostResponse.builder()
             .postId(1L)
