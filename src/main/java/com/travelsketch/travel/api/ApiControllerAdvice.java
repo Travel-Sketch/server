@@ -1,6 +1,7 @@
 package com.travelsketch.travel.api;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -59,6 +60,22 @@ public class ApiControllerAdvice {
     public ApiResponse<Object> noSuchElementException(NoSuchElementException e) {
         return ApiResponse.of(
             HttpStatus.BAD_REQUEST,
+            e.getMessage(),
+            null
+        );
+    }
+
+    /**
+     * AuthenticationException 공통 처리 메서드
+     *
+     * @param e AuthenticationException
+     * @return 403 오류 메세지
+     */
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(AuthenticationException.class)
+    public ApiResponse<Object> authenticationException(AuthenticationException e) {
+        return ApiResponse.of(
+            HttpStatus.FORBIDDEN,
             e.getMessage(),
             null
         );

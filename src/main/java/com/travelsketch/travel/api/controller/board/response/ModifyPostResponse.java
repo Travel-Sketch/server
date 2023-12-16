@@ -1,5 +1,6 @@
 package com.travelsketch.travel.api.controller.board.response;
 
+import com.travelsketch.travel.domain.board.Post;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -21,6 +22,14 @@ public class ModifyPostResponse {
         this.title = title;
         this.content = content;
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public static ModifyPostResponse of(Post post) {
+        return ModifyPostResponse.builder()
+            .postId(post.getId())
+            .title(post.getTitle())
+            .lastModifiedDate(post.getLastModifiedDate())
+            .build();
     }
 
 }

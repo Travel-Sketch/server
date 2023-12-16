@@ -78,7 +78,7 @@ class PostServiceTest extends IntegrationTestSupport {
         postRepository.save(post);
 
         // when
-        ModifyPostResponse response = postService.modifyPost(member.getEmail(), post.getId(), "게시물 제목", "게시물 내용 수정", List.of());
+        ModifyPostResponse response = postService.modifyPost(member.getEmail(), post.getId(), "게시물 제목", "게시물 내용 수정", List.of(), List.of());
 
         // then
         Optional<Post> findPost = postRepository.findById(response.getPostId());

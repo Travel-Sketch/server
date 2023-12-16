@@ -1,5 +1,6 @@
 package com.travelsketch.travel.domain.board;
 
+import com.travelsketch.travel.domain.TimeBaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AttachedFile {
+public class AttachedFile extends TimeBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "attached_file_id")
@@ -27,4 +28,5 @@ public class AttachedFile {
         this.uploadFile = uploadFile;
         this.post = post;
     }
+
 }
