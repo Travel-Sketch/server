@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.travelsketch.travel.api.ApiResponse.created;
@@ -79,12 +78,12 @@ public class PostController {
             }
         }
 
-        ModifyPostResponse response = ModifyPostResponse.builder()
-            .postId(1L)
-            .title("게시물 제목 수정")
-            .content("게시물 내용 수정")
-            .lastModifiedDate(LocalDateTime.of(2023, 11, 30, 2, 00))
-            .build();
+        String email = securityUtils.getCurrentEmail();
+
+        List<UploadFile> newFiles = fileStore.storeFiles(request.getNewFiles());
+
+        ModifyPostResponse response = postService.modifyPost(email, postId, request.getTitle(), request.getContent(), newFiles, request.getDeletedFileIds());
+
         return ok(response);
     }
 
