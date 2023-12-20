@@ -12,8 +12,8 @@
 * [ ] 회원은 스크랩한 게시물 목록을 조회할 수 있다. - `ScrapController#searchScraps`
 * [ ] 모든 사용자는 게시물 목록을 조회할 수 있다. - `PostController#searchPosts`
 * [ ] 모든 사용자는 게시물 상세 조회를 할 수 있다. - `PostController#searchPost`
-* [ ] 게시물 작성자는 게시물 내용을 수정할 수 있다. - `PostController#modifyPost`
-  * [ ] 제목, 내용, 첨부파일을 입력 받아서 게시물을 수정한다.
+* [x] 게시물 작성자는 게시물 내용을 수정할 수 있다. - `PostController#modifyPost`
+  * [x] 제목, 내용, 첨부파일을 입력 받아서 게시물을 수정한다.
   * [x] [예외] 입력 받은 제목이 빈 문자열이면 예외가 발생한다.
   * [x] [예외] 입력 받은 제목의 길이가 50자를 초과하면 예외가 발생한다.
   * [x] [예외] 입력 받은 내용이 빈 문자열이면 예외가 발생한다.
