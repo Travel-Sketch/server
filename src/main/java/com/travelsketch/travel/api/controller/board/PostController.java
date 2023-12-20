@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -40,6 +41,14 @@ public class PostController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<CreatePostResponse> createPost(@Valid @ModelAttribute CreatePostRequest request) throws IOException {
+        if (request.getFiles() != null) {
+            for (MultipartFile file : request.getFiles()) {
+                if (file.getOriginalFilename() == null) continue;
+                if (file.getOriginalFilename().length() > 100) {
+                    throw new IllegalArgumentException("업로드 파일명 길이가 허용된 최대 크기를 초과했습니다.");
+                }
+            }
+        }
         String email = securityUtils.getCurrentEmail();
 
         List<UploadFile> uploadFiles = fileStore.storeFiles(request.getFiles());
@@ -58,11 +67,20 @@ public class PostController {
     @PatchMapping("/{postId}")
     public ApiResponse<ModifyPostResponse> modifyPost(
         @PathVariable Long postId,
-        @RequestBody ModifyPostRequest request
-    ) {
+        @Valid
+        @ModelAttribute ModifyPostRequest request
+    ) throws IOException {
+        if (request.getNewFiles() != null) {
+            for (MultipartFile file : request.getNewFiles()) {
+                if (file.getOriginalFilename() == null) continue;
+                if (file.getOriginalFilename().length() > 100) {
+                    throw new IllegalArgumentException("업로드 파일명 길이가 허용된 최대 크기를 초과했습니다.");
+                }
+            }
+        }
+
         ModifyPostResponse response = ModifyPostResponse.builder()
             .postId(1L)
-            .category("게시물 카테고리 수정")
             .title("게시물 제목 수정")
             .content("게시물 내용 수정")
             .lastModifiedDate(LocalDateTime.of(2023, 11, 30, 2, 00))

@@ -10,15 +10,13 @@ import java.time.LocalDateTime;
 public class ModifyPostResponse {
 
     private Long postId;
-    private String category;
     private String title;
     private String content;
     private LocalDateTime lastModifiedDate;
 
     @Builder
-    private ModifyPostResponse(Long postId, String category, String title, String content, LocalDateTime lastModifiedDate) {
+    private ModifyPostResponse(Long postId, String title, String content, LocalDateTime lastModifiedDate) {
         this.postId = postId;
-        this.category = category;
         this.title = title;
         this.content = content;
         this.lastModifiedDate = lastModifiedDate;

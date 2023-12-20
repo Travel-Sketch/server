@@ -20,16 +20,13 @@ public class CreatePostRequest {
     @NotBlank(message = "내용은 필수입니다.")
     private String content;
 
-    private List<MultipartFile> newFiles;
-
-    private List<Long> deletedFileIds;
+    private List<MultipartFile> files;
 
     @Builder
-    private CreatePostRequest(String title, String content, List<MultipartFile> newFiles, List<Long> deletedFileIds) {
+    private CreatePostRequest(String title, String content, List<MultipartFile> files) {
         this.title = title;
         this.content = content;
-        this.newFiles = newFiles;
-        this.deletedFileIds = deletedFileIds;
+        this.files = files;
     }
 
 }

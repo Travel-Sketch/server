@@ -1,7 +1,6 @@
 package com.travelsketch.travel.docs.board;
 
 import com.travelsketch.travel.api.controller.board.PostController;
-import com.travelsketch.travel.api.controller.board.request.ModifyPostRequest;
 import com.travelsketch.travel.api.controller.board.response.CreatePostResponse;
 import com.travelsketch.travel.api.service.board.FileStore;
 import com.travelsketch.travel.api.service.board.PostService;
@@ -25,8 +24,10 @@ import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -119,16 +120,33 @@ public class PostControllerDocsTest extends RestDocsSupport {
     @DisplayName("게시물 수정 API")
     @Test
     void modifyPost() throws Exception {
-        ModifyPostRequest request = ModifyPostRequest.builder()
-            .category("게시물 카테고리 수정")
-            .title("게시물 제목 수정")
-            .content("게시물 내용 수정")
-            .build();
+        MockMultipartFile newImage1 = new MockMultipartFile(
+            "newFiles", //name
+            "image3.png", //originalFilename
+            "image/png",
+            "<<png data>>".getBytes()
+        );
+        MockMultipartFile newImage2 = new MockMultipartFile(
+            "newFiles", //name
+            "image4.png", //originalFilename
+            "image/png",
+            "<<png data>>".getBytes()
+        );
 
-        mockMvc.perform(patch(BASE_URL + "/{postId}", 1)
-                .header("Authorization", "Bearer Access Token")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request))
+        mockMvc.perform(
+                multipart(BASE_URL + "/{postId}", 1)
+                    .part(new MockPart("title", "게시물 제목".getBytes()))
+                    .part(new MockPart("content", "게시물 내용".getBytes()))
+                    .file(newImage1)
+                    .file(newImage2)
+                    .part(new MockPart("deletedFileIds", "1".getBytes()))
+                    .part(new MockPart("deletedFileIds", "2".getBytes()))
+                    .with(request -> {
+                        request.setMethod("PATCH");
+                        return request;
+                    })
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
+                    .header("Authorization", "Bearer Access Token")
             )
             .andDo(print())
             .andDo(document("modify-post",
@@ -141,13 +159,11 @@ public class PostControllerDocsTest extends RestDocsSupport {
                 pathParameters(
                     parameterWithName("postId").description("게시글id")
                 ),
-                requestFields(
-                    fieldWithPath("category").type(JsonFieldType.STRING)
-                        .description("게시물 카테고리"),
-                    fieldWithPath("title").type(JsonFieldType.STRING)
-                        .description("게시물 제목"),
-                    fieldWithPath("content").type(JsonFieldType.STRING)
-                        .description("게시물 내용")
+                requestParts(
+                    partWithName("newFiles").description("새 첨부파일").optional(),
+                    partWithName("deletedFileIds").description("삭제된 첨부파일 id").optional(),
+                    partWithName("title").description("게시물 제목"),
+                    partWithName("content").description("게시물 내용")
                 ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER)
@@ -160,8 +176,6 @@ public class PostControllerDocsTest extends RestDocsSupport {
                         .description("응답 데이터"),
                     fieldWithPath("data.postId").type(JsonFieldType.NUMBER)
                         .description("게시물 아이디"),
-                    fieldWithPath("data.category").type(JsonFieldType.STRING)
-                        .description("게시물 카테고리"),
                     fieldWithPath("data.title").type(JsonFieldType.STRING)
                         .description("게시물 제목"),
                     fieldWithPath("data.content").type(JsonFieldType.STRING)
@@ -169,7 +183,6 @@ public class PostControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.lastModifiedDate").type(JsonFieldType.ARRAY)
                         .description("게시물 최근 수정 일시")
                 )
-
             ));
     }
 
