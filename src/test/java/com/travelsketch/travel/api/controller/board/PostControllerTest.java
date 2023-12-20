@@ -210,40 +210,6 @@ class PostControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.message").value("OK"));
     }
 
-//    void createPostWithFiles() throws Exception {
-//        //given
-//        CreatePostRequest request = CreatePostRequest.builder()
-//            .title("게시물 제목")
-//            .content("게시물 내용")
-//            .build();
-//
-//        MockMultipartFile image1 = new MockMultipartFile(
-//            "files", //name
-//            "abc1.png", //originalFilename
-//            "image/png",
-//            "<<png data>>".getBytes()
-//        );
-//        MockMultipartFile image2 = new MockMultipartFile(
-//            "files", //name
-//            "abc2.png", //originalFilename
-//            "image/png",
-//            "<<png data>>".getBytes()
-//        );
-//
-//        //when //then
-//        mockMvc.perform(
-//                multipart(BASE_URL)
-//                    .part(new MockPart("title", request.getTitle().getBytes()))
-//                    .part(new MockPart("content", request.getContent().getBytes()))
-//                    .file(image1)
-//                    .file(image2)
-//                    .with(csrf())
-//            )
-//            .andDo(print())
-//            .andExpect(status().isCreated())
-//            .andExpect(jsonPath("$.code").value("201"));
-//    }
-
     @DisplayName("게시물 수정 시 입력 받은 제목이 빈 문자열이면 예외가 발생한다.")
     @Test
     void modifyPostWithoutTitle() throws Exception {
