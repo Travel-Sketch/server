@@ -73,27 +73,13 @@ class PostServiceTest extends IntegrationTestSupport {
             .build();
         memberRepository.save(member);
 
-        Post post = Post.builder()
-            .category(PostCategory.FREE)
-            .title("게시물 제목1")
-            .content("게시물 내용1")
-            .scrapCount(0)
-            .commentCount(0)
-            .member(member)
-            .build();
-        postRepository.save(post);
-
         UploadFile uploadFile = UploadFile.builder()
             .uploadFileName("original_filename.png")
             .storeFileName("stored_filename.png")
             .build();
 
-        // 기존 파일
-        AttachedFile file = AttachedFile.builder()
-            .post(post)
-            .uploadFile(uploadFile)
-            .build();
-        attachedFileRepository.save(file);
+        Post post = Post.createPost(PostCategory.FREE,"게시물 제목1","게시물 내용1",member,List.of(uploadFile));
+        postRepository.save(post);
 
         // 새 파일
         UploadFile newFile = UploadFile.builder()
@@ -102,7 +88,7 @@ class PostServiceTest extends IntegrationTestSupport {
             .build();
 
         // when (기존 파일 삭제, 새 파일 추가)
-        ModifyPostResponse response = postService.modifyPost(member.getEmail(), post.getId(), "게시물 제목", "게시물 내용 수정", List.of(newFile), List.of(file.getId()));
+        ModifyPostResponse response = postService.modifyPost(member.getEmail(), post.getId(), "게시물 제목", "게시물 내용 수정", List.of(newFile), List.of(post.getFiles().get(0).getId()));
 
         // then
         Optional<Post> findPost = postRepository.findById(response.getPostId());
