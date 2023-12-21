@@ -21,6 +21,7 @@ import java.util.List;
 
 import static com.travelsketch.travel.api.ApiResponse.created;
 import static com.travelsketch.travel.api.ApiResponse.ok;
+import static com.travelsketch.travel.api.controller.board.PostCustomValid.checkFileNameLength;
 
 @RequiredArgsConstructor
 @RestController
@@ -91,22 +92,6 @@ public class PostController {
             .isDeleted(true)
             .build();
         return ok(response);
-    }
-
-    /**
-     * 업로드 파일명 길이 체크 함수
-     *
-     * @param files 업로드 파일 정보
-     */
-    private static void checkFileNameLength(List<MultipartFile> files) {
-        if (files != null) {
-            for (MultipartFile file : files) {
-                if (file.getOriginalFilename() == null) continue;
-                if (file.getOriginalFilename().length() > 100) {
-                    throw new IllegalArgumentException("업로드 파일명 길이가 허용된 최대 크기를 초과했습니다.");
-                }
-            }
-        }
     }
 
 }
