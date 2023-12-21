@@ -45,11 +45,7 @@ public class PostService {
         }
         Post post = findPost.get();
 
-        Optional<Member> findMember = memberRepository.findByEmail(email);
-        if (findMember.isEmpty()) {
-            throw new NoSuchElementException("등록되지 않은 회원입니다.");
-        }
-        if (post.getMember() != findMember.get()) {
+        if (!post.getMember().getEmail().equals(email)) {
             throw new AuthenticationException("게시물 작성자가 아닙니다.") {
             };
         }
