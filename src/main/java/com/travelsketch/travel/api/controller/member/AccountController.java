@@ -1,10 +1,8 @@
 package com.travelsketch.travel.api.controller.member;
 
 import com.travelsketch.travel.api.ApiResponse;
-import com.travelsketch.travel.api.controller.member.request.AuthenticationNumberRequest;
-import com.travelsketch.travel.api.controller.member.request.CheckAuthenticationNumberRequest;
-import com.travelsketch.travel.api.controller.member.request.CreateMemberRequest;
-import com.travelsketch.travel.api.controller.member.request.LoginMemberRequest;
+import com.travelsketch.travel.api.controller.member.request.*;
+import com.travelsketch.travel.api.controller.member.response.CheckEmailDuplicationResponse;
 import com.travelsketch.travel.api.controller.member.response.CreateMemberResponse;
 import com.travelsketch.travel.api.controller.member.response.TokenInfo;
 import com.travelsketch.travel.api.service.member.AccountService;
@@ -15,8 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import static com.travelsketch.travel.api.ApiResponse.created;
-import static com.travelsketch.travel.api.ApiResponse.ok;
+import static com.travelsketch.travel.api.ApiResponse.*;
 import static com.travelsketch.travel.api.controller.member.MemberCustomValid.*;
 
 /**
@@ -76,5 +73,14 @@ public class AccountController {
     @PostMapping("/auth/check")
     public ApiResponse<String> checkAuthenticationNumber(@RequestBody CheckAuthenticationNumberRequest request) {
         return ok(null);
+    }
+
+    @PostMapping("/check/email")
+    public ApiResponse<CheckEmailDuplicationResponse> checkEmailDuplication(@RequestBody CheckEmailDuplicationRequest request) {
+        CheckEmailDuplicationResponse response = CheckEmailDuplicationResponse.builder()
+            .isUsed(true)
+            .build();
+
+        return ok(response);
     }
 }
