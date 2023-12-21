@@ -5,6 +5,7 @@ import com.travelsketch.travel.api.controller.board.response.ModifyPostResponse;
 import com.travelsketch.travel.domain.board.Post;
 import com.travelsketch.travel.domain.board.PostCategory;
 import com.travelsketch.travel.domain.board.UploadFile;
+import com.travelsketch.travel.domain.board.repository.PostQueryRepository;
 import com.travelsketch.travel.domain.board.repository.PostRepository;
 import com.travelsketch.travel.domain.member.Member;
 import com.travelsketch.travel.domain.member.repository.MemberRepository;
@@ -24,6 +25,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
+    private final PostQueryRepository postQueryRepository;
 
     public CreatePostResponse createPost(String email, String title, String content, List<UploadFile> files) {
         Optional<Member> findMember = memberRepository.findByEmail(email);
@@ -39,7 +41,7 @@ public class PostService {
     }
 
     public ModifyPostResponse modifyPost(String email, Long postId, String title, String content, List<UploadFile> newFiles, List<Long> deletedFileIds) {
-        Optional<Post> findPost = postRepository.findById(postId);
+        Optional<Post> findPost = postQueryRepository.findByIdWithMember(postId);
         if (findPost.isEmpty()) {
             throw new NoSuchElementException("등록되지 않은 게시물입니다.");
         }
