@@ -1,10 +1,7 @@
 package com.travelsketch.travel.docs.member;
 
 import com.travelsketch.travel.api.controller.member.AccountController;
-import com.travelsketch.travel.api.controller.member.request.AuthenticationNumberRequest;
-import com.travelsketch.travel.api.controller.member.request.CheckAuthenticationNumberRequest;
-import com.travelsketch.travel.api.controller.member.request.CreateMemberRequest;
-import com.travelsketch.travel.api.controller.member.request.LoginMemberRequest;
+import com.travelsketch.travel.api.controller.member.request.*;
 import com.travelsketch.travel.api.controller.member.response.CreateMemberResponse;
 import com.travelsketch.travel.api.controller.member.response.TokenInfo;
 import com.travelsketch.travel.api.service.member.AccountService;
@@ -233,6 +230,42 @@ public class AccountControllerDocsTest extends RestDocsSupport {
                         .description("메시지"),
                     fieldWithPath("data").type(JsonFieldType.NULL)
                         .description("응답 데이터")
+                )
+            ));
+    }
+
+    @DisplayName("닉네임 중복 체크 API")
+    @Test
+    void checkEmailDuplication() throws Exception {
+        CheckEmailDuplicationRequest request = CheckEmailDuplicationRequest.builder()
+            .nickname("카리나")
+            .build();
+
+        mockMvc.perform(
+                post(BASE_URL + "/check/email")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("check-email-duplication",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestFields(
+                    fieldWithPath("nickname").type(JsonFieldType.STRING)
+                        .description("닉네임")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.isUsed").type(JsonFieldType.BOOLEAN)
+                        .description("닉네임 사용 여부")
                 )
             ));
     }
