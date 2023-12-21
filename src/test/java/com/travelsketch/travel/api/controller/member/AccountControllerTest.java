@@ -1,6 +1,7 @@
 package com.travelsketch.travel.api.controller.member;
 
 import com.travelsketch.travel.ControllerTestSupport;
+import com.travelsketch.travel.api.controller.member.request.CheckEmailDuplicationRequest;
 import com.travelsketch.travel.api.controller.member.request.CreateMemberRequest;
 import com.travelsketch.travel.api.controller.member.request.LoginMemberRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -356,6 +357,50 @@ class AccountControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.code").value("400"))
             .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("비밀번호는 필수입니다."));
+    }
+
+    @DisplayName("닉네임 중복 검사시 닉네임은 필수값이다.")
+    @Test
+    void checkEmailDuplicationWithoutNickname() throws Exception {
+        //given
+        CheckEmailDuplicationRequest request = CheckEmailDuplicationRequest.builder()
+            .nickname(" ")
+            .build();
+
+        //when //then
+        mockMvc.perform(
+                post(BASE_URL + "/check/email")
+                    .with(csrf())
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("400"))
+            .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("닉네임은 필수입니다."));
+    }
+
+    @DisplayName("닉네임 중복 검사시 닉네임은 최대 10자이다.")
+    @Test
+    void checkEmailDuplicationOutOfSizeNickname() throws Exception {
+        //given
+        CheckEmailDuplicationRequest request = CheckEmailDuplicationRequest.builder()
+            .nickname(getText(11))
+            .build();
+
+        //when //then
+        mockMvc.perform(
+                post(BASE_URL + "/check/email")
+                    .with(csrf())
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("400"))
+            .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("닉네임은 최대 10자입니다."));
     }
 
     private String getText(int size) {
