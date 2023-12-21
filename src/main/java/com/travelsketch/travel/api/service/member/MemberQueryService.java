@@ -36,6 +36,6 @@ public class MemberQueryService {
     }
 
     public boolean isExistNickname(String nickname) {
-        return false;
+        return memberQueryRepository.existNickname(nickname);
     }
 }
