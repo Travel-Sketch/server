@@ -31,6 +31,7 @@ class PostServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private MemberRepository memberRepository;
+
     @Autowired
     private AttachedFileRepository attachedFileRepository;
 
@@ -88,7 +89,7 @@ class PostServiceTest extends IntegrationTestSupport {
             .build();
 
         // 기존 파일
-        AttachedFile file= AttachedFile.builder()
+        AttachedFile file = AttachedFile.builder()
             .post(post)
             .uploadFile(uploadFile)
             .build();
