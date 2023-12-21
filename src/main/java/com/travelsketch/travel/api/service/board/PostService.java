@@ -47,14 +47,18 @@ public class PostService {
         }
         Post post = findPost.get();
 
-        if (!post.getMember().getEmail().equals(email)) {
-            throw new AuthenticationException("게시물 작성자가 아닙니다.") {
-            };
-        }
+        postWriterCheck(email, post);
 
         post.modify(title, content, newFiles, deletedFileIds);
 
         return ModifyPostResponse.of(post);
+    }
+
+    private static void postWriterCheck(String email, Post post) {
+        if (!post.getMember().getEmail().equals(email)) {
+            throw new AuthenticationException("게시물 작성자가 아닙니다.") {
+            };
+        }
     }
 
 }
