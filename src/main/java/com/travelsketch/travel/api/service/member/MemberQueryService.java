@@ -34,4 +34,8 @@ public class MemberQueryService {
         }
         return findMemberInfo.get();
     }
+
+    public boolean isExistNickname(String nickname) {
+        return false;
+    }
 }

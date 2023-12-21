@@ -46,6 +46,19 @@ class MemberQueryServiceTest extends IntegrationTestSupport {
         assertThat(memberInfo.getNickname()).isEqualTo("카리나");
     }
 
+    @DisplayName("닉네임을 입력 받아 중복 확인을 할 수 있다.")
+    @Test
+    void isExistNickname() {
+        //given
+        Member member = savedMember();
+
+        //when
+        boolean isExist = memberQueryService.isExistNickname("카리나");
+
+        //then
+        assertThat(isExist).isTrue();
+    }
+
     private Member savedMember() {
         Member member = Member.builder()
             .email("karina@naver.com")
