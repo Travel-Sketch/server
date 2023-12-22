@@ -79,6 +79,7 @@ public class AccountController {
 
     @PostMapping("/check/email")
     public ApiResponse<CheckEmailDuplicationResponse> checkEmailDuplication(@Valid @RequestBody CheckEmailDuplicationRequest request) {
+        validNickname(request.getNickname());
 
         boolean isExist = memberQueryService.isExistNickname(request.getNickname());
 
