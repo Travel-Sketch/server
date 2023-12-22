@@ -1,10 +1,9 @@
 package com.travelsketch.travel.config;
 
-import com.travelsketch.travel.interceptor.query.ApiQueryCounter;
 import com.travelsketch.travel.interceptor.LoggingInterceptor;
-import org.springframework.context.annotation.Bean;
+import com.travelsketch.travel.interceptor.query.ApiQueryCounter;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -20,6 +19,14 @@ public class WebConfig implements WebMvcConfigurer {
 
     public WebConfig(ApiQueryCounter apiQueryCounter) {
         this.apiQueryCounter = apiQueryCounter;
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+            .allowedOrigins("*")
+            .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE")
+            .maxAge(3000);
     }
 
     @Override
