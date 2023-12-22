@@ -12,4 +12,10 @@ public class CheckEmailDuplicationResponse {
     private CheckEmailDuplicationResponse(Boolean isUsed) {
         this.isUsed = isUsed;
     }
+
+    public static CheckEmailDuplicationResponse of(boolean isUsed) {
+        return CheckEmailDuplicationResponse.builder()
+            .isUsed(isUsed)
+            .build();
+    }
 }

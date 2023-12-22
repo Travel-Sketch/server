@@ -5,6 +5,7 @@ import com.travelsketch.travel.api.controller.member.request.*;
 import com.travelsketch.travel.api.controller.member.response.CreateMemberResponse;
 import com.travelsketch.travel.api.controller.member.response.TokenInfo;
 import com.travelsketch.travel.api.service.member.AccountService;
+import com.travelsketch.travel.api.service.member.MemberQueryService;
 import com.travelsketch.travel.api.service.member.MemberService;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
@@ -30,12 +31,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AccountControllerDocsTest extends RestDocsSupport {
 
     private final MemberService memberService = mock(MemberService.class);
+    private final MemberQueryService memberQueryService = mock(MemberQueryService.class);
     private final AccountService accountService = mock(AccountService.class);
     private static final String BASE_URL = "/api/v1";
 
     @Override
     protected Object initController() {
-        return new AccountController(memberService, accountService);
+        return new AccountController(memberService, memberQueryService, accountService);
     }
 
     @DisplayName("회원 가입 API")
@@ -240,6 +242,9 @@ public class AccountControllerDocsTest extends RestDocsSupport {
         CheckEmailDuplicationRequest request = CheckEmailDuplicationRequest.builder()
             .nickname("카리나")
             .build();
+
+        given(memberQueryService.isExistNickname(anyString()))
+            .willReturn(true);
 
         mockMvc.perform(
                 post(BASE_URL + "/check/email")

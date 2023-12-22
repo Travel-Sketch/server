@@ -6,6 +6,7 @@ import com.travelsketch.travel.api.controller.member.response.CheckEmailDuplicat
 import com.travelsketch.travel.api.controller.member.response.CreateMemberResponse;
 import com.travelsketch.travel.api.controller.member.response.TokenInfo;
 import com.travelsketch.travel.api.service.member.AccountService;
+import com.travelsketch.travel.api.service.member.MemberQueryService;
 import com.travelsketch.travel.api.service.member.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ import static com.travelsketch.travel.api.controller.member.MemberCustomValid.*;
 public class AccountController {
 
     private final MemberService memberService;
+    private final MemberQueryService memberQueryService;
     private final AccountService accountService;
 
     /**
@@ -76,10 +78,11 @@ public class AccountController {
     }
 
     @PostMapping("/check/email")
-    public ApiResponse<CheckEmailDuplicationResponse> checkEmailDuplication(@RequestBody CheckEmailDuplicationRequest request) {
-        CheckEmailDuplicationResponse response = CheckEmailDuplicationResponse.builder()
-            .isUsed(true)
-            .build();
+    public ApiResponse<CheckEmailDuplicationResponse> checkEmailDuplication(@Valid @RequestBody CheckEmailDuplicationRequest request) {
+
+        boolean isExist = memberQueryService.isExistNickname(request.getNickname());
+
+        CheckEmailDuplicationResponse response = CheckEmailDuplicationResponse.of(isExist);
 
         return ok(response);
     }
