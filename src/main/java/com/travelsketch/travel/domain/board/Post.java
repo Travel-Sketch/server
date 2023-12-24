@@ -76,6 +76,26 @@ public class Post extends TimeBaseEntity {
         return post;
     }
 
+    public void modify(String title, String content, List<UploadFile> newFiles, List<Long> deletedFileIds) {
+        this.title = title;
+        this.content = content;
+
+        for (AttachedFile file : this.getFiles()) {
+            if (deletedFileIds.contains(file.getId())) {
+                file.remove();
+            }
+        }
+
+        for (UploadFile file : newFiles) {
+            AttachedFile attachedFile = AttachedFile.builder()
+                .post(this)
+                .uploadFile(file)
+                .build();
+            this.getFiles().add(attachedFile);
+        }
+
+    }
+
     // 스크랩 수 증가
     public void increaseScrapCount() {
         this.scrapCount += 1;

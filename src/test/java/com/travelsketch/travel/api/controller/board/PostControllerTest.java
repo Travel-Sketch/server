@@ -2,6 +2,7 @@ package com.travelsketch.travel.api.controller.board;
 
 import com.travelsketch.travel.ControllerTestSupport;
 import com.travelsketch.travel.api.controller.board.request.CreatePostRequest;
+import com.travelsketch.travel.api.controller.board.request.ModifyPostRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
@@ -168,7 +169,159 @@ class PostControllerTest extends ControllerTestSupport {
                     .with(csrf())
             )
             .andDo(print())
-            .andExpect(status().isCreated())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("400"))
+            .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("업로드 파일명 길이가 허용된 최대 크기를 초과했습니다."));
+    }
+
+    @DisplayName("제목, 내용, 첨부파일을 입력 받아서 게시물을 수정한다.")
+    @Test
+    void modifyPostWithFiles() throws Exception {
+        //given
+        ModifyPostRequest request = ModifyPostRequest.builder()
+            .title("게시물 제목")
+            .content("게시물 내용")
+            .build();
+
+        MockMultipartFile image1 = new MockMultipartFile(
+            "newFiles", //name
+            "abc1.png", //originalFilename
+            "image/png",
+            "<<png data>>".getBytes()
+        );
+
+        //when //then
+        mockMvc.perform(
+                multipart(BASE_URL + "/{postId}", 1)
+                    .part(new MockPart("title", request.getTitle().getBytes()))
+                    .part(new MockPart("content", request.getContent().getBytes()))
+                    .file(image1)
+                    .with(csrf())
+                    .with(req -> {
+                        req.setMethod("PATCH");
+                        return req;
+                    })
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.code").value("200"))
+            .andExpect(jsonPath("$.status").value("OK"))
+            .andExpect(jsonPath("$.message").value("OK"));
+    }
+
+    @DisplayName("게시물 수정 시 입력 받은 제목이 빈 문자열이면 예외가 발생한다.")
+    @Test
+    void modifyPostWithoutTitle() throws Exception {
+        //given
+        ModifyPostRequest request = ModifyPostRequest.builder()
+            .title(" ")
+            .content("게시물 내용")
+            .build();
+
+        //when //then
+        mockMvc.perform(
+                multipart(BASE_URL + "/{postId}", 1)
+                    .part(new MockPart("title", request.getTitle().getBytes()))
+                    .part(new MockPart("content", request.getContent().getBytes()))
+                    .with(csrf())
+                    .with(req -> {
+                        req.setMethod("PATCH");
+                        return req;
+                    })
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("400"))
+            .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("제목은 필수입니다."));
+    }
+
+    @DisplayName("게시물 수정 시 입력 받은 제목의 길이가 50자를 초과하면 예외가 발생한다.")
+    @Test
+    void modifyPostOutOfMaxSizeTitle() throws Exception {
+        //given
+        ModifyPostRequest request = ModifyPostRequest.builder()
+            .title(getText(51))
+            .content("게시물 내용")
+            .build();
+
+        //when //then
+        mockMvc.perform(
+                multipart(BASE_URL + "/{postId}", 1)
+                    .part(new MockPart("title", request.getTitle().getBytes()))
+                    .part(new MockPart("content", request.getContent().getBytes()))
+                    .with(csrf())
+                    .with(req -> {
+                        req.setMethod("PATCH");
+                        return req;
+                    })
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("400"))
+            .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("제목은 최대 50자입니다."));
+    }
+
+    @DisplayName("게시물 수정 시 입력 받은 내용이 빈 문자열이면 예외가 발생한다.")
+    @Test
+    void modifyPostWithoutContent() throws Exception {
+        //given
+        ModifyPostRequest request = ModifyPostRequest.builder()
+            .title("게시물 제목")
+            .content(" ")
+            .build();
+
+        //when //then
+        mockMvc.perform(
+                multipart(BASE_URL + "/{postId}", 1)
+                    .part(new MockPart("title", request.getTitle().getBytes()))
+                    .part(new MockPart("content", request.getContent().getBytes()))
+                    .with(csrf())
+                    .with(req -> {
+                        req.setMethod("PATCH");
+                        return req;
+                    })
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("400"))
+            .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+            .andExpect(jsonPath("$.message").value("내용은 필수입니다."));
+    }
+
+
+    @DisplayName("게시물 수정 시 첨부 파일의 업로드 파일명 길이가 100자를 초과하면 예외가 발생한다.")
+    @Test
+    void modifyWithExceededUploadFileNameLength() throws Exception {
+        //given
+        ModifyPostRequest request = ModifyPostRequest.builder()
+            .title("게시물 제목")
+            .content("게시물 내용")
+            .build();
+
+        MockMultipartFile image1 = new MockMultipartFile(
+            "newFiles", //name
+            getText(101), //originalFilename
+            "image/png",
+            "<<png data>>".getBytes()
+        );
+
+        //when //then
+        mockMvc.perform(
+                multipart(BASE_URL + "/{postId}", 1)
+                    .part(new MockPart("title", request.getTitle().getBytes()))
+                    .part(new MockPart("content", request.getContent().getBytes()))
+                    .file(image1)
+                    .with(csrf())
+                    .with(req -> {
+                        req.setMethod("PATCH");
+                        return req;
+                    })
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.code").value("400"))
             .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("업로드 파일명 길이가 허용된 최대 크기를 초과했습니다."));
