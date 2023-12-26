@@ -26,7 +26,7 @@ public class PostQueryRepository {
         Post content = queryFactory
             .select(post)
             .from(post)
-            .leftJoin(post.member)
+            .leftJoin(post.member).fetchJoin()
             .where(
                 post.id.eq(postId)
             )
