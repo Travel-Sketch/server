@@ -80,18 +80,22 @@ public class Post extends TimeBaseEntity {
         this.title = title;
         this.content = content;
 
-        for (AttachedFile file : this.getFiles()) {
-            if (deletedFileIds.contains(file.getId())) {
-                file.remove();
+        if (!deletedFileIds.isEmpty()) {
+            for (AttachedFile file : this.getFiles()) {
+                if (deletedFileIds.contains(file.getId())) {
+                    file.remove();
+                }
             }
         }
 
-        for (UploadFile file : newFiles) {
-            AttachedFile attachedFile = AttachedFile.builder()
-                .post(this)
-                .uploadFile(file)
-                .build();
-            this.getFiles().add(attachedFile);
+        if (!newFiles.isEmpty()) {
+            for (UploadFile file : newFiles) {
+                AttachedFile attachedFile = AttachedFile.builder()
+                    .post(this)
+                    .uploadFile(file)
+                    .build();
+                this.getFiles().add(attachedFile);
+            }
         }
 
     }
