@@ -8,15 +8,15 @@ import java.time.LocalDateTime;
 @Getter
 public class SearchPostResponse {
 
-    private Long postId;
-    private String category;
-    private String title;
-    private String content;
-    private Integer scrapCount;
-    private Integer commentCount;
-    private Boolean isDeleted;
-    private LocalDateTime createdDate;
-    private LocalDateTime lastModifiedDate;
+    private final Long postId;
+    private final String category;
+    private final String title;
+    private final String content;
+    private final Integer scrapCount;
+    private final Integer commentCount;
+    private final Boolean isDeleted;
+    private final LocalDateTime createdDate;
+    private final LocalDateTime lastModifiedDate;
 
     @Builder
     private SearchPostResponse(Long postId, String category, String title, String content, Integer scrapCount, Integer commentCount, Boolean isDeleted, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {

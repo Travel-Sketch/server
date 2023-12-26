@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 public class ToggleScrapResponse {
 
-    private Long postId;
-    private boolean isDeleted;
+    private final Long postId;
+    private final boolean isDeleted;
 
     @Builder
     private ToggleScrapResponse(Long postId, boolean isDeleted) {

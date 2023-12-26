@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 public class RemoveCommentResponse {
 
-    private Long postId;
-    private Long commentId;
-    private String content;
-    private Boolean isDeleted;
+    private final Long postId;
+    private final Long commentId;
+    private final String content;
+    private final Boolean isDeleted;
 
     @Builder
     private RemoveCommentResponse(Long postId, Long commentId, String content, Boolean isDeleted) {

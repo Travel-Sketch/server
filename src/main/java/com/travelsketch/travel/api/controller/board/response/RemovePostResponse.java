@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 public class RemovePostResponse {
 
-    private Long postId;
-    private String title;
-    private Boolean isDeleted;
+    private final Long postId;
+    private final String title;
+    private final Boolean isDeleted;
 
     @Builder
     private RemovePostResponse(Long postId, String title, Boolean isDeleted) {
