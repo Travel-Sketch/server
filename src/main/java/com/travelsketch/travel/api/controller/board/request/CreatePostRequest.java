@@ -20,7 +20,7 @@ public class CreatePostRequest {
     @NotBlank(message = "내용은 필수입니다.")
     private String content;
 
-    private List<MultipartFile> files;
+    private List<MultipartFile> files = List.of();
 
     @Builder
     private CreatePostRequest(String title, String content, List<MultipartFile> files) {

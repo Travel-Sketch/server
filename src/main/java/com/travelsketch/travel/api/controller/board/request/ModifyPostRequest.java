@@ -21,9 +21,9 @@ public class ModifyPostRequest {
     @NotBlank(message = "내용은 필수입니다.")
     private String content;
 
-    private List<MultipartFile> newFiles;
+    private List<MultipartFile> newFiles = List.of();
 
-    private List<Long> deletedFileIds;
+    private List<Long> deletedFileIds = List.of();
 
     @Builder
     private ModifyPostRequest(String title, String content, List<MultipartFile> newFiles, List<Long> deletedFileIds) {
