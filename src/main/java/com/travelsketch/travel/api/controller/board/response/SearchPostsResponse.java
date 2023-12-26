@@ -13,7 +13,7 @@ public class SearchPostsResponse {
     private final LocalDateTime createdDate;
 
     @Builder
-    private SearchPostsResponse(Long postId, String title, LocalDateTime createdDate) {
+    public SearchPostsResponse(Long postId, String title, LocalDateTime createdDate) {
         this.postId = postId;
         this.title = title;
         this.createdDate = createdDate;

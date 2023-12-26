@@ -26,6 +26,9 @@ class PostQueryRepositoryTest extends IntegrationTestSupport {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private PostRepository postRepository;
+
     @DisplayName("페이지 번호를 입력 받아 게시물 목록을 조회한다.")
     @Test
     void findByPage() {
@@ -45,6 +48,10 @@ class PostQueryRepositoryTest extends IntegrationTestSupport {
         Post post2 = createPost(PostCategory.FREE, "게시글2 제목", "게시글2 내용", member, List.of());
         Post post3 = createPost(PostCategory.FREE, "게시글3 제목", "게시글3 내용", member, List.of());
         Post post4 = createPost(PostCategory.FREE, "게시글4", "게시글4", member, List.of());
+        postRepository.save(post1);
+        postRepository.save(post2);
+        postRepository.save(post3);
+        postRepository.save(post4);
 
         PageRequest pageRequest = PageRequest.of(0, 10);
 
@@ -82,6 +89,10 @@ class PostQueryRepositoryTest extends IntegrationTestSupport {
         Post post2 = createPost(PostCategory.FREE, "게시글2 제목", "게시글2 내용", member, List.of());
         Post post3 = createPost(PostCategory.FREE, "게시글3 제목", "게시글3 내용", member, List.of());
         Post post4 = createPost(PostCategory.FREE, "게시글4", "게시글4", member, List.of());
+        postRepository.save(post1);
+        postRepository.save(post2);
+        postRepository.save(post3);
+        postRepository.save(post4);
 
         PageRequest pageRequest = PageRequest.of(0, 10);
 
