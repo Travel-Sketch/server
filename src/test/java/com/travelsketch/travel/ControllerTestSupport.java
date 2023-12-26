@@ -2,6 +2,7 @@ package com.travelsketch.travel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.travelsketch.travel.api.controller.board.PostController;
+import com.travelsketch.travel.api.controller.board.PostQueryController;
 import com.travelsketch.travel.api.controller.member.AccountController;
 import com.travelsketch.travel.api.controller.member.MemberController;
 import com.travelsketch.travel.api.controller.member.MemberQueryController;
@@ -11,6 +12,7 @@ import com.travelsketch.travel.api.controller.plan.PlanController;
 import com.travelsketch.travel.api.controller.qna.QnaController;
 import com.travelsketch.travel.api.controller.qna.QnaQueryController;
 import com.travelsketch.travel.api.service.board.FileStore;
+import com.travelsketch.travel.api.service.board.PostQueryService;
 import com.travelsketch.travel.api.service.board.PostService;
 import com.travelsketch.travel.api.service.member.AccountService;
 import com.travelsketch.travel.api.service.member.MemberQueryService;
@@ -32,7 +34,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(controllers = {AccountController.class, MemberController.class, MemberQueryController.class,
     NoticeController.class, NoticeQueryController.class,
     QnaController.class, QnaQueryController.class,
-    PlanController.class, PostController.class
+    PlanController.class, PostController.class, PostQueryController.class
 
 })
 public abstract class ControllerTestSupport {
@@ -79,4 +81,6 @@ public abstract class ControllerTestSupport {
     @MockBean
     protected PlanService planService;
 
+    @MockBean
+    protected PostQueryService postQueryService;
 }

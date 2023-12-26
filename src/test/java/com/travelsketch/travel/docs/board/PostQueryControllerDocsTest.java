@@ -1,6 +1,7 @@
 package com.travelsketch.travel.docs.board;
 
 import com.travelsketch.travel.api.controller.board.PostQueryController;
+import com.travelsketch.travel.api.service.board.PostQueryService;
 import com.travelsketch.travel.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentRequest;
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
+import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -19,11 +21,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class PostQueryControllerDocsTest extends RestDocsSupport {
 
+    private final PostQueryService postQueryService = mock(PostQueryService.class);
     private static final String BASE_URL = "/api/v1/posts";
 
     @Override
     protected Object initController() {
-        return new PostQueryController();
+        return new PostQueryController(postQueryService);
     }
 
     @DisplayName("게시물 목록 조회 API")
