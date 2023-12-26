@@ -4,18 +4,21 @@ import com.travelsketch.travel.api.ApiResponse;
 import com.travelsketch.travel.api.PageResponse;
 import com.travelsketch.travel.api.controller.board.response.SearchPostResponse;
 import com.travelsketch.travel.api.controller.board.response.SearchPostsResponse;
+import com.travelsketch.travel.api.service.board.PostQueryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
+import static com.travelsketch.travel.api.ApiResponse.ok;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/posts")
 public class PostQueryController {
+
+    private final PostQueryService postQueryService;
 
     /**
      * 게시물 목록 조회 API
@@ -30,26 +33,14 @@ public class PostQueryController {
         @RequestParam(defaultValue = "") String query
     ) {
         if (isNegativeOrZero(page)) {
-            throw new IllegalArgumentException("페이지는 1이상입니다.");
+            throw new IllegalArgumentException("페이지 번호가 유효하지 않습니다.");
         }
 
         PageRequest pageRequest = PageRequest.of(page - 1, 10);
 
-        SearchPostsResponse response1 = SearchPostsResponse.builder()
-            .postId(1L)
-            .title("게시물 제목1")
-            .createdDate(LocalDateTime.of(2023, 11, 30, 1, 30))
-            .build();
-        SearchPostsResponse response2 = SearchPostsResponse.builder()
-            .postId(2L)
-            .title("게시물 제목2")
-            .createdDate(LocalDateTime.of(2023, 11, 30, 1, 40))
-            .build();
+        PageResponse<SearchPostsResponse> response = postQueryService.searchByCriteria(pageRequest, query);
 
-        List<SearchPostsResponse> posts = List.of(response1, response2);
-        PageImpl<SearchPostsResponse> content = new PageImpl<>(posts, pageRequest, 2);
-
-        return ApiResponse.ok(new PageResponse<>(content));
+        return ok(response);
     }
 
     /**
