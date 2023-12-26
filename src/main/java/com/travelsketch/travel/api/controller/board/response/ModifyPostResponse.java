@@ -2,6 +2,7 @@ package com.travelsketch.travel.api.controller.board.response;
 
 import com.travelsketch.travel.domain.board.Post;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -9,10 +10,10 @@ import java.time.LocalDateTime;
 @Getter
 public class ModifyPostResponse {
 
-    private Long postId;
-    private String title;
-    private String content;
-    private LocalDateTime lastModifiedDate;
+    private final Long postId;
+    private final String title;
+    private final String content;
+    private final LocalDateTime lastModifiedDate;
 
     @Builder
     private ModifyPostResponse(Long postId, String title, String content, LocalDateTime lastModifiedDate) {
@@ -26,6 +27,7 @@ public class ModifyPostResponse {
         return ModifyPostResponse.builder()
             .postId(post.getId())
             .title(post.getTitle())
+            .content(post.getContent())
             .lastModifiedDate(post.getLastModifiedDate())
             .build();
     }
