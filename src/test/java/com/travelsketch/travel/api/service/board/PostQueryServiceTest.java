@@ -53,5 +53,3 @@ class PostQueryServiceTest extends IntegrationTestSupport {
         assertThat(response.getContent()).isEqualTo("게시물 내용");
     }
 }
-
-}

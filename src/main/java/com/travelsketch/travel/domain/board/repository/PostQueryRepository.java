@@ -69,4 +69,17 @@ public class PostQueryRepository {
         return Optional.ofNullable(content);
     }
 
+    public Optional<Post> findByIdWithMemberAndAttachedFiles(Long postId) {
+        Post content = queryFactory
+            .select(post)
+            .from(post)
+            .leftJoin(post.member).fetchJoin()
+            .leftJoin(post.files).fetchJoin()
+            .where(
+                post.id.eq(postId)
+            )
+            .distinct()
+            .fetchFirst();
+        return Optional.ofNullable(content);
+    }
 }

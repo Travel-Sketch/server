@@ -4,6 +4,7 @@ import com.travelsketch.travel.IntegrationTestSupport;
 import com.travelsketch.travel.api.controller.board.response.SearchPostsResponse;
 import com.travelsketch.travel.domain.board.Post;
 import com.travelsketch.travel.domain.board.PostCategory;
+import com.travelsketch.travel.domain.board.UploadFile;
 import com.travelsketch.travel.domain.member.Member;
 import com.travelsketch.travel.domain.member.Role;
 import com.travelsketch.travel.domain.member.repository.MemberRepository;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.travelsketch.travel.domain.board.Post.createPost;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -107,6 +109,44 @@ class PostQueryRepositoryTest extends IntegrationTestSupport {
                 tuple(post2.getId(), "게시글2 제목"),
                 tuple(post3.getId(), "게시글3 제목")
             );
+    }
+
+    @DisplayName("게시물id로 유저와 첨부파일 정보를 함께 불러올 수 있다.")
+    @Test
+    void findByIdWithMemberAndAttachedFiles() {
+        // given
+        Member member = Member.builder()
+            .email("cherry@naver.com")
+            .pwd(passwordEncoder.encode("cherry_password"))
+            .name("서지현")
+            .birth("2000-01-01")
+            .gender("F")
+            .nickname("체리")
+            .role(Role.USER)
+            .build();
+        memberRepository.save(member);
+
+        UploadFile uploadFile1 = UploadFile.builder()
+            .uploadFileName("original_filename1.png")
+            .storeFileName("stored_filename1.png")
+            .build();
+
+        UploadFile uploadFile2 = UploadFile.builder()
+            .uploadFileName("original_filename2.png")
+            .storeFileName("stored_filename2.png")
+            .build();
+
+        Post post = createPost(PostCategory.FREE, "게시글 제목", "게시글 내용", member, List.of(uploadFile1, uploadFile2));
+        postRepository.save(post);
+
+        // when
+        Optional<Post> findPost = postQueryRepository.findByIdWithMemberAndAttachedFiles(post.getId());
+
+        // then
+        assertThat(findPost).isPresent();
+        assertThat(findPost.get().getMember().getName()).isEqualTo("서지현");
+        assertThat(findPost.get().getTitle()).isEqualTo("게시글 제목");
+        assertThat(findPost.get().getFiles().size()).isEqualTo(2);
     }
 
 }
