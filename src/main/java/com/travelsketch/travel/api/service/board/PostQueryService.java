@@ -3,6 +3,7 @@ package com.travelsketch.travel.api.service.board;
 import com.travelsketch.travel.api.PageResponse;
 import com.travelsketch.travel.api.controller.board.response.SearchPostResponse;
 import com.travelsketch.travel.api.controller.board.response.SearchPostsResponse;
+import com.travelsketch.travel.domain.board.Post;
 import com.travelsketch.travel.domain.board.repository.PostQueryRepository;
 import com.travelsketch.travel.domain.board.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -35,8 +38,20 @@ public class PostQueryService {
         return new PageResponse<>(content);
     }
 
+    /**
+     * 게시물 상세 조회
+     *
+     * @param postId 게시물id
+     * @return 게시물 상세 정보
+     */
     public SearchPostResponse searchByPostId(Long postId) {
-        return null;
+        Optional<Post> findPost = postQueryRepository.findByIdWithMemberAndAttachedFiles(postId);
+        if (findPost.isEmpty()) {
+            throw new NoSuchElementException("등록되지 않은 게시물입니다.");
+        }
+        Post post = findPost.get();
+
+        return SearchPostResponse.of(post);
     }
 }
 
