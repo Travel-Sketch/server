@@ -3,7 +3,6 @@ package com.travelsketch.travel.api.service.board;
 import com.travelsketch.travel.IntegrationTestSupport;
 import com.travelsketch.travel.api.controller.board.response.CreatePostResponse;
 import com.travelsketch.travel.api.controller.board.response.ModifyPostResponse;
-import com.travelsketch.travel.domain.board.AttachedFile;
 import com.travelsketch.travel.domain.board.Post;
 import com.travelsketch.travel.domain.board.PostCategory;
 import com.travelsketch.travel.domain.board.UploadFile;
@@ -78,7 +77,7 @@ class PostServiceTest extends IntegrationTestSupport {
             .storeFileName("stored_filename.png")
             .build();
 
-        Post post = Post.createPost(PostCategory.FREE,"게시물 제목1","게시물 내용1",member,List.of(uploadFile));
+        Post post = Post.createPost(PostCategory.FREE, "게시물 제목1", "게시물 내용1", member, List.of(uploadFile));
         postRepository.save(post);
 
         // 새 파일

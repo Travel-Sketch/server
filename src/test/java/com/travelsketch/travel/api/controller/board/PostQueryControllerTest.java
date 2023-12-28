@@ -15,7 +15,7 @@ class PostQueryControllerTest extends ControllerTestSupport {
 
     @DisplayName("페이지 번호가 유효해야 한다.")
     @Test
-    void searchPosts() throws Exception {
+    void searchPostsWithInvalidPage() throws Exception {
         mockMvc.perform(
                 get(BASE_URL)
                     .with(csrf())
