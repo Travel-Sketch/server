@@ -13,9 +13,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static com.travelsketch.travel.domain.board.Post.createPost;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class PostQueryServiceTest extends IntegrationTestSupport {
 
@@ -51,5 +53,39 @@ class PostQueryServiceTest extends IntegrationTestSupport {
 
         //then
         assertThat(response.getContent()).isEqualTo("게시물 내용");
+    }
+
+    @DisplayName("등록되지 않은 게시물이면 예외가 발생한다.")
+    @Test
+    void searchUnregisteredPost() {
+        assertThatThrownBy(() -> postQueryService.searchByPostId(1L))
+            .isInstanceOf(NoSuchElementException.class)
+            .hasMessage("등록되지 않은 게시물입니다.");
+    }
+
+    @DisplayName("삭제된 게시물이면 예외가 발생한다.")
+    @Test
+    void searchDeletedPost() {
+        //given
+        Member member = Member.builder()
+            .email("cherry@naver.com")
+            .pwd(passwordEncoder.encode("cherry_password"))
+            .name("서지현")
+            .birth("2000-01-01")
+            .gender("F")
+            .nickname("체리")
+            .role(Role.USER)
+            .build();
+        memberRepository.save(member);
+
+        Post post = createPost(PostCategory.FREE, "게시물 제목", "게시물 내용", member, List.of());
+        post.remove();
+        postRepository.save(post);
+
+        assertThatThrownBy(() -> postQueryService.searchByPostId(post.getId()))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("삭제된 게시물입니다.");
+
+
     }
 }

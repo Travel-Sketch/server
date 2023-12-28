@@ -51,6 +51,10 @@ public class PostQueryService {
         }
         Post post = findPost.get();
 
+        if (post.getIsDeleted()) {
+            throw new IllegalArgumentException("삭제된 게시물입니다.");
+        }
+
         return SearchPostResponse.of(post);
     }
 }
