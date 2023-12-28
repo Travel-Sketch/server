@@ -9,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
 import static com.travelsketch.travel.api.ApiResponse.ok;
 
 @RequiredArgsConstructor
@@ -51,18 +49,8 @@ public class PostQueryController {
      */
     @GetMapping("/{postId}")
     public ApiResponse<SearchPostResponse> searchPost(@PathVariable Long postId) {
-        SearchPostResponse response = SearchPostResponse.builder()
-            .postId(1L)
-            .category("게시물 카테고리 1")
-            .title("게시물 제목 1")
-            .content("게시물 내용 1")
-            .scrapCount(5)
-            .commentCount(7)
-            .isDeleted(false)
-            .createdDate(LocalDateTime.of(2023, 11, 30, 1, 50))
-            .lastModifiedDate(LocalDateTime.of(2023, 11, 30, 1, 55))
-            .build();
-        return ApiResponse.ok(response);
+        SearchPostResponse response = postQueryService.searchByPostId(postId);
+        return ok(response);
     }
 
     /**
