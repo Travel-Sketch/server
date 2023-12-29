@@ -45,7 +45,7 @@ public class PostQueryService {
      * @return 게시물 상세 정보
      */
     public SearchPostResponse searchByPostId(Long postId) {
-        Optional<Post> findPost = postQueryRepository.findByIdWithMemberAndAttachedFiles(postId);
+        Optional<Post> findPost = postQueryRepository.findByIdWithMember(postId);
         if (findPost.isEmpty()) {
             throw new NoSuchElementException("등록되지 않은 게시물입니다.");
         }

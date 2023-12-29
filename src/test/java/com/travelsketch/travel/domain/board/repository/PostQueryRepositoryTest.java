@@ -140,7 +140,7 @@ class PostQueryRepositoryTest extends IntegrationTestSupport {
         postRepository.save(post);
 
         // when
-        Optional<Post> findPost = postQueryRepository.findByIdWithMemberAndAttachedFiles(post.getId());
+        Optional<Post> findPost = postQueryRepository.findByIdWithMember(post.getId());
 
         // then
         assertThat(findPost).isPresent();
