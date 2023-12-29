@@ -57,6 +57,17 @@ public class PostQueryRepository {
             .fetch();
     }
 
+    public Long findCountByCond(String query) {
+        return queryFactory
+            .select(post.count())
+            .from(post)
+            .where(
+                post.isDeleted.isFalse(),
+                post.title.like("%" + query + "%")
+            )
+            .fetchOne();
+    }
+
     public Optional<Post> findByIdWithMember(Long postId) {
         Post content = queryFactory
             .select(post)

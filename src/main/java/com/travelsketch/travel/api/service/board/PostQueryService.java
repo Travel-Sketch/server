@@ -33,7 +33,9 @@ public class PostQueryService {
     public PageResponse<SearchPostsResponse> searchByCond(PageRequest pageRequest, String query) {
         List<SearchPostsResponse> responses = postQueryRepository.findByCond(pageRequest, query);
 
-        PageImpl<SearchPostsResponse> content = new PageImpl<>(responses, pageRequest, responses.size());
+        Long count = postQueryRepository.findCountByCond(query);
+
+        PageImpl<SearchPostsResponse> content = new PageImpl<>(responses, pageRequest, count);
 
         return new PageResponse<>(content);
     }

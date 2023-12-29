@@ -111,10 +111,10 @@ class PostQueryRepositoryTest extends IntegrationTestSupport {
             );
     }
 
-    @DisplayName("게시물id로 유저와 첨부파일 정보를 함께 불러올 수 있다.")
+    @DisplayName("검색 조회 결과 수를 반환할 수 있다.")
     @Test
-    void findByIdWithMemberAndAttachedFiles() {
-        // given
+    void findCountByCond() {
+        //given
         Member member = Member.builder()
             .email("cherry@naver.com")
             .pwd(passwordEncoder.encode("cherry_password"))
@@ -126,27 +126,21 @@ class PostQueryRepositoryTest extends IntegrationTestSupport {
             .build();
         memberRepository.save(member);
 
-        UploadFile uploadFile1 = UploadFile.builder()
-            .uploadFileName("original_filename1.png")
-            .storeFileName("stored_filename1.png")
-            .build();
+        Post post1 = createPost(PostCategory.FREE, "게시글1 제목", "게시글1 내용", member, List.of());
+        Post post2 = createPost(PostCategory.FREE, "게시글2 제목", "게시글2 내용", member, List.of());
+        Post post3 = createPost(PostCategory.FREE, "게시글3 제목", "게시글3 내용", member, List.of());
+        Post post4 = createPost(PostCategory.FREE, "게시글4", "게시글4", member, List.of());
+        postRepository.save(post1);
+        postRepository.save(post2);
+        postRepository.save(post3);
+        postRepository.save(post4);
 
-        UploadFile uploadFile2 = UploadFile.builder()
-            .uploadFileName("original_filename2.png")
-            .storeFileName("stored_filename2.png")
-            .build();
+        PageRequest pageRequest = PageRequest.of(0, 10);
 
-        Post post = createPost(PostCategory.FREE, "게시글 제목", "게시글 내용", member, List.of(uploadFile1, uploadFile2));
-        postRepository.save(post);
+        //when
+        Long count = postQueryRepository.findCountByCond("제목");
 
-        // when
-        Optional<Post> findPost = postQueryRepository.findByIdWithMember(post.getId());
-
-        // then
-        assertThat(findPost).isPresent();
-        assertThat(findPost.get().getMember().getName()).isEqualTo("서지현");
-        assertThat(findPost.get().getTitle()).isEqualTo("게시글 제목");
-        assertThat(findPost.get().getFiles().size()).isEqualTo(2);
+        //then
+        assertThat(count).isEqualTo(3);
     }
-
 }
