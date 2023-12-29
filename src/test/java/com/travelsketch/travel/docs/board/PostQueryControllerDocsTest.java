@@ -44,7 +44,6 @@ public class PostQueryControllerDocsTest extends RestDocsSupport {
     @DisplayName("게시물 목록 조회 API")
     @Test
     void searchPosts() throws Exception {
-
         SearchPostsResponse response1 = SearchPostsResponse.builder()
             .postId(1L)
             .title("게시물 제목")

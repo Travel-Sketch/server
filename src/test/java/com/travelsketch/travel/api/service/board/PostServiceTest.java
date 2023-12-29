@@ -38,16 +38,7 @@ class PostServiceTest extends IntegrationTestSupport {
     @Test
     void createPost() {
         // given
-        Member member = Member.builder()
-            .email("cherry@naver.com")
-            .pwd(passwordEncoder.encode("cherry_password"))
-            .name("서지현")
-            .birth("2000-01-01")
-            .gender("F")
-            .nickname("체리")
-            .role(Role.USER)
-            .build();
-        memberRepository.save(member);
+        Member member = getMember();
 
         // when
         CreatePostResponse response = postService.createPost(member.getEmail(), "게시물 제목", "게시물 내용", List.of());
@@ -61,16 +52,7 @@ class PostServiceTest extends IntegrationTestSupport {
     @Test
     void modifyPost() {
         // given
-        Member member = Member.builder()
-            .email("cherry@naver.com")
-            .pwd(passwordEncoder.encode("cherry_password"))
-            .name("서지현")
-            .birth("2000-01-01")
-            .gender("F")
-            .nickname("체리")
-            .role(Role.USER)
-            .build();
-        memberRepository.save(member);
+        Member member = getMember();
 
         UploadFile uploadFile = UploadFile.builder()
             .uploadFileName("original_filename.png")
@@ -98,4 +80,17 @@ class PostServiceTest extends IntegrationTestSupport {
         assertThat(findPost.get().getFiles().get(1).getUploadFile().getStoreFileName()).isEqualTo("stored_filename2.png");
     }
 
+    private Member getMember() {
+        Member member = Member.builder()
+            .email("cherry@naver.com")
+            .pwd(passwordEncoder.encode("cherry_password"))
+            .name("서지현")
+            .birth("2000-01-01")
+            .gender("F")
+            .nickname("체리")
+            .role(Role.USER)
+            .build();
+        memberRepository.save(member);
+        return member;
+    }
 }

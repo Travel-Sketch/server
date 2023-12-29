@@ -36,16 +36,7 @@ class PostQueryServiceTest extends IntegrationTestSupport {
     @Test
     void findById() {
         //given
-        Member member = Member.builder()
-            .email("cherry@naver.com")
-            .pwd(passwordEncoder.encode("cherry_password"))
-            .name("서지현")
-            .birth("2000-01-01")
-            .gender("F")
-            .nickname("체리")
-            .role(Role.USER)
-            .build();
-        memberRepository.save(member);
+        Member member = getMember();
 
         UploadFile uploadFile = UploadFile.builder()
             .uploadFileName("original_filename.png")
@@ -77,6 +68,18 @@ class PostQueryServiceTest extends IntegrationTestSupport {
     @Test
     void searchDeletedPost() {
         //given
+        Member member = getMember();
+
+        Post post = createPost(PostCategory.FREE, "게시물 제목", "게시물 내용", member, List.of());
+        post.remove();
+        postRepository.save(post);
+
+        assertThatThrownBy(() -> postQueryService.searchByPostId(post.getId()))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("삭제된 게시물입니다.");
+    }
+
+    private Member getMember() {
         Member member = Member.builder()
             .email("cherry@naver.com")
             .pwd(passwordEncoder.encode("cherry_password"))
@@ -87,15 +90,6 @@ class PostQueryServiceTest extends IntegrationTestSupport {
             .role(Role.USER)
             .build();
         memberRepository.save(member);
-
-        Post post = createPost(PostCategory.FREE, "게시물 제목", "게시물 내용", member, List.of());
-        post.remove();
-        postRepository.save(post);
-
-        assertThatThrownBy(() -> postQueryService.searchByPostId(post.getId()))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("삭제된 게시물입니다.");
-
-
+        return member;
     }
 }
