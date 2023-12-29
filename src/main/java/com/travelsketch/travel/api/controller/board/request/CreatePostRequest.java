@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -20,7 +21,7 @@ public class CreatePostRequest {
     @NotBlank(message = "내용은 필수입니다.")
     private String content;
 
-    private List<MultipartFile> files = List.of();
+    private List<MultipartFile> files = new ArrayList<>();
 
     @Builder
     private CreatePostRequest(String title, String content, List<MultipartFile> files) {
