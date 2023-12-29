@@ -23,7 +23,7 @@ public class PostQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<SearchPostsResponse> findByCriteria(PageRequest pageRequest, String query) {
+    public List<SearchPostsResponse> findByCond(PageRequest pageRequest, String query) {
         List<Long> postIds = queryFactory
             .select(post.id)
             .from(post)

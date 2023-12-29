@@ -58,7 +58,7 @@ class PostQueryRepositoryTest extends IntegrationTestSupport {
         PageRequest pageRequest = PageRequest.of(0, 10);
 
         //when
-        List<SearchPostsResponse> responses = postQueryRepository.findByCriteria(pageRequest, "");
+        List<SearchPostsResponse> responses = postQueryRepository.findByCond(pageRequest, "");
 
         //then
         assertThat(responses).hasSize(4)
@@ -99,7 +99,7 @@ class PostQueryRepositoryTest extends IntegrationTestSupport {
         PageRequest pageRequest = PageRequest.of(0, 10);
 
         //when
-        List<SearchPostsResponse> responses = postQueryRepository.findByCriteria(pageRequest, "제목");
+        List<SearchPostsResponse> responses = postQueryRepository.findByCond(pageRequest, "제목");
 
         //then
         assertThat(responses).hasSize(3)
