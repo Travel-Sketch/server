@@ -30,7 +30,7 @@ public class PostQueryService {
      * @param query       검색 조건
      * @return 게시물 목록 정보
      */
-    public PageResponse<SearchPostsResponse> searchByCriteria(PageRequest pageRequest, String query) {
+    public PageResponse<SearchPostsResponse> searchByCond(PageRequest pageRequest, String query) {
         List<SearchPostsResponse> responses = postQueryRepository.findByCond(pageRequest, query);
 
         PageImpl<SearchPostsResponse> content = new PageImpl<>(responses, pageRequest, responses.size());

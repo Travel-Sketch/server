@@ -36,7 +36,7 @@ public class PostQueryController {
 
         PageRequest pageRequest = PageRequest.of(page - 1, 10);
 
-        PageResponse<SearchPostsResponse> response = postQueryService.searchByCriteria(pageRequest, query);
+        PageResponse<SearchPostsResponse> response = postQueryService.searchByCond(pageRequest, query);
 
         return ok(response);
     }

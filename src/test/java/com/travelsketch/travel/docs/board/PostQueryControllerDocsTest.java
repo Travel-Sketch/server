@@ -66,7 +66,7 @@ public class PostQueryControllerDocsTest extends RestDocsSupport {
 
         PageImpl<SearchPostsResponse> content = new PageImpl<>(responses, pageRequest, responses.size());
 
-        given(postQueryService.searchByCriteria(any(), anyString()))
+        given(postQueryService.searchByCond(any(), anyString()))
             .willReturn(new PageResponse<>(content));
 
         mockMvc.perform(get(BASE_URL + "?page=1&query=검색어")
