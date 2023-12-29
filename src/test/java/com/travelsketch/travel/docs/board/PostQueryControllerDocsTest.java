@@ -119,10 +119,8 @@ public class PostQueryControllerDocsTest extends RestDocsSupport {
             .scrapCount(0)
             .commentCount(0)
             .writer("서지현")
-            .files(List.of(new UploadFile("업로드 파일명1","저장 파일명1"), new UploadFile("업로드 파일명2", "저장 파일명2")))
-            .isDeleted(false)
+            .files(List.of(new UploadFile("업로드 파일명1", "저장 파일명1"), new UploadFile("업로드 파일명2", "저장 파일명2")))
             .createdDate(LocalDateTime.of(2023, 12, 7, 10, 30))
-            .lastModifiedDate(LocalDateTime.of(2023, 12, 7, 10, 50))
             .build();
 
         given(postQueryService.searchByPostId(anyLong()))
@@ -168,12 +166,8 @@ public class PostQueryControllerDocsTest extends RestDocsSupport {
                         .description("게시물 첨부파일 업로드 파일명"),
                     fieldWithPath("data.files[].storeFileName").type(JsonFieldType.STRING)
                         .description("게시물 첨부파일 저장 파일명"),
-                    fieldWithPath("data.isDeleted").type(JsonFieldType.BOOLEAN)
-                        .description("게시물 삭제 여부"),
                     fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY)
-                        .description("게시물 등록 일시"),
-                    fieldWithPath("data.lastModifiedDate").type(JsonFieldType.ARRAY)
-                        .description("게시물 최근 수정 일시")
+                        .description("게시물 등록 일시")
                 )
 
             ));
