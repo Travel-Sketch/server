@@ -22,12 +22,10 @@ public class SearchPostResponse {
     private final Integer commentCount;
     private final String writer;
     private final List<UploadFile> files;
-    private final Boolean isDeleted;
     private final LocalDateTime createdDate;
-    private final LocalDateTime lastModifiedDate;
 
     @Builder
-    private SearchPostResponse(Long postId, PostCategory category, String title, String content, Integer scrapCount, Integer commentCount, String writer, List<UploadFile> files, Boolean isDeleted, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
+    private SearchPostResponse(Long postId, PostCategory category, String title, String content, Integer scrapCount, Integer commentCount, String writer, List<UploadFile> files, LocalDateTime createdDate) {
         this.postId = postId;
         this.category = category;
         this.title = title;
@@ -36,9 +34,7 @@ public class SearchPostResponse {
         this.commentCount = commentCount;
         this.writer = writer;
         this.files = files;
-        this.isDeleted = isDeleted;
         this.createdDate = createdDate;
-        this.lastModifiedDate = lastModifiedDate;
     }
 
     public static SearchPostResponse of(Post post) {
@@ -51,9 +47,7 @@ public class SearchPostResponse {
             .commentCount(post.getCommentCount())
             .writer(post.getMember().getName())
             .files(convertToUploadFiles(post.getFiles()))
-            .isDeleted(post.getIsDeleted())
             .createdDate(post.getCreatedDate())
-            .lastModifiedDate(post.getLastModifiedDate())
             .build();
     }
 
