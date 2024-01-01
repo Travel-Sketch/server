@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .requestMatchers(PathRequest.toH2Console()).permitAll()
                 .requestMatchers(new MvcRequestMatcher(introspector, "/api/v1/join")).permitAll()
                 .requestMatchers(new MvcRequestMatcher(introspector, "/api/v1/login")).permitAll()
+                .requestMatchers(new MvcRequestMatcher(introspector, "/api/v1/posts")).permitAll()
                 .requestMatchers(new MvcRequestMatcher(introspector, "/**")).hasRole("USER")
                 .anyRequest().authenticated()
         );

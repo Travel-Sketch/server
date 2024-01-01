@@ -2,6 +2,7 @@ package com.travelsketch.travel.docs.board;
 
 import com.travelsketch.travel.api.controller.board.PostController;
 import com.travelsketch.travel.api.controller.board.response.CreatePostResponse;
+import com.travelsketch.travel.api.controller.board.response.ModifyPostResponse;
 import com.travelsketch.travel.api.service.board.FileStore;
 import com.travelsketch.travel.api.service.board.PostService;
 import com.travelsketch.travel.docs.RestDocsSupport;
@@ -17,8 +18,7 @@ import java.time.LocalDateTime;
 
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentRequest;
 import static com.travelsketch.travel.docs.ApiDocumentUtil.getDocumentResponse;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -132,6 +132,17 @@ public class PostControllerDocsTest extends RestDocsSupport {
             "image/png",
             "<<png data>>".getBytes()
         );
+
+        ModifyPostResponse response = ModifyPostResponse.builder()
+            .postId(1L)
+            .title("게시물 제목")
+            .content("게시물 내용")
+            .lastModifiedDate(LocalDateTime.of(2023, 12, 7, 10, 30))
+            .build();
+
+        given(securityUtils.getCurrentEmail()).willReturn("test@test.com");
+        given(postService.modifyPost(anyString(), anyLong(), anyString(), anyString(), anyList(), anyList()))
+            .willReturn(response);
 
         mockMvc.perform(
                 multipart(BASE_URL + "/{postId}", 1)

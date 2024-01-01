@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 @Getter
 public class CreateCommentResponse {
 
-    private Long commentId;
-    private String content;
-    private LocalDateTime createdDate;
+    private final Long commentId;
+    private final String content;
+    private final LocalDateTime createdDate;
 
     @Builder
     private CreateCommentResponse(Long commentId, String content, LocalDateTime createdDate) {

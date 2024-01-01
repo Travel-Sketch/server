@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 public class SearchScrapsResponse {
 
-    private Long postId;
-    private String title;
+    private final Long postId;
+    private final String title;
 
     @Builder
     private SearchScrapsResponse(Long postId, String title) {
