@@ -15,6 +15,7 @@ import com.travelsketch.travel.domain.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.AuthenticationException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -49,6 +50,20 @@ class PostServiceTest extends IntegrationTestSupport {
         // then (post 등록 확인)
         Optional<Post> findPost = postRepository.findById(response.getPostId());
         assertThat(findPost).isPresent();
+    }
+
+    @DisplayName("게시물 수정 시 작성자가 아니면 예외가 발생한다.")
+    @Test
+    void modifyOthersPost() {
+        //given
+        Member member = getMember();
+        Post post = Post.createPost(PostCategory.FREE, "게시물 제목1", "게시물 내용1", member, List.of());
+        postRepository.save(post);
+
+        //when //then
+        assertThatThrownBy(() -> postService.modifyPost("apple@apple.com", 1L, "제목 수정", "내용 수정", List.of(), List.of()))
+            .isInstanceOf(AuthenticationException.class)
+            .hasMessage("게시물 작성자가 아닙니다.");
     }
 
     @DisplayName("제목, 내용을 입력 받아 게시물을 수정할 수 있다.")
@@ -90,6 +105,20 @@ class PostServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(() -> postService.removePost("cherry@cherry.com", 1L))
             .isInstanceOf(NoSuchElementException.class)
             .hasMessage("등록되지 않은 게시물입니다.");
+    }
+
+    @DisplayName("게시물 삭제 시 작성자가 아니면 예외가 발생한다.")
+    @Test
+    void deleteOthersPost() {
+        //given
+        Member member = getMember();
+        Post post = Post.createPost(PostCategory.FREE, "게시물 제목1", "게시물 내용1", member, List.of());
+        postRepository.save(post);
+
+        //when //then
+        assertThatThrownBy(() -> postService.removePost("apple@apple.com", 1L))
+            .isInstanceOf(AuthenticationException.class)
+            .hasMessage("게시물 작성자가 아닙니다.");
     }
 
     @DisplayName("게시물id를 입력 받아 게시물을 삭제할 수 있다.")
