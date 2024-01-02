@@ -2,6 +2,7 @@ package com.travelsketch.travel.api.service.board;
 
 import com.travelsketch.travel.api.controller.board.response.CreatePostResponse;
 import com.travelsketch.travel.api.controller.board.response.ModifyPostResponse;
+import com.travelsketch.travel.api.controller.board.response.RemovePostResponse;
 import com.travelsketch.travel.domain.board.Post;
 import com.travelsketch.travel.domain.board.PostCategory;
 import com.travelsketch.travel.domain.board.UploadFile;
@@ -54,11 +55,16 @@ public class PostService {
         return ModifyPostResponse.of(post);
     }
 
+    public RemovePostResponse removePost(Long postId) {
+        return null;
+    }
+
     private static void postWriterCheck(String email, Post post) {
         if (!post.getMember().getEmail().equals(email)) {
             throw new AuthenticationException("게시물 작성자가 아닙니다.") {
             };
         }
     }
+
 
 }
