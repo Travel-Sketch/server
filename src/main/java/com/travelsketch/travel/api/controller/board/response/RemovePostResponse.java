@@ -1,5 +1,6 @@
 package com.travelsketch.travel.api.controller.board.response;
 
+import com.travelsketch.travel.domain.board.Post;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,6 +16,14 @@ public class RemovePostResponse {
         this.postId = postId;
         this.title = title;
         this.isDeleted = isDeleted;
+    }
+
+    public static RemovePostResponse of(Post post) {
+        return RemovePostResponse.builder()
+            .postId(post.getId())
+            .title(post.getTitle())
+            .isDeleted(post.getIsDeleted())
+            .build();
     }
 
 }

@@ -55,8 +55,17 @@ public class PostService {
         return ModifyPostResponse.of(post);
     }
 
-    public RemovePostResponse removePost(Long postId) {
-        return null;
+    public RemovePostResponse removePost(String email, Long postId) {
+        Optional<Post> findPost = postQueryRepository.findByIdWithMember(postId);
+        if (findPost.isEmpty()) {
+            throw new NoSuchElementException("등록되지 않은 게시물입니다.");
+        }
+
+        Post post = findPost.get();
+        postWriterCheck(email, post);
+        post.remove();
+
+        return RemovePostResponse.of(post);
     }
 
     private static void postWriterCheck(String email, Post post) {

@@ -87,7 +87,7 @@ class PostServiceTest extends IntegrationTestSupport {
     @Test
     void removeNotExistPost() {
         //given //when //then
-        assertThatThrownBy(() -> postService.removePost(1L))
+        assertThatThrownBy(() -> postService.removePost("cherry@cherry.com", 1L))
             .isInstanceOf(NoSuchElementException.class)
             .hasMessage("등록되지 않은 게시물입니다.");
     }
@@ -101,7 +101,7 @@ class PostServiceTest extends IntegrationTestSupport {
         postRepository.save(post);
 
         //when
-        RemovePostResponse response = postService.removePost(post.getId());
+        RemovePostResponse response = postService.removePost(member.getEmail(), post.getId());
 
         //then
         Optional<Post> findPost = postRepository.findById(response.getPostId());
