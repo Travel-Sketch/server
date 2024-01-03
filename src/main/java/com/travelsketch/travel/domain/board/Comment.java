@@ -4,6 +4,7 @@ import com.travelsketch.travel.domain.TimeBaseEntity;
 import com.travelsketch.travel.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,5 +33,13 @@ public class Comment extends TimeBaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
+
+    @Builder
+    private Comment(String content, Comment parentComment, Post post, Member member) {
+        this.content = content;
+        this.parentComment = parentComment;
+        this.post = post;
+        this.member = member;
+    }
 
 }
