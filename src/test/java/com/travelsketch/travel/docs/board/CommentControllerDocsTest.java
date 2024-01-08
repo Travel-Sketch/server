@@ -78,9 +78,7 @@ public class CommentControllerDocsTest extends RestDocsSupport {
                 ),
                 requestFields(
                     fieldWithPath("content").type(JsonFieldType.STRING)
-                        .description("댓글 내용"),
-                    fieldWithPath("parentCommentId").type(JsonFieldType.NUMBER)
-                        .description("상위 댓글 id").optional()
+                        .description("댓글 내용")
                 ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER)
@@ -101,6 +99,65 @@ public class CommentControllerDocsTest extends RestDocsSupport {
             ));
     }
 
+    @DisplayName("대댓글 등록 API")
+    @Test
+    void createChildComment() throws Exception {
+        CreateCommentRequest request = CreateCommentRequest.builder()
+            .content("comment content 1")
+            .build();
+
+        CreateCommentResponse response = CreateCommentResponse.builder()
+            .commentId(1L)
+            .content("댓글 내용")
+            .createdDate(LocalDateTime.of(2024, 1, 1, 10, 30))
+            .build();
+
+        given(securityUtils.getCurrentEmail()).willReturn("test@test.com");
+        given(commentService.createChildComment(anyString(), anyLong(), any(), anyString()))
+            .willReturn(response);
+
+        mockMvc.perform(
+                post(BASE_URL + "/{commentId}", 1, 1)
+                    .header("Authorization", "Bearer Access Token")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding("utf-8")
+                    .content(objectMapper.writeValueAsString(request))
+            )
+            .andDo(print())
+            .andExpect(status().isCreated())
+            .andDo(document("create-child-comment",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                pathParameters(
+                    parameterWithName("postId").description("게시글id"),
+                    parameterWithName("commentId").description("상위댓글id")
+                ),
+                requestHeaders(
+                    headerWithName("Authorization")
+                        .description("Bearer Access Token")
+                ),
+                requestFields(
+                    fieldWithPath("content").type(JsonFieldType.STRING)
+                        .description("댓글 내용")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.commentId").type(JsonFieldType.NUMBER)
+                        .description("댓글 아이디"),
+                    fieldWithPath("data.content").type(JsonFieldType.STRING)
+                        .description("댓글 내용"),
+                    fieldWithPath("data.createdDate").type(JsonFieldType.ARRAY)
+                        .description("댓글 등록일시")
+                )
+            ));
+    }
 
     @DisplayName("댓글 삭제 API")
     @Test

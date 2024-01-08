@@ -37,7 +37,30 @@ public class CommentController {
     ) {
         String email = securityUtils.getCurrentEmail();
         CreateCommentResponse response = commentService.createComment(
-            email, postId, request.getParentCommentId(), request.getContent()
+            email, postId, null, request.getContent()
+        );
+
+        return created(response);
+    }
+
+    /**
+     * 대댓글 등록 API
+     *
+     * @param request 등록할 댓글 정보
+     * @param postId 게시물 id
+     * @param commentId 상위댓글 id
+     * @return 등록된 댓글 정보
+     */
+    @PostMapping("/{commentId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ApiResponse<CreateCommentResponse> createChildComment(
+        @Valid @RequestBody CreateCommentRequest request,
+        @PathVariable Long postId,
+        @PathVariable Long commentId) {
+        String email = securityUtils.getCurrentEmail();
+
+        CreateCommentResponse response = commentService.createChildComment(
+            email, postId, commentId, request.getContent()
         );
 
         return created(response);

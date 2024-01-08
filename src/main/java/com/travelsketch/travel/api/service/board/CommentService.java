@@ -4,7 +4,7 @@ import com.travelsketch.travel.api.controller.board.response.CreateCommentRespon
 import com.travelsketch.travel.domain.board.Comment;
 import com.travelsketch.travel.domain.board.Post;
 import com.travelsketch.travel.domain.board.repository.CommentRepository;
-import com.travelsketch.travel.domain.board.repository.PostQueryRepository;
+import com.travelsketch.travel.domain.board.repository.PostRepository;
 import com.travelsketch.travel.domain.member.Member;
 import com.travelsketch.travel.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,32 +21,12 @@ public class CommentService {
 
     private final MemberRepository memberRepository;
     private final CommentRepository commentRepository;
-    private final PostQueryRepository postQueryRepository;
+    private final PostRepository postRepository;
 
-    public CreateCommentResponse createComment(String email, Long postId, Long parentCommentId, String content) {
-        Optional<Member> findMember = memberRepository.findByEmail(email);
-        if (findMember.isEmpty()) {
-            throw new NoSuchElementException("등록되지 않은 회원입니다.");
-        }
-        Member member = findMember.get();
+    public CreateCommentResponse createComment(String email, Long postId, Comment parentComment, String content) {
+        Member member = getMember(email);
 
-        Optional<Post> findPost = postQueryRepository.findByIdWithMember(postId);
-        if (findPost.isEmpty()) {
-            throw new NoSuchElementException("등록되지 않은 게시물입니다.");
-        }
-        Post post = findPost.get();
-
-        Comment parentComment;
-        if (parentCommentId != null) {
-            Optional<Comment> findParentComment = commentRepository.findById(parentCommentId);
-            if (findParentComment.isPresent()) {
-                parentComment = findParentComment.get();
-            } else {
-                throw new NoSuchElementException("상위 댓글을 찾을 수 없습니다.");
-            }
-        } else {
-            parentComment = null;
-        }
+        Post post = getPost(postId);
 
         Comment comment = Comment.builder()
             .content(content)
@@ -58,6 +38,31 @@ public class CommentService {
         Comment savedComment = commentRepository.save(comment);
 
         return CreateCommentResponse.of(savedComment);
+    }
+
+    public CreateCommentResponse createChildComment(String email, Long postId, Long parentId, String content) {
+        Optional<Comment> findComment = commentRepository.findById(parentId);
+        if (findComment.isEmpty()) {
+            throw new NoSuchElementException("상위 댓글을 찾을 수 없습니다.");
+        }
+
+        return createComment(email, postId, findComment.get(), content);
+    }
+
+    private Post getPost(Long postId) {
+        Optional<Post> findPost = postRepository.findById(postId);
+        if (findPost.isEmpty()) {
+            throw new NoSuchElementException("등록되지 않은 게시물입니다.");
+        }
+        return findPost.get();
+    }
+
+    private Member getMember(String email) {
+        Optional<Member> findMember = memberRepository.findByEmail(email);
+        if (findMember.isEmpty()) {
+            throw new NoSuchElementException("등록되지 않은 회원입니다.");
+        }
+        return findMember.get();
     }
 
 }

@@ -12,12 +12,9 @@ public class CreateCommentRequest {
     @NotBlank(message = "댓글 내용은 필수입니다.")
     private String content;
 
-    private Long parentCommentId;
-
     @Builder
-    private CreateCommentRequest(String content, Long parentCommentId) {
+    private CreateCommentRequest(String content) {
         this.content = content;
-        this.parentCommentId = parentCommentId;
     }
 
 }

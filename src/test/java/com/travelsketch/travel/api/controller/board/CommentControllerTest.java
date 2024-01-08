@@ -22,7 +22,6 @@ class CommentControllerTest extends ControllerTestSupport {
         //given
         CreateCommentRequest request = CreateCommentRequest.builder()
             .content("댓글 내용")
-            .parentCommentId(null)
             .build();
 
         mockMvc.perform(
@@ -42,7 +41,6 @@ class CommentControllerTest extends ControllerTestSupport {
         //given
         CreateCommentRequest request = CreateCommentRequest.builder()
             .content(" ")
-            .parentCommentId(null)
             .build();
 
         mockMvc.perform(
@@ -56,5 +54,24 @@ class CommentControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.code").value("400"))
             .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
             .andExpect(jsonPath("$.message").value("댓글 내용은 필수입니다."));
+    }
+
+    @DisplayName("게시물에 대댓글을 등록할 수 있다.")
+    @Test
+    void createChildComment() throws Exception {
+        //given
+        CreateCommentRequest request = CreateCommentRequest.builder()
+            .content("댓글 내용")
+            .build();
+
+        mockMvc.perform(
+                post(BASE_URL + "/{commentId}", 1, 1)
+                    .with(csrf())
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.code").value("201"));
     }
 }
