@@ -25,6 +25,7 @@
 * [ ] 회원 이메일 중복 확인을 위해 인증 번호 요청을 보낼 수 있다. - `AccountController#requestAuthenticationNumber`
 * [ ] 회원 이메일 중복 확인을 위해 발급 받은 인증 번호가 일치하는지 확인할 수 있다. - `AccountController#checkAuthenticationNumber`
 * [x] 회원은 로그인을 할 수 있다. - `AccountController#login`
+  * [ ] [예외] 로그인을 시도하는 계정이 탈퇴된 계정이라면 예외가 발생한다.
 * [ ] 회원은 로그아웃을 할 수 있다.
 * [x] 회원은 본인의 회원 정보를 조회할 수 있다. - `MemberQueryController#searchMemberInfo`
   * [x] 토큰 정보로 회원 정보를 조회한다.

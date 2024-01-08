@@ -54,6 +54,10 @@ public class Member extends TimeBaseEntity {
     }
 
     //== 비즈니스 로직 ==//
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
     public Member modifyPwd(String pwd) {
         this.pwd = pwd;
         return this;
