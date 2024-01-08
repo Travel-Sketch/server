@@ -3,6 +3,7 @@ package com.travelsketch.travel.docs.board;
 import com.travelsketch.travel.api.controller.board.PostController;
 import com.travelsketch.travel.api.controller.board.response.CreatePostResponse;
 import com.travelsketch.travel.api.controller.board.response.ModifyPostResponse;
+import com.travelsketch.travel.api.controller.board.response.RemovePostResponse;
 import com.travelsketch.travel.api.service.board.FileStore;
 import com.travelsketch.travel.api.service.board.PostService;
 import com.travelsketch.travel.docs.RestDocsSupport;
@@ -200,6 +201,17 @@ public class PostControllerDocsTest extends RestDocsSupport {
     @DisplayName("게시물 삭제 API")
     @Test
     void removePost() throws Exception {
+        given(securityUtils.getCurrentEmail())
+            .willReturn("cherry@naver.com");
+
+        RemovePostResponse response = RemovePostResponse.builder()
+            .postId(1L)
+            .title("질문 제목입니다.")
+            .isDeleted(true)
+            .build();
+
+        given(postService.removePost(anyString(), anyLong()))
+            .willReturn(response);
 
         mockMvc.perform(delete(BASE_URL + "/{postId}", 1)
                 .contentType(MediaType.APPLICATION_JSON)

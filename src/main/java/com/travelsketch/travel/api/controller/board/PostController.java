@@ -14,7 +14,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,10 +30,10 @@ public class PostController {
     private final SecurityUtils securityUtils;
     private final PostService postService;
     private final FileStore fileStore;
-    
+
     /**
      * 게시물 등록 API
-     * 
+     *
      * @param request 등록할 게시물 정보
      * @return 등록된 게시물 정보
      * @throws IOException
@@ -55,8 +54,8 @@ public class PostController {
 
     /**
      * 게시물 수정 API
-     * 
-     * @param postId 게시물 id
+     *
+     * @param postId  게시물 id
      * @param request 게시물 수정 내용
      * @return 게시물 수정 내용
      * @throws IOException
@@ -77,20 +76,18 @@ public class PostController {
 
         return ok(response);
     }
-    
+
     /**
      * 게시물 삭제 API
-     * 
+     *
      * @param postId 게시물 id
      * @return 삭제된 게시물
      */
     @DeleteMapping("/{postId}")
     public ApiResponse<RemovePostResponse> removePost(@PathVariable Long postId) {
-        RemovePostResponse response = RemovePostResponse.builder()
-            .postId(1L)
-            .title("게시물 제목 1")
-            .isDeleted(true)
-            .build();
+        String email = securityUtils.getCurrentEmail();
+
+        RemovePostResponse response = postService.removePost(email, postId);
         return ok(response);
     }
 
