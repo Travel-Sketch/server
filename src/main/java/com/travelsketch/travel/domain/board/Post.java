@@ -28,6 +28,7 @@ public class Post extends TimeBaseEntity {
     @Column(nullable = false, length = 50)
     private String title;
 
+    @Lob
     @Column(nullable = false)
     private String content;
 
